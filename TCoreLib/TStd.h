@@ -40,7 +40,7 @@ extern HDC			g_hOffScreenDC;
 extern HDC			g_hScreenDC;
 extern RECT			g_rtClient;
 extern bool			g_bActiveApp;
-
+extern POINT		g_pHeroPos;
 //추가 포함 디렉토리에 해당파일을 또 추가하면
 //../../include; 경로를 추가해서 또 include하면
 //컴파일러 오류 C2953

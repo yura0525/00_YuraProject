@@ -16,6 +16,9 @@
     <Filter Include="FMOD">
       <UniqueIdentifier>{4aad8d42-55e8-4126-98d0-70749addef21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FSM">
+      <UniqueIdentifier>{99edf655-b0e0-4a89-bc90-cef59fba0a99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TCore.cpp">
@@ -68,6 +71,27 @@
     </ClCompile>
     <ClCompile Include="TEffectObject.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TAttackAction.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TFiniteStateMachine.cpp">
+      <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="TMoveAction.cpp">
+      <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="TStandAction.cpp">
+      <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="TFSMMgr.cpp">
+      <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="TEnemyState.cpp">
+      <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="TEnemy.cpp">
+      <Filter>FSM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +166,27 @@
     </ClInclude>
     <ClInclude Include="TEffectObject.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TFSMMgr.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="TFiniteStateMachine.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="TEnemyState.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="TEnemy.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="TAttackAction.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="TMoveAction.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="TStandAction.h">
+      <Filter>FSM</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

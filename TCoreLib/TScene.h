@@ -1,13 +1,11 @@
 #pragma once
 #include "TBkObj.h"
 #include "THeroObj.h"
-#include "TNPCObject.h"
+#include "TEnemy.h"
 #include "TButton.h"
 #include "TEffectObject.h"
 #include <vector>
 using namespace std;
-
-typedef std::vector<RECT> RECT_ARRAY;
 
 const int g_iMaxLevel = 10;
 const int g_iMaxNpcCount = 100;
@@ -21,13 +19,22 @@ enum TGameState
 class TScene
 {
 public:
-	int m_iSceneID;
+	TEffectMgr		m_EffecMgr;
+	int				m_iSceneID;
 
 	TBkObj m_BackGround;
 	
 	bool m_bNextSceneStart;
 	int m_iMaxNpcCount;
-
+public:
+	virtual bool FadeOut()
+	{
+		return true;
+	}
+	virtual bool FadeIn()
+	{
+		return true;
+	}
 	virtual bool Init() { return true; }
 	virtual bool Frame() { return true; }
 	virtual bool Render() { return true; }
@@ -35,6 +42,20 @@ public:
 	virtual bool Reset()	{	return true;	}
 
 	virtual bool IsDead() { return false; }
+
+	virtual bool GetNPCDead(int iNPC)
+	{
+		return false;
+	}
+	virtual void SetNPCDead(int iNPC, bool bDead = true)
+	{
+	}
+
+	virtual RECT GetCollider(int iNPC)
+	{
+		RECT rt{ 0,0,0,0 };
+		return rt;
+	}
 	virtual bool SetNPCCount(int iNPC);
 public:
 	TScene()
@@ -57,8 +78,8 @@ public:
 	bool Release();
 	bool IsDead() { return m_btnStart.m_bDead; }
 
-	virtual bool FadeOut() { return m_BackGround.FadeOut(); }
-	virtual bool FadeIn() { return m_BackGround.FadeIn(); }
+	bool FadeOut() { return m_BackGround.FadeOut(); }
+	bool FadeIn() { return m_BackGround.FadeIn(); }
 
 public:
 	TLobbyScene();
@@ -69,7 +90,7 @@ class TGameScene : public TScene
 {
 public:
 	THeroObj m_Hero;
-	vector<TNPCObject> m_npcList;
+	vector<TEnemy> m_npcList;
 
 public:
 	bool Init();
@@ -77,19 +98,11 @@ public:
 	bool Render();
 	bool Release();
 	bool Reset();
-
 public:
-	std::vector<RECT_ARRAY> m_rtSpriteList;
-	int						m_iSpriteIndex;
-
-	float						m_fAngle;
-	std::vector<TEffectObject>	m_effectObjList;
-
+	bool GetNPCDead(int iNPC);
+	void SetNPCDead(int iNPC, bool bDead = true);
+	RECT GetCollider(int iNPC);
 public:
-
-	bool GameDataLoad(const TCHAR* pszFileName);
-	void AddEffect(POINT pos);
-
 	TGameScene();
 	virtual ~TGameScene();
 };
@@ -104,6 +117,7 @@ public:
 	bool Frame();
 	bool Render();
 	bool Release();
+public:
 	bool IsDead() { return m_btnStart.m_bDead; }
 public:
 	TEndScene();

@@ -14,7 +14,6 @@ bool TScene::SetNPCCount(int iNPC)
 }
 bool TGameScene::Init()
 {
-	m_fAngle = 0.0f;
 	m_BackGround.Init();
 	m_BackGround.Set((g_rtClient.right / 2), (g_rtClient.bottom / 2), 0, 0, 800, 600);
 	m_BackGround.Load(L"../../data/bk.bmp");
@@ -22,15 +21,28 @@ bool TGameScene::Init()
 	m_Hero.Set(300, 300, 90, 2, 42, 58);
 	m_Hero.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
 
+	int iIndexFSM = I_FSMMgr.Load(L"../../data/fsmDefault.txt");
+	int iIndexFSM2 = I_FSMMgr.Load(L"../../data/fsmLevel1.txt");
+
 	m_npcList.resize(g_iMaxNpcCount);
 	for (int inpc = 0; inpc < g_iMaxNpcCount; inpc++)
 	{
-		m_npcList[inpc].Set(rand() % 800, rand() % 600, 46, 62, 68, 79);
+		m_npcList[inpc].SetFSM(1 + (rand() % I_FSMMgr.Size()));
+
+		if (m_npcList[inpc].m_iFSMID == 1)
+		{
+			m_npcList[inpc].Set(100 + rand() % 300, 100 + rand() % 200, 46, 62, 68, 79);
+		}
+		else
+		{
+			m_npcList[inpc].Set(100 + rand() % 300, 100 + rand() % 200,115, 62, 37, 35);
+		}
 		m_npcList[inpc].Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
+		m_npcList[inpc].m_bDebugRect = true;
+		m_npcList[inpc].m_fSpeed = 10 + rand() % 200;
+		m_npcList[inpc].m_fAttackRadius = 30 + rand() % 300;
 	}
 
-	GameDataLoad(L"../../data/SpriteList.txt");
-	m_iSpriteIndex = 0;
 	return true;
 }
 bool TGameScene::Frame()
@@ -51,6 +63,7 @@ bool TGameScene::Frame()
 		if (!m_npcList[inpc].m_bDead)
 		{
 			m_npcList[inpc].Frame();
+			m_npcList[inpc].Process(&m_Hero);
 		}
 	}
 
@@ -80,31 +93,6 @@ bool TGameScene::Frame()
 		m_bNextSceneStart = true;
 	}
 
-	if (I_Input.Key(VK_LBUTTON) == KEY_PUSH)
-	{
-		static float fAddTime = 0.0f;
-		fAddTime += g_fSecPerFrame;
-
-		if (fAddTime >= 0.003f);
-		{
-			AddEffect(I_Input.m_MousePos);
-			fAddTime -= 0.003f;
-		}
-
-		for (int iObj = 0; iObj < m_effectObjList.size(); iObj++)
-		{
-			m_effectObjList[iObj].Init();
-			m_effectObjList[iObj].Set(I_Input.m_MousePos.x, I_Input.m_MousePos.y, 1, 142, 41, 41);
-			m_effectObjList[iObj].Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
-		}
-	}
-
-	for (int iObj = 0; iObj < m_effectObjList.size(); iObj++)
-	{
-		m_effectObjList[iObj].Frame();
-	}
-	return true;
-
 	return true;
 }
 bool TGameScene::Render()
@@ -119,12 +107,7 @@ bool TGameScene::Render()
 		}
 	}
 
-	m_fAngle += g_fSecPerFrame * 100.0f;
-
-	for (int iObj = 0; iObj < m_effectObjList.size(); iObj++)
-	{
-		m_effectObjList[iObj].RotationBlt(m_fAngle);
-	}
+	
 	return true;
 }
 bool TGameScene::Release()
@@ -135,11 +118,7 @@ bool TGameScene::Release()
 	{
 		m_npcList[inpc].Release();
 	}
-
-	for (int iObj = 0; iObj < m_effectObjList.size(); iObj++)
-	{
-		m_effectObjList[iObj].Release();
-	}
+	
 	return true;
 }
 bool TGameScene::Reset()
@@ -153,60 +132,23 @@ bool TGameScene::Reset()
 	return true;
 }
 
-bool TGameScene::GameDataLoad(const TCHAR* pszFileName)
+bool TGameScene::GetNPCDead(int iNPC)
 {
-	TCHAR pBuffer[256] = { 0, };
-	TCHAR pTemp[256] = { 0, };
-
-	int iNumSprite = 0;
-	FILE* fp_src;
-
-	_wfopen_s(&fp_src, pszFileName, _T("rt"));
-
-	if (fp_src == NULL) return false;
-
-	_fgetts(pBuffer, _countof(pBuffer), fp_src);
-	_stscanf_s(pBuffer, _T("%s%d%s"), pTemp, _countof(pTemp), &iNumSprite);
-
-	m_rtSpriteList.resize(iNumSprite);
-
-	for (int iCnt = 0; iCnt < iNumSprite; iCnt++)
-	{
-		int iNumFrame = 0;
-		_fgetts(pBuffer, _countof(pBuffer), fp_src);
-		_stscanf_s(pBuffer, _T("%s%d"), pTemp, _countof(pTemp), &iNumFrame);
-
-		RECT rt;
-		for (int iFrame = 0; iFrame < iNumFrame; iFrame++)
-		{
-			_fgetts(pBuffer, _countof(pBuffer), fp_src);
-			_stscanf_s(pBuffer, _T("%s %d %d %d %d"), pTemp, _countof(pTemp), &rt.left, &rt.top, &rt.right, &rt.bottom);
-
-			m_rtSpriteList[iCnt].push_back(rt);
-		}
-	}
-	fclose(fp_src);
-	return true;
+	return m_npcList[iNPC].m_bDead;
 }
-
-void TGameScene::AddEffect(POINT pos)
+void TGameScene::SetNPCDead(int iNPC, bool bDead)
 {
-	TEffectObject obj;
-	obj.SetSpriteList(m_rtSpriteList);
-	obj.Init();
-	obj.Set(pos.x, pos.y, 1, 142, 41, 42);
-	obj.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
-	obj.m_iIndexSprite = rand() % m_rtSpriteList.size();
-	obj.m_fSpeed = 1000.0f;
-	m_effectObjList.push_back(obj);
+	m_npcList[iNPC].m_bDead = bDead;
 }
-
+RECT TGameScene::GetCollider(int iNPC)
+{
+	return m_npcList[iNPC].m_rtCollision;
+}
 
 TGameScene::TGameScene()
 {
 	m_iSceneID = GAME_SCENE_PLAY;
 	m_bNextSceneStart = false;
-	m_fAngle = 0.0f;
 }
 
 
