@@ -9,6 +9,7 @@ public:
 
 	bool Init()
 	{
+		TSound::GetInstance()->Init();
 		TSound::GetInstance()->Load("../../data/Dance The Night Away.flac", true);
 		TSound::GetInstance()->Load("../../data/DDU-DU DDU-DU.flac", false);
 		TSound::GetInstance()->Load("../../data/Forever Young.flac", false);
