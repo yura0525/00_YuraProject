@@ -14,8 +14,6 @@ public:
 	{
 		m_bGameSceneChange = false;
 
-
-
 		m_pGameScene = make_shared<TGameScene>();
 		m_pGameScene->Init();
 		m_pGameScene->SetNPCCount(g_iMaxNPC);
