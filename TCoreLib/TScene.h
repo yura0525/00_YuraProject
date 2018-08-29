@@ -8,7 +8,7 @@
 using namespace std;
 
 const int g_iMaxLevel = 10;
-const int g_iMaxNpcCount = 100;
+const int g_iMaxNpcCount = 10;
 
 enum TGameState
 {
@@ -19,7 +19,7 @@ enum TGameState
 class TScene
 {
 public:
-	TEffectMgr		m_EffecMgr;
+	TEffectMgr		m_EffectMgr;
 	int				m_iSceneID;
 
 	TBkObj m_BackGround;
@@ -43,14 +43,8 @@ public:
 
 	virtual bool IsDead() { return false; }
 
-	virtual bool GetNPCDead(int iNPC)
-	{
-		return false;
-	}
-	virtual void SetNPCDead(int iNPC, bool bDead = true)
-	{
-	}
-
+	virtual bool GetNPCDead(int iNPC) {	return false;	}
+	virtual void SetNPCDead(int iNPC, bool bDead = true) { }
 	virtual RECT GetCollider(int iNPC)
 	{
 		RECT rt{ 0,0,0,0 };
@@ -91,7 +85,7 @@ class TGameScene : public TScene
 public:
 	THeroObj m_Hero;
 	vector<TEnemy> m_npcList;
-
+	
 public:
 	bool Init();
 	bool Frame();

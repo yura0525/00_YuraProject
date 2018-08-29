@@ -34,7 +34,6 @@ public:
 	bool IsCollision(RECT rt);
 	
 public:
-	bool Init();
 	bool Frame();
 	bool Render();
 	bool Release();

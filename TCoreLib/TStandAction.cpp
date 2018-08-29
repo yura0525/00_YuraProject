@@ -9,17 +9,18 @@ bool TStandAction::Process(TObject* pTarget)
 	rt.right = m_pOwner->m_pos.x + m_pOwner->m_fAttackRadius;
 	rt.bottom = m_pOwner->m_pos.y + m_pOwner->m_fAttackRadius;
 
+	
 	m_pOwner->m_rtCollision.left = rt.left;
-	m_pOwner->m_rtCollision.top = rt.left;
-	m_pOwner->m_rtCollision.left = rt.left;
-	m_pOwner->m_rtCollision.left = rt.left;
+	m_pOwner->m_rtCollision.top = rt.top;
+	m_pOwner->m_rtCollision.right = rt.right;
+	m_pOwner->m_rtCollision.bottom = rt.bottom;
 
-	if ((rand() % 100) == 5)
+	if (rand() % 100 == 5)
 	{
 		m_pOwner->SetTransition(EVENT_PATROL);
 	}
 
-	if (TCollision::RectInRect(rt, pTarget->m_rtCollision) )
+	if (TCollision::RectInRect(rt, pTarget->m_rtCollision))
 	{
 		m_pOwner->SetTransition(EVENT_FINDTARGET);
 	}
@@ -30,7 +31,7 @@ bool TStandAction::Process(TObject* pTarget)
 			m_pOwner->SetTransition(EVENT_LOSTTARGET);
 		}
 	}
-	
+
 	return true;
 }
 

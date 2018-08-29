@@ -99,16 +99,9 @@ bool TEffectMgr::GameDataLoad(const TCHAR* pszFileName)
 	return true;
 }
 
-bool TEffectMgr::Init()
-{
-	GameDataLoad(L"../../data/SpriteList.txt");
-	m_fAngle = 0.0f;
-	return true;
-}
-
 bool TEffectMgr::Frame()
 {
-	if (I_Input.Key(VK_LBUTTON) == KEY_PUSH)
+	if (I_Input.Key(VK_LBUTTON))
 	{
 		static float fAddTime = 0.0f;
 		fAddTime += g_fSecPerFrame;
@@ -116,7 +109,6 @@ bool TEffectMgr::Frame()
 		if (fAddTime >= 0.1f);
 		{
 			AddEffect(I_Input.m_MousePos);
-			TSound::GetInstance()->PlayEffect(5);
 			fAddTime -= 0.1f;
 		}
 	}
@@ -173,6 +165,7 @@ bool TEffectMgr::Release()
 
 TEffectMgr::TEffectMgr()
 {
+	m_fAngle = 0.0f;
 }
 
 

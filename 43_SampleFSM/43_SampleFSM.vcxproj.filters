@@ -13,61 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="State">
-      <UniqueIdentifier>{4ac38ed3-b4da-44fd-b949-e188db70189b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="FSM">
-      <UniqueIdentifier>{1975801e-37d0-4cee-a273-14f990df2bdd}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sample.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TEnemy.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TEnemyState.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TAttackAction.cpp">
-      <Filter>State</Filter>
-    </ClCompile>
-    <ClCompile Include="TMoveAction.cpp">
-      <Filter>State</Filter>
-    </ClCompile>
-    <ClCompile Include="TStandAction.cpp">
-      <Filter>State</Filter>
-    </ClCompile>
-    <ClCompile Include="TFiniteStateMachine.cpp">
-      <Filter>FSM</Filter>
-    </ClCompile>
-    <ClCompile Include="TFSMMgr.cpp">
-      <Filter>FSM</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="TEnemy.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TEnemyState.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TAttackAction.h">
-      <Filter>State</Filter>
-    </ClInclude>
-    <ClInclude Include="TMoveAction.h">
-      <Filter>State</Filter>
-    </ClInclude>
-    <ClInclude Include="TStandAction.h">
-      <Filter>State</Filter>
-    </ClInclude>
-    <ClInclude Include="TFiniteStateMachine.h">
-      <Filter>FSM</Filter>
-    </ClInclude>
-    <ClInclude Include="TFSMMgr.h">
-      <Filter>FSM</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="fsmLevel1.txt" />

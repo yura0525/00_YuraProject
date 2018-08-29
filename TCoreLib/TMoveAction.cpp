@@ -10,17 +10,16 @@ bool TMoveAction::Process(TObject* pTarget)
 	rt.bottom = m_pOwner->m_pos.y + m_pOwner->m_fAttackRadius;
 
 	m_pOwner->m_rtCollision.left = rt.left;
-	m_pOwner->m_rtCollision.top = rt.left;
-	m_pOwner->m_rtCollision.left = rt.left;
-	m_pOwner->m_rtCollision.left = rt.left;
-
+	m_pOwner->m_rtCollision.top = rt.top;
+	m_pOwner->m_rtCollision.right = rt.right;
+	m_pOwner->m_rtCollision.bottom = rt.bottom;
 
 	if (TCollision::RectInRect(rt, pTarget->m_rtCollision))
 	{
 		m_pOwner->SetTransition(EVENT_FINDTARGET);
 	}
 
-	if ((rand() % 100) == 5)
+	if (rand() % 100 == 5)
 	{
 		m_pOwner->SetTransition(EVENT_STOPWALK);
 	}

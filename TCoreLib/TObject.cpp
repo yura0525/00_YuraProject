@@ -32,10 +32,8 @@ void TObject::Set(float x, float y,
 	m_rtCollision.right = m_rtCollision.left + m_rtDraw.right;
 	m_rtCollision.bottom = m_rtCollision.top + m_rtDraw.bottom;
 
-	m_iMaxDistance = sqrt((m_rtDraw.right *
-		m_rtDraw.right) +
-		(m_rtDraw.bottom *
-			m_rtDraw.bottom));
+	m_iMaxDistance = sqrt(m_rtDraw.right*m_rtDraw.right + 
+							m_rtDraw.bottom*m_rtDraw.bottom);
 
 	m_hColorRotateBitmap = CreateCompatibleBitmap(g_hScreenDC,
 		m_iMaxDistance, m_iMaxDistance);
@@ -297,7 +295,7 @@ bool TObject::AlphaBlend(HDC hdcDest, int x, int y, int cx, int cy,
 	// Create DIB section in shared memory
 	hbmMask = CreateDIBSection(hdcMaskSrc, (BITMAPINFO *)&BMI, DIB_RGB_COLORS, (void **)&pMaskBits, 0, 0l);
 
-	HDC dc = CreateCompatibleDC(NULL);
+	HDC dc = CreateCompatibleDC(g_hScreenDC);
 
 	HBITMAP dcOld = (HBITMAP)SelectObject(dc, hbmSrc);
 
@@ -349,7 +347,7 @@ bool TObject::AlphaBlend(HDC hdcDest, int x, int y, int cx, int cy,
 		}
 	}
 
-	dc = CreateCompatibleDC(NULL);
+	dc = CreateCompatibleDC(g_hScreenDC);
 
 	SelectObject(dc, hbmSrc);
 	if (!BitBlt(hdcDest, x, y, cx, cy, dc, 0, 0, opMode))

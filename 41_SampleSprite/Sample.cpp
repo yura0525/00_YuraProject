@@ -93,4 +93,4 @@ public:
 	~Sample() {}
 };
 
-GAMERUN("SampleBitmap", 800, 600);
+GAMERUN("SampleSprite", 800, 600);

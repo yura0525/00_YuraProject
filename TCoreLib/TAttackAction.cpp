@@ -3,6 +3,7 @@
 
 bool TAttackAction::Process(TObject* pTarget)
 {
+
 	RECT rt;
 	rt.left = m_pOwner->m_pos.x - m_pOwner->m_fAttackRadius;
 	rt.top = m_pOwner->m_pos.y - m_pOwner->m_fAttackRadius;
@@ -14,25 +15,30 @@ bool TAttackAction::Process(TObject* pTarget)
 	m_pOwner->m_rtCollision.right = rt.right;
 	m_pOwner->m_rtCollision.bottom = rt.bottom;
 
-
 	TPoint vDir;
-	vDir.x= pTarget->m_pos.x - m_pOwner->m_pos.x;
+
+	vDir.x = pTarget->m_pos.x - m_pOwner->m_pos.x;
 	vDir.y = pTarget->m_pos.y - m_pOwner->m_pos.y;
 
-	float fLength = sqrt((vDir.x * vDir.x) + (vDir.y * vDir.y));
+	float fLength = sqrt(vDir.x*vDir.x + vDir.y*vDir.y);
+
 	vDir.x /= fLength;
 	vDir.y /= fLength;
 
+	fLength = sqrt(vDir.x*vDir.x + vDir.y*vDir.y);
+	
 	TPoint vPos;
-	vPos.x = m_pOwner->m_pos.x + (vDir.x * g_fSecPerFrame * m_pOwner->m_fSpeed);
-	vPos.y = m_pOwner->m_pos.y + (vDir.y * g_fSecPerFrame * m_pOwner->m_fSpeed);
 
+	vPos.x = m_pOwner->m_pos.x + vDir.x * g_fSecPerFrame* m_pOwner->m_fSpeed;
+	
+	vPos.y = m_pOwner->m_pos.y + vDir.y * g_fSecPerFrame * m_pOwner->m_fSpeed;
 	m_pOwner->Move(vPos);
 
-	if (TCollision::RectInRect(m_pOwner->m_rtCollision, pTarget->m_rtCollision) == false)
+	if (TCollision::RectInRect(rt, pTarget->m_rtCollision) == false)
 	{
 		m_pOwner->SetTransition(EVENT_LOSTTARGET);
 	}
+
 	return true;
 }
 

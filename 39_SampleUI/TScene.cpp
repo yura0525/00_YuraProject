@@ -65,11 +65,6 @@ bool TGameScene::Frame()
 	bool bChangeScene = true;
 	for (int inpc = 0; inpc < m_iMaxNpcCount; inpc++)
 	{
-		if (I_Input.Key(VK_LBUTTON) &&
-			TCollision::RectInPoint(m_npcList[inpc].m_rtCollision, I_Input.m_MousePos))
-		{
-			m_npcList[inpc].m_bDead = true;
-		}
 		if( !m_npcList[inpc].m_bDead)
 		{
 			bChangeScene = false;

@@ -23,8 +23,7 @@ public:
 		m_npcList.resize(g_iMaxNPC);
 		for (int iNpc = 0; iNpc < g_iMaxNPC; iNpc++)
 		{
-			//m_npcList[iNpc].SetFSM(1 + (rand() % I_FSMMgr.Size()));
-			m_npcList[iNpc].SetFSM(rand() % I_FSMMgr.Size());
+			m_npcList[iNpc].SetFSM(1 + (rand() % I_FSMMgr.Size()));
 
 			if (m_npcList[iNpc].m_iFSMID == 1)
 			{
@@ -45,7 +44,7 @@ public:
 				L"../../data/bitmap2.bmp");
 			m_npcList[iNpc].m_bDebugRect = true;
 			m_npcList[iNpc].m_fSpeed = 10 + rand() % 200;
-			m_npcList[iNpc].m_fAttackRadius = 30 + rand() % 300;
+			m_npcList[iNpc].m_fAttackRadius = 30 + rand() % 10;
 			
 		}
 		return true;
@@ -85,4 +84,4 @@ public:
 	virtual ~Sample() {}
 };
 
-GAMERUN("SampleSprite", 800, 600)
+GAMERUN("SampleFSM", 800, 600)

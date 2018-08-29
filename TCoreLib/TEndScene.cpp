@@ -11,7 +11,10 @@ bool TEndScene::Init()
 
 	m_btnStart.Init();
 	m_btnStart.Set(g_rtClient.right / 2, g_rtClient.bottom / 2, 0, 0, 334,82);
-	m_btnStart.Load(L"../../data/end.bmp");
+	m_btnStart.LoadUI(L"../../data/end.bmp", NULL, 0);
+	m_btnStart.LoadUI(L"../../data/end.bmp", NULL, 1);
+	m_btnStart.LoadUI(L"../../data/end.bmp", NULL, 2);
+	m_btnStart.LoadUI(L"../../data/end.bmp", NULL, 3);
 	return true;
 }
 bool TEndScene::Frame()

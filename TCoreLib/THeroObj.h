@@ -5,11 +5,11 @@ class THeroObj : public TObject
 public:
 	bool bFadeStart;
 public:
-	bool Render();
+	virtual bool Render() override;
 
 public:
-	bool FadeOut();
-	bool FadeIn();
+	virtual bool FadeOut() override;
+	virtual bool FadeIn() override;
 public:
 	THeroObj();
 	virtual ~THeroObj();

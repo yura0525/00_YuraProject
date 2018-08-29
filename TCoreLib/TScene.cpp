@@ -1,5 +1,6 @@
 #include "TScene.h"
 #include "TInput.h"
+#include "TSound.h"
 
 bool TScene::SetNPCCount(int iNPC)
 {
@@ -14,16 +15,19 @@ bool TScene::SetNPCCount(int iNPC)
 }
 bool TGameScene::Init()
 {
+	int iIndexFSM = I_FSMMgr.Load(L"../../data/fsmDefault.txt");
+	int iIndexFSM2 = I_FSMMgr.Load(L"../../data/fsmLevel1.txt");
+
+	m_EffectMgr.GameDataLoad(L"../../data/SpriteList.txt");
+
+
 	m_BackGround.Init();
 	m_BackGround.Set((g_rtClient.right / 2), (g_rtClient.bottom / 2), 0, 0, 800, 600);
 	m_BackGround.Load(L"../../data/bk.bmp");
 
-	m_Hero.Set(300, 300, 90, 2, 42, 58);
+	m_Hero.Set(300, 900, 90, 2, 42, 58);
 	m_Hero.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
-
-	int iIndexFSM = I_FSMMgr.Load(L"../../data/fsmDefault.txt");
-	int iIndexFSM2 = I_FSMMgr.Load(L"../../data/fsmLevel1.txt");
-
+	
 	m_npcList.resize(g_iMaxNpcCount);
 	for (int inpc = 0; inpc < g_iMaxNpcCount; inpc++)
 	{
@@ -40,9 +44,8 @@ bool TGameScene::Init()
 		m_npcList[inpc].Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
 		m_npcList[inpc].m_bDebugRect = true;
 		m_npcList[inpc].m_fSpeed = 10 + rand() % 200;
-		m_npcList[inpc].m_fAttackRadius = 30 + rand() % 300;
+		m_npcList[inpc].m_fAttackRadius = 30 + rand() % 10;
 	}
-
 	return true;
 }
 bool TGameScene::Frame()
@@ -66,23 +69,29 @@ bool TGameScene::Frame()
 			m_npcList[inpc].Process(&m_Hero);
 		}
 	}
+	m_EffectMgr.Frame();
+
+	for (int inpc = 0; inpc < g_iMaxNpcCount; inpc++)
+	{
+		if (m_EffectMgr.IsCollision( GetCollider(inpc)))
+		{
+			SetNPCDead(inpc, true);
+		}
+	}
 
 	for (int inpc = 0; inpc < m_iMaxNpcCount; inpc++)
 	{
 		if (TCollision::RectInRect(m_npcList[inpc].m_rtCollision, m_Hero.m_rtCollision))
 		{
 			m_npcList[inpc].m_bDead = true;
+			m_Hero.m_bDead = true;
 		}
 	}
+
 	bool bChangeScene = true;
 	for (int inpc = 0; inpc < m_iMaxNpcCount; inpc++)
 	{
-		if (I_Input.Key(VK_LBUTTON) &&
-			TCollision::RectInPoint(m_npcList[inpc].m_rtCollision, I_Input.m_MousePos))
-		{
-			m_npcList[inpc].m_bDead = true;
-		}
-		if( !m_npcList[inpc].m_bDead)
+		if (m_npcList[inpc].m_bDead == false)
 		{
 			bChangeScene = false;
 		}
@@ -99,6 +108,7 @@ bool TGameScene::Render()
 {
 	m_BackGround.Render();
 	m_Hero.Render();
+	m_EffectMgr.Render();
 	for (int inpc = 0; inpc < m_iMaxNpcCount; inpc++)
 	{
 		if (!m_npcList[inpc].m_bDead)
@@ -114,6 +124,8 @@ bool TGameScene::Release()
 {
 	m_BackGround.Release();
 	m_Hero.Release();
+	m_EffectMgr.Release();
+
 	for (int inpc = 0; inpc < m_iMaxNpcCount; inpc++)
 	{
 		m_npcList[inpc].Release();

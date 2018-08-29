@@ -152,22 +152,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Sample.cpp" />
-    <ClCompile Include="TAttackAction.cpp" />
-    <ClCompile Include="TEnemy.cpp" />
-    <ClCompile Include="TEnemyState.cpp" />
-    <ClCompile Include="TFiniteStateMachine.cpp" />
-    <ClCompile Include="TFSMMgr.cpp" />
-    <ClCompile Include="TMoveAction.cpp" />
-    <ClCompile Include="TStandAction.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="TAttackAction.h" />
-    <ClInclude Include="TEnemy.h" />
-    <ClInclude Include="TEnemyState.h" />
-    <ClInclude Include="TFiniteStateMachine.h" />
-    <ClInclude Include="TFSMMgr.h" />
-    <ClInclude Include="TMoveAction.h" />
-    <ClInclude Include="TStandAction.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="fsmDefault.txt" />

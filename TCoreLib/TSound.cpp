@@ -5,6 +5,12 @@ bool TSound::Init()
 	FMOD::System_Create(&m_pSystem);
 	m_pSystem->init(g_iMaxSound, FMOD_INIT_NORMAL, 0);
 	
+	/*TSound::GetInstance()->Load("../../data/Dance The Night Away.flac", true);
+	TSound::GetInstance()->Load("../../data/DDU-DU DDU-DU.flac", false);
+	TSound::GetInstance()->Load("../../data/Forever Young.flac", false);
+	TSound::GetInstance()->Load("../../data/004.flac", false);
+	TSound::GetInstance()->Load("../../data/Egotistic.flac", false);*/
+
 	//m_pSystem->createSound("../../data/abel_leaf.asf", FMOD_DEFAULT, 0, &m_pSound[m_iSoundList++]);
 	//m_pSystem->playSound(m_pSound[m_iSoundList-1], 0, false, &m_Channel[m_iSoundList-1]);
 
