@@ -44,7 +44,7 @@ bool TGameScene::Init()
 		m_npcList[inpc].Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
 		m_npcList[inpc].m_bDebugRect = true;
 		m_npcList[inpc].m_fSpeed = 10 + rand() % 200;
-		m_npcList[inpc].m_fAttackRadius = 30 + rand() % 10;
+		m_npcList[inpc].m_fAttackRadius = 30 + rand() % 100;
 	}
 	return true;
 }
@@ -71,13 +71,13 @@ bool TGameScene::Frame()
 	}
 	m_EffectMgr.Frame();
 
-	for (int inpc = 0; inpc < g_iMaxNpcCount; inpc++)
+	/*for (int inpc = 0; inpc < g_iMaxNpcCount; inpc++)
 	{
 		if (m_EffectMgr.IsCollision( GetCollider(inpc)))
 		{
 			SetNPCDead(inpc, true);
 		}
-	}
+	}*/
 
 	for (int inpc = 0; inpc < m_iMaxNpcCount; inpc++)
 	{

@@ -369,7 +369,7 @@ TObject::TObject()
 
 	m_fDir[0] = 1.0f;
 	m_fDir[1] = 1.0f;
-	m_fSpeed = 30.0f + (rand() % 50);
+	m_fSpeed = 100.0f;
 	m_fAttackRadius = 200.0f;
 
 	m_bDead = false;

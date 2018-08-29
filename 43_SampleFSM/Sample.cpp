@@ -44,7 +44,7 @@ public:
 				L"../../data/bitmap2.bmp");
 			m_npcList[iNpc].m_bDebugRect = true;
 			m_npcList[iNpc].m_fSpeed = 10 + rand() % 200;
-			m_npcList[iNpc].m_fAttackRadius = 30 + rand() % 10;
+			m_npcList[iNpc].m_fAttackRadius = 30 + rand() % 100;
 			
 		}
 		return true;
