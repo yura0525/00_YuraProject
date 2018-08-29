@@ -62,6 +62,7 @@ bool TEffectMgr::IsCollision(RECT rt)
 			return true;
 		}
 	}
+	return false;
 }
 bool TEffectMgr::GameDataLoad(const TCHAR* pszFileName)
 {

@@ -71,13 +71,13 @@ bool TGameScene::Frame()
 	}
 	m_EffectMgr.Frame();
 
-	/*for (int inpc = 0; inpc < g_iMaxNpcCount; inpc++)
+	for (int inpc = 0; inpc < g_iMaxNpcCount; inpc++)
 	{
 		if ( m_EffectMgr.IsCollision(GetCollider(inpc)) )
 		{
 			SetNPCDead(inpc, true);
 		}
-	}*/
+	}
 
 	for (int inpc = 0; inpc < m_iMaxNpcCount; inpc++)
 	{
