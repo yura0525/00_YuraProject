@@ -57,7 +57,7 @@ public:
 
 		for (int inpc = 0; inpc < g_iMaxNpcCount; inpc++)
 		{
-			if (TCollision::RectInRect(m_npcList[inpc].m_rtDraw, m_Hero.m_rtDraw))
+			if (TCollision::SphereInSphere(m_npcList[inpc].m_rtDraw, m_Hero.m_rtDraw))
 			{
 				m_npcList[inpc].m_bDead = true;
 			}
@@ -66,7 +66,7 @@ public:
 		for (int inpc = 0; inpc < g_iMaxNpcCount; inpc++)
 		{
 			if (I_Input.Key(VK_LBUTTON) && 
-				TCollision::RectInPoint(m_npcList[inpc].m_rtCollision, I_Input.m_MousePos))
+				TCollision::SphereInPoint(m_npcList[inpc].m_rtCollision, I_Input.m_MousePos))
 			{
 				m_npcList[inpc].m_bDead = true;
 			}

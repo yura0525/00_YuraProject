@@ -73,7 +73,7 @@ bool TGameScene::Frame()
 
 	/*for (int inpc = 0; inpc < g_iMaxNpcCount; inpc++)
 	{
-		if (m_EffectMgr.IsCollision( GetCollider(inpc)))
+		if ( m_EffectMgr.IsCollision(GetCollider(inpc)) )
 		{
 			SetNPCDead(inpc, true);
 		}
@@ -81,9 +81,8 @@ bool TGameScene::Frame()
 
 	for (int inpc = 0; inpc < m_iMaxNpcCount; inpc++)
 	{
-		if (TCollision::RectInRect(m_npcList[inpc].m_rtCollision, m_Hero.m_rtCollision))
+		if (TCollision::SphereInSphere(m_npcList[inpc].m_rtCollision, m_Hero.m_rtCollision))
 		{
-			m_npcList[inpc].m_bDead = true;
 			m_Hero.m_bDead = true;
 		}
 	}
@@ -151,6 +150,10 @@ bool TGameScene::GetNPCDead(int iNPC)
 void TGameScene::SetNPCDead(int iNPC, bool bDead)
 {
 	m_npcList[iNPC].m_bDead = bDead;
+
+	TCHAR	csBuffer[256];
+	_stprintf_s(csBuffer, L"iNPC = %d, bDead  = %d, m_npcList[iNPC].m_bDead = %d\n", iNPC, bDead, m_npcList[iNPC].m_bDead);
+	OutputDebugString(csBuffer);
 }
 RECT TGameScene::GetCollider(int iNPC)
 {

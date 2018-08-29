@@ -57,7 +57,7 @@ bool TGameScene::Frame()
 
 	for (int inpc = 0; inpc < m_iMaxNpcCount; inpc++)
 	{
-		if (TCollision::RectInRect(m_npcList[inpc].m_rtCollision, m_Hero.m_rtCollision))
+		if (TCollision::SphereInSphere(m_npcList[inpc].m_rtCollision, m_Hero.m_rtCollision))
 		{
 			m_npcList[inpc].m_bDead = true;
 		}
