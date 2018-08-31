@@ -31,7 +31,6 @@ bool TEffectObject::Frame()
 TEffectObject::TEffectObject()
 {
 	m_iCurrentSprite = 0;
-	m_iCurrentSprite = 0;
 	m_fSpriteTime = 1.0f;
 	m_fOffSet = 1.0f;
 	m_fLifeTime = 1.0f;
@@ -109,7 +108,7 @@ bool TEffectMgr::Frame()
 
 		if (fAddTime >= 0.1f);
 		{
-			AddEffect(I_Input.m_MousePos);
+			AddEffect(g_pHeroPos);
 			fAddTime -= 0.1f;
 		}
 	}

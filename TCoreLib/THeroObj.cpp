@@ -10,7 +10,7 @@ bool THeroObj::FadeOut()
 		return true;
 	}
 
-	g_pHeroPos.y = m_pos.x;
+	g_pHeroPos.x = m_pos.x;
 	g_pHeroPos.y = m_pos.y;
 	return false;
 }
@@ -40,7 +40,7 @@ bool THeroObj::Render()
 
 	if (m_fAlpha < 255)
 	{
-		AlphaBlend(g_hOffScreenDC, m_posDraw.x, m_posDraw.y, m_posDraw.x, m_posDraw.y,
+		AlphaBlend(g_hOffScreenDC, m_posDraw.x, m_posDraw.y, m_rtDraw.right, m_rtDraw.bottom,
 			m_pColorBitmap->m_hMemDC, m_pMaskBitmap->m_hMemDC,
 			m_rtDraw.left, m_rtDraw.top, m_rtDraw.right, m_rtDraw.bottom, m_fAlpha, SRCCOPY, RGB(0, 0, 0));
 	}
