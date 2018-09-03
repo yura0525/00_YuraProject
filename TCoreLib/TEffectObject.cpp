@@ -107,7 +107,7 @@ bool TEffectMgr::Frame()
 		static float fAddTime = 0.0f;
 		fAddTime += g_fSecPerFrame;
 
-		if (fAddTime >= 0.1f);
+		if (fAddTime >= 0.1f)
 		{
 			AddEffect(I_Input.m_MousePos);
 			fAddTime -= 0.1f;
