@@ -63,7 +63,7 @@ bool Sample::Init()
 	sd.BufferCount = 1;									//백버퍼의 갯수.
 	sd.OutputWindow = m_hWnd;
 	sd.Windowed = true;
-	sd.SampleDesc.Count = 1;
+	sd.SampleDesc.Count = 1;							//한번만 뿌린다. 여러번 뿌리면 안티앨리어싱.
 
 	for(int iMode = 0; iMode < numDriverType; iMode++)
 	{
@@ -91,7 +91,7 @@ bool Sample::Init()
 	//생성된 이후의 제어는 m_pContext
 	m_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &m_pRenderTargetView);
 
-	//Get을 쓰고 원하는 작업을 한뒤에는 무조건 삭제해야한다.Release();
+	//GetBuffer을 쓰고 원하는 작업을 한뒤에는 무조건 삭제해야한다.Release();
 	pBackBuffer->Release();
 	m_pContext->OMSetRenderTargets(1, &m_pRenderTargetView, NULL);
 	
@@ -104,7 +104,7 @@ bool Sample::Init()
 	vp.Height = g_rtClient.bottom;
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
-	m_pContext->RSSetViewports(1, &vp);
+	m_pContext->RSSetViewports(1, &vp);			//RasterizerStage에 셋팅.
 	return true;
 }
 
@@ -134,7 +134,7 @@ bool Sample::Render()
 }
 bool Sample::Release()
 {
-
+	//생성한 역순으로 Release한다.
 	if (m_pRenderTargetView)	m_pRenderTargetView->Release();
 	if (m_pSwapChain)			m_pSwapChain->Release();
 	if (m_pd3dDevice)			m_pd3dDevice->Release();

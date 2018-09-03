@@ -172,6 +172,7 @@ copy "*.lib" "../../lib"</Command>
     <ClCompile Include="TButton.cpp" />
     <ClCompile Include="TCollision.cpp" />
     <ClCompile Include="TCore.cpp" />
+    <ClCompile Include="TDevice.cpp" />
     <ClCompile Include="TEffectObject.cpp" />
     <ClCompile Include="TEndScene.cpp" />
     <ClCompile Include="TEnemy.cpp" />
@@ -189,6 +190,8 @@ copy "*.lib" "../../lib"</Command>
     <ClCompile Include="TStandAction.cpp" />
     <ClCompile Include="TTimer.cpp" />
     <ClCompile Include="TWindow.cpp" />
+    <ClCompile Include="xCore.cpp" />
+    <ClCompile Include="xWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fmod.h" />
@@ -206,6 +209,7 @@ copy "*.lib" "../../lib"</Command>
     <ClInclude Include="TButton.h" />
     <ClInclude Include="TCollision.h" />
     <ClInclude Include="TCore.h" />
+    <ClInclude Include="TDevice.h" />
     <ClInclude Include="TEffectObject.h" />
     <ClInclude Include="TEnemy.h" />
     <ClInclude Include="TEnemyState.h" />
@@ -222,6 +226,12 @@ copy "*.lib" "../../lib"</Command>
     <ClInclude Include="TStd.h" />
     <ClInclude Include="TTimer.h" />
     <ClInclude Include="TWindow.h" />
+    <ClInclude Include="xCore.h" />
+    <ClInclude Include="xStd.h" />
+    <ClInclude Include="xWindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fmodL64.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

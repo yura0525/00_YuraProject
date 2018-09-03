@@ -1,6 +1,6 @@
 #pragma once
 #include "xStd.h"
-
+#include "dxgi.h" //dxgi.lib CreateDXGIFactory 외부 기호
 class xWindow
 {
 public:
