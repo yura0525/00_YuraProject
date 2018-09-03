@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{06DC7ACF-0D53-4D6D-8BB0-A1E59395B480}</ProjectGuid>
+    <ProjectGuid>{AE9EEE9E-D620-4A1F-A376-68A969F4F6EC}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>CreateDevite2</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
@@ -150,6 +150,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Sample.cpp" />
+    <ClCompile Include="TDevice.cpp" />
+    <ClCompile Include="xCore.cpp" />
+    <ClCompile Include="xWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TDevice.h" />
+    <ClInclude Include="xCore.h" />
+    <ClInclude Include="xStd.h" />
+    <ClInclude Include="xWindow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
