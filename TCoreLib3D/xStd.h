@@ -12,8 +12,6 @@
 #include "d3d11.h"
 
 //프로젝트 속성에서 추가 종속성에 넣을걸 코드로 넣을수 있다.
-#pragma comment(lib, "winmm.lib")
-#pragma comment(lib, "fmod64_vc.lib")
 #pragma comment(lib, "xCoreLib.lib")
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
