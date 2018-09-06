@@ -3,7 +3,6 @@
 
 bool TAttackAction::Process(TObject* pTarget)
 {
-
 	RECT rt;
 	rt.left = m_pOwner->m_pos.x - m_pOwner->m_fAttackRadius;
 	rt.top = m_pOwner->m_pos.y - m_pOwner->m_fAttackRadius;
@@ -24,8 +23,6 @@ bool TAttackAction::Process(TObject* pTarget)
 
 	vDir.x /= fLength;
 	vDir.y /= fLength;
-
-	fLength = sqrt(vDir.x*vDir.x + vDir.y*vDir.y);
 	
 	TPoint vPos;
 
