@@ -134,6 +134,9 @@ bool Sample::Render()
 }
 bool Sample::Release()
 {
+	//장치의 모든 기본설정을 복원하고 장치를 만들때 상태로 되돌린다.
+	if (m_pContext)				m_pContext->ClearState();
+
 	//생성한 역순으로 Release한다.
 	if (m_pRenderTargetView)	m_pRenderTargetView->Release();
 	if (m_pSwapChain)			m_pSwapChain->Release();

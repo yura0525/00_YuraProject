@@ -4,6 +4,8 @@
 class xCore : public xWindow
 {
 public:
+	virtual bool GamePreInit() { return false; }
+
 	bool GameInit();
 	bool GameRun();
 	bool GameRelease();
@@ -13,7 +15,6 @@ public:
 	bool GamePreRender();
 	bool GamePostRender();
 
-	virtual bool GamePreInit() { return false; }
 //public:
 //	virtual bool Init() { return true; }
 //	virtual bool Frame() { return true; }

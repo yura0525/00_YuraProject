@@ -4,13 +4,13 @@
 class TDevice
 {
 public:
-	ID3D11Device *			m_pd3dDevice;
-	ID3D11DeviceContext*	m_pContext;
-	IDXGISwapChain*			m_pSwapChain;	//WINAPI의 더블버퍼링이랑 같음.백버퍼를 만듬.
-	IDXGIFactory*			m_pDXGIFactory;
+	ID3D11Device *			m_pd3dDevice;	// 디바이스 객체
+	ID3D11DeviceContext*	m_pContext;		// 디바이스 컨텍스트
+	IDXGISwapChain*			m_pSwapChain;	//WINAPI의 더블버퍼링이랑 같음.백버퍼를 만듬.// 스왑체인 객체
+	IDXGIFactory*			m_pDXGIFactory;	// DXGI 객체
 
-	ID3D11RenderTargetView*	m_pRenderTargetView;
-
+	ID3D11RenderTargetView*	m_pRenderTargetView;	// 메인 랜더타켓 뷰
+	DXGI_SWAP_CHAIN_DESC	m_sd;
 public:
 	HRESULT CreateDevice();
 	HRESULT CreateDX11GIFactory();
@@ -18,13 +18,14 @@ public:
 	HRESULT SetRenderTarget();
 	void SetViewPort();
 
+	HRESULT ResizeDevice(UINT iWidth, UINT iHeight);
 public:
-	bool Init();
+	virtual bool Init();
 	virtual bool Frame() { return true; }
-	bool PreRender();
-	bool PostRender();
-	bool Render();
-	bool Release();
+	virtual bool PreRender();
+	virtual bool PostRender();
+	virtual bool Render();
+	virtual bool Release();
 public:
 	TDevice();
 	virtual ~TDevice();

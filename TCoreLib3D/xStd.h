@@ -9,7 +9,8 @@
 #include <string>
 #include <list>
 #include <vector>
-#include "d3d11.h"
+#include <d3d11.h>
+#include <dxgi.h>
 
 //프로젝트 속성에서 추가 종속성에 넣을걸 코드로 넣을수 있다.
 #pragma comment(lib, "xCoreLib.lib")
@@ -38,6 +39,9 @@ extern HWND			g_hWnd;
 extern HINSTANCE	g_hInstance;
 extern float		g_fSecPerFrame;
 extern RECT			g_rtClient;
+extern float		g_fGameTimer;
+extern float		g_fSecPerFrame;
+
 //추가 포함 디렉토리에 해당파일을 또 추가하면
 //../../include; 경로를 추가해서 또 include하면
 //컴파일러 오류 C2953

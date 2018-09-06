@@ -66,24 +66,23 @@ HRESULT TDevice::CreateDX11GIFactory()
 HRESULT TDevice::CreateSwapChain()
 {
 	//백버퍼 만드는것.
-	DXGI_SWAP_CHAIN_DESC sd;
-	ZeroMemory(&sd, sizeof(DXGI_SWAP_CHAIN_DESC));
+	ZeroMemory(&m_sd, sizeof(DXGI_SWAP_CHAIN_DESC));
 	DXGI_MODE_DESC BufferDesc;
 
-	sd.BufferDesc.Width = g_rtClient.right;
-	sd.BufferDesc.Height = g_rtClient.bottom;
+	m_sd.BufferDesc.Width = g_rtClient.right;
+	m_sd.BufferDesc.Height = g_rtClient.bottom;
 
-	sd.BufferDesc.RefreshRate.Numerator = 60;
-	sd.BufferDesc.RefreshRate.Denominator = 1;			//60메가 헤르츠 1/60
-	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;	//백버퍼의 용도.
-	sd.BufferCount = 1;									//백버퍼의 갯수.
-	sd.OutputWindow = g_hWnd;
-	sd.Windowed = true;
-	sd.SampleDesc.Count = 1;							//한번만 뿌린다. 여러번 뿌리면 안티앨리어싱.
+	m_sd.BufferDesc.RefreshRate.Numerator = 60;
+	m_sd.BufferDesc.RefreshRate.Denominator = 1;			//60메가 헤르츠 1/60
+	m_sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	m_sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;	//백버퍼의 용도.
+	m_sd.BufferCount = 1;									//백버퍼의 갯수.
+	m_sd.OutputWindow = g_hWnd;
+	m_sd.Windowed = true;
+	m_sd.SampleDesc.Count = 1;							//한번만 뿌린다. 여러번 뿌리면 안티앨리어싱.
 
 	HRESULT hr = S_OK;
-	m_pDXGIFactory->CreateSwapChain(m_pd3dDevice, &sd, &m_pSwapChain);
+	m_pDXGIFactory->CreateSwapChain(m_pd3dDevice, &m_sd, &m_pSwapChain);
 
 	return hr;
 }
@@ -124,12 +123,12 @@ void TDevice::SetViewPort()
 bool TDevice::Init()
 {
 	HRESULT hr;
-	if (FAILED(hr = CreateDevice()))
+	if (FAILED(hr = CreateDX11GIFactory()))
 	{
 		return false;
 	}
 
-	if (FAILED(hr = CreateDX11GIFactory()))
+	if (FAILED(hr = CreateDevice()))
 	{
 		return false;
 	}

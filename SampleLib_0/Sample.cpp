@@ -6,7 +6,7 @@ struct TOutput									//모니터의 정보와 갯수를 알수있다.
 	std::vector<DXGI_MODE_DESC>		m_pModeList;
 	std::vector<IDXGIOutput*>		m_pOutputList;
 };
-struct TAdapter
+struct TAdapter									//그래픽카드
 {
 	IDXGIAdapter*				m_pAdapter;
 	DXGI_ADAPTER_DESC			desc;

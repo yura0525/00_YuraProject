@@ -8,6 +8,7 @@ public:
 	ID3D11DeviceContext*	m_pContext;
 	IDXGISwapChain*			m_pSwapChain;	//WINAPI의 더블버퍼링이랑 같음.백버퍼를 만듬.
 	IDXGIFactory*			m_pDXGIFactory;
+	DXGI_SWAP_CHAIN_DESC	m_sd;
 
 	ID3D11RenderTargetView*	m_pRenderTargetView;
 

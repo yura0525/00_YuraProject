@@ -7,7 +7,7 @@ HRESULT TDevice::CreateDevice()
 
 	//1)디바이스 생성.
 	UINT Flags = 0;
-
+	Flags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 	//다이렉트엑스에서 오류날때 친절하게 알려준다. 디버그시에만 알려주는걸로.
 #ifdef _DEBUG
 	Flags |= D3D11_CREATE_DEVICE_DEBUG;
@@ -31,11 +31,18 @@ HRESULT TDevice::CreateDevice()
 
 	UINT numDriverType = sizeof(DriverType) / sizeof(D3D_DRIVER_TYPE);
 
+	//Alt + Enter 막는 코드.
+	/*IDXGIAdapter* pAdapter = NULL;
+	m_pDXGIFactory->EnumAdapters(0, &pAdapter);*/
+
 	for (int iMode = 0; iMode < numDriverType; iMode++)
 	{
 		//D3D_FEATURE_LEVEL_11_0의 값이 들어온다.
 		D3D_FEATURE_LEVEL retFL;
 
+		//Alt + Enter 막는 코드.
+		//if (SUCCEEDED(D3D11CreateDevice(pAdapter, D3D_DRIVER_TYPE_UNKNOWN, NULL, Flags,
+		//	pFeatureLevels, FeatureLevels, D3D11_SDK_VERSION, &m_pd3dDevice, &retFL, &m_pContext)))
 		if (SUCCEEDED(D3D11CreateDevice(NULL, DriverType[iMode], NULL, Flags,
 			pFeatureLevels, FeatureLevels, D3D11_SDK_VERSION, &m_pd3dDevice, &retFL, &m_pContext)))
 		{
@@ -66,24 +73,25 @@ HRESULT TDevice::CreateDX11GIFactory()
 HRESULT TDevice::CreateSwapChain()
 {
 	//백버퍼 만드는것.
-	DXGI_SWAP_CHAIN_DESC sd;
-	ZeroMemory(&sd, sizeof(DXGI_SWAP_CHAIN_DESC));
-	DXGI_MODE_DESC BufferDesc;
+	ZeroMemory(&m_sd, sizeof(DXGI_SWAP_CHAIN_DESC));
 
-	sd.BufferDesc.Width = g_rtClient.right;
-	sd.BufferDesc.Height = g_rtClient.bottom;
+	m_sd.BufferDesc.Width = g_rtClient.right;
+	m_sd.BufferDesc.Height = g_rtClient.bottom;
+	m_sd.BufferDesc.RefreshRate.Numerator = 60;
+	m_sd.BufferDesc.RefreshRate.Denominator = 1;			//60메가 헤르츠 1/60(주사율)
+	m_sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	m_sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;	//백버퍼의 용도.
+	m_sd.BufferCount = 1;									//백버퍼의 갯수.
+	m_sd.OutputWindow = g_hWnd;
+	m_sd.Windowed = true;
+	m_sd.SampleDesc.Count = 1;							//한번만 뿌린다. 여러번 뿌리면 안티앨리어싱.
 
-	sd.BufferDesc.RefreshRate.Numerator = 60;
-	sd.BufferDesc.RefreshRate.Denominator = 1;			//60메가 헤르츠 1/60
-	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;	//백버퍼의 용도.
-	sd.BufferCount = 1;									//백버퍼의 갯수.
-	sd.OutputWindow = g_hWnd;
-	sd.Windowed = true;
-	sd.SampleDesc.Count = 1;							//한번만 뿌린다. 여러번 뿌리면 안티앨리어싱.
+	//초기해상도대로 띄운다. 전체화면 전환시에 자동으로 바탕화면 해상도로 변경되는걸 막는다.
+	m_sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+	
 
 	HRESULT hr = S_OK;
-	m_pDXGIFactory->CreateSwapChain(m_pd3dDevice, &sd, &m_pSwapChain);
+	m_pDXGIFactory->CreateSwapChain(m_pd3dDevice, &m_sd, &m_pSwapChain);
 
 	return hr;
 }
@@ -120,20 +128,44 @@ void TDevice::SetViewPort()
 	m_pContext->RSSetViewports(1, &vp);			//RasterizerStage에 셋팅.
 }
 
+HRESULT TDevice::ResizeDevice(UINT iWidth, UINT iHeight)
+{
+	if (m_pd3dDevice == NULL) return false;
 
+	HRESULT hr = S_OK;
+
+	//렌더타겟을 널로 셋팅하고 해제
+	m_pContext->OMSetRenderTargets(0, NULL, NULL);
+	if (m_pRenderTargetView) m_pRenderTargetView->Release();
+
+	//백버퍼의 크기를 조정한다.
+	m_pSwapChain->ResizeBuffers(m_sd.BufferCount, m_sd.BufferDesc.Width, m_sd.BufferDesc.Height,
+		m_sd.BufferDesc.Format, m_sd.Flags);
+
+	//랜더타겟뷰 생성및 적용한다.
+	if (FAILED(hr = SetRenderTarget()))
+	{
+		return hr;
+	}
+
+	SetViewPort();
+	return hr;
+}
 bool TDevice::Init()
 {
 	HRESULT hr;
-	if (FAILED(hr = CreateDevice()))
-	{
-		return false;
-	}
-
 	if (FAILED(hr = CreateDX11GIFactory()))
 	{
 		return false;
 	}
 
+
+	if (FAILED(hr = CreateDevice()))
+	{
+		return false;
+	}
+
+	
 	if (FAILED(hr = CreateSwapChain()))
 	{
 		return false;
@@ -145,6 +177,12 @@ bool TDevice::Init()
 	}
 
 	SetViewPort();
+
+	//Alt + Enter 키를 막는다.
+	if (FAILED(hr = m_pDXGIFactory->MakeWindowAssociation(NULL, DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER)))
+	{
+		return hr;
+	}
 	return true;
 }
 

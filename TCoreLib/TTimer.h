@@ -12,7 +12,7 @@ private:
 	
 	DWORD	m_dwFrameCount;
 	DWORD	m_dwFPS;			//2) 1초의 프레임 카운터
-	DWORD	m_dwBeforeTick;
+	DWORD	m_BeforeTick;
 	
 	float	m_fSecPerFrame;		//1) 1프레임의 경과 시간
 	float	m_fGameTime;		//3) 게임이 실행된 누적시간

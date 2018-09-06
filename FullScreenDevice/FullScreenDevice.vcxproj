@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{F16E7920-53F5-40DE-B194-EC64D5214C32}</ProjectGuid>
+    <ProjectGuid>{7D545D4D-C21C-411C-BC36-FC29FC75ABDA}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>SampleLib0</RootNamespace>
+    <RootNamespace>FullScreenDevice</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -72,8 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>../../output/SampleLib_0</OutDir>
-    <IntDir>../../output/SampleLib_0</IntDir>
+    <OutDir>../../output/FullScreenDevice</OutDir>
+    <IntDir>../../output/FullScreenDevice</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>

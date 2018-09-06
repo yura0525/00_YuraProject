@@ -5,7 +5,7 @@ float g_fSecPerFrame = 0.0f;
 bool TTimer::Init()
 {
 	//__imp_ timeGetTime() 링커의 입력 추가종속성에 추가 : winmm.lib
-	m_dwBeforeTick = timeGetTime();				//1 / 1000초의 정밀도
+	m_BeforeTick = timeGetTime();				//1 / 1000초의 정밀도
 
 	return true;
 }
@@ -13,7 +13,7 @@ bool TTimer::Frame()
 {
 	DWORD dwCurrentTick = timeGetTime();
 
-	DWORD dwElapseTick = dwCurrentTick - m_dwBeforeTick;
+	DWORD dwElapseTick = dwCurrentTick - m_BeforeTick;
 	m_fSecPerFrame = dwElapseTick / 1000.0f;
 	g_fSecPerFrame = m_fSecPerFrame;
 
@@ -34,7 +34,7 @@ bool TTimer::Frame()
 
 	m_dwFrameCount++;
 
-	m_dwBeforeTick = dwCurrentTick;
+	m_BeforeTick = dwCurrentTick;
 	return true;
 }
 bool TTimer::Render()
@@ -65,7 +65,7 @@ TTimer::TTimer()
 	m_fGameTime = 0.0f;
 	m_dwFrameCount = 0;
 	m_dwFPS = 0;
-	m_dwBeforeTick = 0;
+	m_BeforeTick = 0;
 	m_fSecPerFrame =0.0f;		//1) 1프레임의 경과 시간
 	m_fTimer = 0.0f;
 }
