@@ -227,7 +227,6 @@ bool xWindow::GameRelease()
 {
 	return true;
 }
-
 xWindow::xWindow()
 {
 	g_pWindow = this;

@@ -1,8 +1,13 @@
 #pragma once
 #include "xWindow.h"
+#include "TDirectWrite.h"
+#include "TTimer.h"
 
 class xCore : public xWindow
 {
+public:
+	TTimer			m_Timer;
+	TDirectWrite	m_Font;
 public:
 	virtual bool GamePreInit() { return false; }
 
@@ -14,14 +19,16 @@ public:
 	bool GameRender();
 	bool GamePreRender();
 	bool GamePostRender();
+	void DeleteDeviceResources(UINT iWidth, UINT iHeight);
+	HRESULT CreateDeviceResources(UINT iWidth, UINT iHeight);
 
-//public:
-//	virtual bool Init() { return true; }
-//	virtual bool Frame() { return true; }
-//	virtual bool PreRender() { return true; }
-//	virtual bool PostRender() { return true; }
-//	virtual bool Render() { return true; }
-//	virtual bool Release() { return true; }
+public:
+	virtual bool Init();
+	virtual bool Frame();
+	virtual bool PreRender();
+	virtual bool PostRender();
+	virtual bool Render();
+	virtual bool Release();
 
 public:
 	xCore();

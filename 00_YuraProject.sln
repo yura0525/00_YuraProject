@@ -151,6 +151,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "45_DirectWrite", "DirectWrite\DirectWrite.vcxproj", "{8542EC47-1390-426D-8970-06EC98A1B63A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "46_DirectInput", "46_DirectInput\46_DirectInput.vcxproj", "{247DC983-A885-4A55-9F47-51FCAA65CBCF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0D417BF8-274A-42C7-BCB3-D06DC44FC929} = {0D417BF8-274A-42C7-BCB3-D06DC44FC929}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

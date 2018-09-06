@@ -46,14 +46,16 @@ HRESULT TDirectWrite::DrawText(RECT rt, const TCHAR* pText, D2D1::ColorF color)
 {
 	m_pRT->BeginDraw();
 
-	D2D1::Matrix3x2F matWorld;
-	D2D1_POINT_2F center;
-	center.x = 0;
-	center.y = 0;
+	//D2D1::Matrix3x2F matWorld;
+	//D2D1_POINT_2F center;
+	//center.x = 400;
+	//center.y = 300;
+	float fScale = (cosf(g_fGameTimer) * 0.5f) + 0.5f;
+
 
 	//D2D1::Matrix3x2F rot = matWorld.Rotation(g_fGameTimer, center);
 
-	//m_pRT->SetTransform(m_TextList[iText].matWorld);
+	//m_pRT->SetTransform(matWorld);
 	m_pColorBrush->SetColor(color);
 	D2D1_RECT_F rf = D2D1::RectF(rt.left, rt.top, rt.right, rt.bottom);
 

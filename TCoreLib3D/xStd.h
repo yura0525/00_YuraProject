@@ -1,4 +1,5 @@
 #pragma once
+#define DIRECTINPUT_VERSION 0x0800
 
 #include <windows.h>
 #include <assert.h>
@@ -11,11 +12,14 @@
 #include <vector>
 #include <d3d11.h>
 #include <dxgi.h>
+#include <dinput.h>
 
 //프로젝트 속성에서 추가 종속성에 넣을걸 코드로 넣을수 있다.
 #pragma comment(lib, "xCoreLib.lib")
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
+#pragma comment( lib, "dinput8.lib")
+#pragma comment( lib, "dxguid.lib")
 
 typedef std::basic_string <char>	C_STR;	//multi-byte
 typedef std::basic_string <wchar_t>	W_STR;	//unicode byte
@@ -42,6 +46,17 @@ extern RECT			g_rtClient;
 extern float		g_fGameTimer;
 extern float		g_fSecPerFrame;
 
+struct TGameInput
+{
+	BOOL bFront;
+	BOOL bBack;
+	BOOL bLeft;
+	BOOL bRight;
+	BOOL bAttack;
+	BOOL bJump;
+};
+
+extern TGameInput g_Input;
 //추가 포함 디렉토리에 해당파일을 또 추가하면
 //../../include; 경로를 추가해서 또 include하면
 //컴파일러 오류 C2953

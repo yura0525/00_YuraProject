@@ -1,7 +1,7 @@
 #include "TTimer.h"
 
 float g_fSecPerFrame = 0.0f;
-
+float g_fGameTimer = 0.0f;
 bool TTimer::Init()
 {
 	//이전 시간 저장.
@@ -41,6 +41,7 @@ bool TTimer::Frame()
 	m_BeforeTick = m_CurrentTime;
 
 	m_fGameTime = static_cast<float>(m_CurrentTime.QuadPart - m_Start.QuadPart) / static_cast<float>(m_Frequency.QuadPart);
+	g_fGameTimer = m_fGameTime;
 	return true;
 }
 bool TTimer::Render()

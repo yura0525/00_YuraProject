@@ -127,6 +127,13 @@ void TDevice::SetViewPort()
 	vp.MaxDepth = 1.0f;
 	m_pContext->RSSetViewports(1, &vp);			//RasterizerStage에 셋팅.
 }
+void TDevice::DeleteDeviceResources(UINT iWidth, UINT iHeight)
+{
+}
+HRESULT TDevice::CreateDeviceResources(UINT iWidth, UINT iHeight)
+{
+	return S_OK;
+}
 
 HRESULT TDevice::ResizeDevice(UINT iWidth, UINT iHeight)
 {
@@ -136,6 +143,8 @@ HRESULT TDevice::ResizeDevice(UINT iWidth, UINT iHeight)
 
 	//렌더타겟을 널로 셋팅하고 해제
 	m_pContext->OMSetRenderTargets(0, NULL, NULL);
+	DeleteDeviceResources(iWidth, iHeight);
+
 	if (m_pRenderTargetView) m_pRenderTargetView->Release();
 
 	//백버퍼의 크기를 조정한다.
@@ -149,6 +158,8 @@ HRESULT TDevice::ResizeDevice(UINT iWidth, UINT iHeight)
 	}
 
 	SetViewPort();
+
+	CreateDeviceResources(iWidth, iHeight);
 	return hr;
 }
 bool TDevice::Init()

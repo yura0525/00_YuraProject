@@ -1,6 +1,5 @@
 #pragma once
 #include "xStd.h"
-
 class TDevice
 {
 public:
@@ -17,6 +16,9 @@ public:
 	HRESULT CreateSwapChain();
 	HRESULT SetRenderTarget();
 	void SetViewPort();
+
+	virtual void DeleteDeviceResources(UINT iWidth, UINT iHeight);
+	virtual HRESULT CreateDeviceResources(UINT iWidth, UINT iHeight);
 
 	HRESULT ResizeDevice(UINT iWidth, UINT iHeight);
 public:

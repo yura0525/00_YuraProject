@@ -166,14 +166,18 @@ copy "*.lib" "../../lib"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="TDevice.cpp" />
+    <ClCompile Include="TDirectWrite.cpp" />
     <ClCompile Include="TTimer.cpp" />
     <ClCompile Include="xCore.cpp" />
+    <ClCompile Include="xInput.cpp" />
     <ClCompile Include="xWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TDevice.h" />
+    <ClInclude Include="TDirectWrite.h" />
     <ClInclude Include="TTimer.h" />
     <ClInclude Include="xCore.h" />
+    <ClInclude Include="xInput.h" />
     <ClInclude Include="xStd.h" />
     <ClInclude Include="xWindow.h" />
   </ItemGroup>
