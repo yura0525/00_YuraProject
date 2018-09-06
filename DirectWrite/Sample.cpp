@@ -21,14 +21,14 @@ public:
 		m_Write.Set(m_hWnd, m_sd.BufferDesc.Width, m_sd.BufferDesc.Height, m_pBackBuffer);
 		if (m_pBackBuffer)	m_pBackBuffer->Release();
 		
-		//TTextArray s0, s1, s2;
-		//s0.pText = L"asdf";
-		//s1.pText = L"qwer";
-		//s2.pText = L"zxcv";
+		TTextArray s0, s1, s2;
+		s0.pText = L"asdf";
+		s1.pText = L"qwer";
+		s2.pText = L"zxcv";
 
-		//m_Write.m_TextList.push_back(s0);
-		//m_Write.m_TextList.push_back(s1);
-		//m_Write.m_TextList.push_back(s2);
+		m_Write.m_TextList.push_back(s0);
+		m_Write.m_TextList.push_back(s1);
+		m_Write.m_TextList.push_back(s2);
 
 		return true;
 	}
@@ -70,7 +70,7 @@ public:
 
 		rt.top += 50;
 		m_Write.m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
-		m_Write.m_pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+		m_Write.m_pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 
 		m_Write.DrawText(g_rtClient, m_csBuffer, D2D1::ColorF(1, 0, 0, 1));
 		return true;
