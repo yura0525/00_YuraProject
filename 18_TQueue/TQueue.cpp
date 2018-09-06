@@ -24,7 +24,7 @@ int TQueue::Put(int iData)
 	}
 	m_iQueueArray[m_iNear] = iData;
 	m_iNear = (++m_iNear) % g_iMaxQueue;
-
+	return m_iNear;
 }
 void TQueue::Show()
 {

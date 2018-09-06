@@ -134,21 +134,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DirectX3D", "DirectX3D", "{
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xCoreLib", "TCoreLib3D\TCoreLib.vcxproj", "{0D417BF8-274A-42C7-BCB3-D06DC44FC929}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CreateDevice_1", "CreateDevice\CreateDevice.vcxproj", "{94DAC799-5012-4420-8EA7-F1C5B1B45A4F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "41_CreateDevice_1", "CreateDevice\CreateDevice.vcxproj", "{94DAC799-5012-4420-8EA7-F1C5B1B45A4F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleLib_0", "SampleLib_0\SampleLib_0.vcxproj", "{F16E7920-53F5-40DE-B194-EC64D5214C32}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "43_SampleLib", "SampleLib_0\SampleLib_0.vcxproj", "{F16E7920-53F5-40DE-B194-EC64D5214C32}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0D417BF8-274A-42C7-BCB3-D06DC44FC929} = {0D417BF8-274A-42C7-BCB3-D06DC44FC929}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CreateDevice_2", "CreateDevice_2\CreateDevice_2.vcxproj", "{AE9EEE9E-D620-4A1F-A376-68A969F4F6EC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "42_CreateDevice_2", "CreateDevice_2\CreateDevice_2.vcxproj", "{AE9EEE9E-D620-4A1F-A376-68A969F4F6EC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FullScreenDevice", "FullScreenDevice\FullScreenDevice.vcxproj", "{7D545D4D-C21C-411C-BC36-FC29FC75ABDA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "44_FullScreenDevice", "FullScreenDevice\FullScreenDevice.vcxproj", "{7D545D4D-C21C-411C-BC36-FC29FC75ABDA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0D417BF8-274A-42C7-BCB3-D06DC44FC929} = {0D417BF8-274A-42C7-BCB3-D06DC44FC929}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectWrite", "DirectWrite\DirectWrite.vcxproj", "{8542EC47-1390-426D-8970-06EC98A1B63A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "45_DirectWrite", "DirectWrite\DirectWrite.vcxproj", "{8542EC47-1390-426D-8970-06EC98A1B63A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "46_DirectInput", "46_DirectInput\46_DirectInput.vcxproj", "{247DC983-A885-4A55-9F47-51FCAA65CBCF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -566,6 +568,14 @@ Global
 		{8542EC47-1390-426D-8970-06EC98A1B63A}.Release|x64.Build.0 = Release|x64
 		{8542EC47-1390-426D-8970-06EC98A1B63A}.Release|x86.ActiveCfg = Release|Win32
 		{8542EC47-1390-426D-8970-06EC98A1B63A}.Release|x86.Build.0 = Release|Win32
+		{247DC983-A885-4A55-9F47-51FCAA65CBCF}.Debug|x64.ActiveCfg = Debug|x64
+		{247DC983-A885-4A55-9F47-51FCAA65CBCF}.Debug|x64.Build.0 = Debug|x64
+		{247DC983-A885-4A55-9F47-51FCAA65CBCF}.Debug|x86.ActiveCfg = Debug|Win32
+		{247DC983-A885-4A55-9F47-51FCAA65CBCF}.Debug|x86.Build.0 = Debug|Win32
+		{247DC983-A885-4A55-9F47-51FCAA65CBCF}.Release|x64.ActiveCfg = Release|x64
+		{247DC983-A885-4A55-9F47-51FCAA65CBCF}.Release|x64.Build.0 = Release|x64
+		{247DC983-A885-4A55-9F47-51FCAA65CBCF}.Release|x86.ActiveCfg = Release|Win32
+		{247DC983-A885-4A55-9F47-51FCAA65CBCF}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -622,6 +632,7 @@ Global
 		{AE9EEE9E-D620-4A1F-A376-68A969F4F6EC} = {00C16D2C-2F78-4908-A039-6B8CCCDBF2F1}
 		{7D545D4D-C21C-411C-BC36-FC29FC75ABDA} = {00C16D2C-2F78-4908-A039-6B8CCCDBF2F1}
 		{8542EC47-1390-426D-8970-06EC98A1B63A} = {00C16D2C-2F78-4908-A039-6B8CCCDBF2F1}
+		{247DC983-A885-4A55-9F47-51FCAA65CBCF} = {00C16D2C-2F78-4908-A039-6B8CCCDBF2F1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7DC79333-0A2A-4D79-BDD2-2EB81F53BA33}

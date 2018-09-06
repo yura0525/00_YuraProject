@@ -67,7 +67,6 @@ HRESULT TDevice::CreateSwapChain()
 {
 	//백버퍼 만드는것.
 	ZeroMemory(&m_sd, sizeof(DXGI_SWAP_CHAIN_DESC));
-	DXGI_MODE_DESC BufferDesc;
 
 	m_sd.BufferDesc.Width = g_rtClient.right;
 	m_sd.BufferDesc.Height = g_rtClient.bottom;

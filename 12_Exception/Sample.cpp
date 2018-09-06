@@ -38,7 +38,7 @@ void DivideA(int a, int b, int& c)
 	}
 	throw TException(1);
 }
-void main()
+int main()
 {
 	int a = 10;
 	int b = 0;
@@ -70,4 +70,5 @@ void main()
 	{
 		cout << "char 계산오류!";
 	}*/
+	return 0;
 }

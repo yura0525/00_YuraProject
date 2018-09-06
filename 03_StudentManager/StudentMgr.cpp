@@ -60,7 +60,7 @@ void Excute(void(*process)())
 {
 	process();
 }
-void main()
+int main()
 {
 	Student studentArr[30];
 	char*	findName;
@@ -182,6 +182,7 @@ void main()
 		}
 		}
 	}
+	return 0;
 }
 
 void FindStudent(char* findName)

@@ -51,7 +51,6 @@ bool Sample::Init()
 	//백버퍼 만드는것.
 	DXGI_SWAP_CHAIN_DESC sd;
 	ZeroMemory(&sd, sizeof(DXGI_SWAP_CHAIN_DESC));
-	DXGI_MODE_DESC BufferDesc;
 
 	sd.BufferDesc.Width = g_rtClient.right;
 	sd.BufferDesc.Height = g_rtClient.bottom;
