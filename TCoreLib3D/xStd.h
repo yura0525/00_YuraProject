@@ -10,7 +10,7 @@
 #include <string>
 #include <list>
 #include <vector>
-#include <d3d11.h>
+#include <d3dx11.h>
 #include <dxgi.h>
 #include <dinput.h>
 
@@ -20,6 +20,8 @@
 #pragma comment(lib, "dxgi.lib")
 #pragma comment( lib, "dinput8.lib")
 #pragma comment( lib, "dxguid.lib")
+#pragma comment( lib, "d3dx11.lib")
+#pragma warning (disable : C4005)
 
 typedef std::basic_string <char>	C_STR;	//multi-byte
 typedef std::basic_string <wchar_t>	W_STR;	//unicode byte
@@ -71,3 +73,11 @@ public:
 		return theSingleInstance;
 	}
 };
+
+#ifndef V_RETURN
+#define V_RETURN(x) { hr = (x); if( FAILED(hr) ) {return hr;} }
+#endif
+
+#ifndef V
+#define V(x) { hr = (x);}
+#endif

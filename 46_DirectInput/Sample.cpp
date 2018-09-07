@@ -52,6 +52,12 @@ public:
 		//m_Font.DrawText(g_rtClient, m_csBuffer, D2D1::ColorF(1, 0, 0, 1));
 		return true;
 	}
+
+	bool Release()
+	{
+		TDevice::Release();
+		return true;
+	}
 public:
 	Sample() {}
 	~Sample() {}

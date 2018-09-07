@@ -13,6 +13,16 @@ public:
 		TDevice::Frame();
 		return true;
 	}
+	bool Render()
+	{
+		TDevice::Render();
+		return true;
+	}
+	bool Release()
+	{
+		TDevice::Release();
+		return true;
+	}
 public:
 	Sample() {}
 	~Sample() {}
