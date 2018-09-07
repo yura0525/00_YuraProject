@@ -50,7 +50,7 @@ public:
 		UINT offset = 0;
 		UINT stride = sizeof(P3VERTEX);
 		m_pContext->IASetVertexBuffers(0, 1, &m_pVertextBuffer, &stride, &offset);
-		m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+		m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_pContext->IASetInputLayout(m_pVertexLayout);
 		m_pContext->VSSetShader(m_pVS, NULL, 0);
 		m_pContext->HSSetShader(NULL, NULL, 0);
@@ -74,6 +74,7 @@ public:
 	Sample() {}
 	~Sample() {}
 };
+
 HRESULT Sample::CreateVertextBuffer()
 {
 	HRESULT hr;
