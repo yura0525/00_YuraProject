@@ -23,7 +23,7 @@ public:
 public:
 	bool Init()
 	{
-		TDevice::Init();
+		xCore::Init();
 
 		CreateVertextBuffer();
 		if (FAILED(LoadShaderAndInputLayout()))
@@ -40,12 +40,12 @@ public:
 	}
 	bool Frame()
 	{
-		TDevice::Frame();
+		xCore::Frame();
 		return true;
 	}
 	bool Render()
 	{
-		TDevice::Render();
+		xCore::Render();
 
 		UINT offset = 0;
 		UINT stride = sizeof(P3VERTEX);
@@ -63,7 +63,7 @@ public:
 	}
 	bool Release()
 	{
-		TDevice::Release();
+		xCore::Release();
 
 		m_pVS->Release();
 		m_pPS->Release();

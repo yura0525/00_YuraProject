@@ -5,7 +5,7 @@ class Sample : public xCore
 public:
 	bool Init()
 	{
-		TDevice::Init();
+		xCore::Init();
 
 		IDXGISurface1*		m_pBackBuffer;
 
@@ -29,14 +29,14 @@ public:
 	}
 	bool Frame()
 	{
-		TDevice::Frame();
+		xCore::Frame();
 		m_Timer.Frame();
 		m_Font.Frame();
 		return true;
 	}
 	bool Render()
 	{
-		TDevice::Render();
+		xCore::Render();
 
 		m_Font.Render();
 		m_Timer.Render();
@@ -60,7 +60,7 @@ public:
 	}
 	bool Release()
 	{
-		TDevice::Release();
+		xCore::Release();
 		m_Font.Release();
 		m_Timer.Release();
 		return true;

@@ -5,22 +5,22 @@ class Sample : public xCore
 public:
 	bool Init()
 	{
-		TDevice::Init();
+		xCore::Init();
 		return true;
 	}
 	bool Frame()
 	{
-		TDevice::Frame();
+		xCore::Frame();
 		return true;
 	}
 	bool Render()
 	{
-		TDevice::Render();
+		xCore::Render();
 		return true;
 	}
 	bool Release()
 	{
-		TDevice::Release();
+		xCore::Release();
 		return true;
 	}
 public:

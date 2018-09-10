@@ -55,7 +55,7 @@ public:
 
 	bool Release()
 	{
-		TDevice::Release();
+		xCore::Release();
 		return true;
 	}
 public:

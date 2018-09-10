@@ -13,6 +13,7 @@
 #include <d3dx11.h>
 #include <dxgi.h>
 #include <dinput.h>
+using namespace std;
 
 //프로젝트 속성에서 추가 종속성에 넣을걸 코드로 넣을수 있다.
 #pragma comment(lib, "xCoreLib.lib")
