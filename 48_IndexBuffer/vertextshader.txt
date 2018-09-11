@@ -14,10 +14,11 @@ cbuffer VS_CB
 {
 	//x,y,z,w
 	float4 g_color: packoffset(c0);				//: packoffset(c0);
-	float x : packoffset(c1.x);					//: packoffset(c1.x);
-	float g_fTimeX		: packoffset(c1.y);		//: packoffset(c1.y);
-	float g_iIndex: packoffset(c1.z);			//: packoffset(c1.z);
-	float w: packoffset(c1.w);					//: packoffset(c1.w);
+	float g_fTimeX : packoffset(c1.x);			//: packoffset(c1.x);
+	float g_iIndex	: packoffset(c1.y);			//: packoffset(c1.y);
+	float g_scale : packoffset(c1.z);			//: packoffset(c1.z);
+	float w : packoffset(c1.w);					//: packoffset(c1.w);
+	//float g_angle: packoffset(c1.w);			//: packoffset(c1.w);
 };
 
 float4 GetPos(in float3 pos : POSITION) : SV_POSITION
@@ -29,7 +30,13 @@ float4 GetPos(in float3 pos : POSITION) : SV_POSITION
 	//rRet.w = 1;	
 	//정규화 w값으로 x와 y와 z값을 나눠서 넘겨준다.w가 1이면 그대로 넘겨준다.
 
-	float3 vPos = pos * (cos(g_fTimeX) * 0.5f + 0.5f);
+	float3 vPos = pos;
+	//vPos.x = pos.x * cos(g_angle) + pos.y * sin(g_angle);
+	//vPos.y = pos.y * cos(g_angle) - pos.x * sin(g_angle);
+	//vPos.z = 1.0f;
+
+	vPos = vPos * (cos(g_fTimeX) * 0.5f + 0.5f);
+	vPos = vPos * g_scale;
 	return float4(vPos, 1.0f);	//스위즐링
 }
 
@@ -57,6 +64,7 @@ float4 GetColor(uint index) : SV_POSITION
 	case 0: {vPos = float4( (cos(g_fTimeX) * 0.5f + 0.5f), (sin(g_fTimeX) * 0.5f + 0.5f), (0.5f + cos(g_fTimeX) * 0.5f + 0.5f), 1); break;}
 	case 1: {vPos = float4(1, 0, 0, 1); break;}
 	case 2: {vPos = float4(1, 0, 1, 1); break;}
+	case 3: {vPos = float4(0, 1, 1, 1); break;}
 	}
 	
 	return vPos;	//스위즐링
@@ -68,6 +76,6 @@ float4 PS(in float4 pos : SV_POSITION ) : SV_Target
 	//float fColor = (cos(g_fTimeX) * 0.5f + 0.5f);
 	//return float4( fColor, fColor, fColor, 0.0f);
 
-	float4 fColor = GetColor(0);
+	float4 fColor = GetColor(g_iIndex);
 	return fColor;
 }

@@ -12,13 +12,6 @@ public:
 	bool GameRender();
 	bool GamePreRender();
 	bool GamePostRender();
-//public:
-//	virtual bool Init() { return true; }
-//	virtual bool Frame() { return true; }
-//	virtual bool PreRender() { return true; }
-//	virtual bool PostRender() { return true; }
-//	virtual bool Render() { return true; }
-//	virtual bool Release() { return true; }
 
 public:
 	xCore();

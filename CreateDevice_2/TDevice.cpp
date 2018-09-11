@@ -54,7 +54,7 @@ HRESULT TDevice::CreateDX11GIFactory()
 {
 	HRESULT hr = S_OK;
 
-	//Create SwapChain
+	//Create DXGIFactory
 	if (FAILED(hr = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&m_pDXGIFactory)))
 	{
 		return false;

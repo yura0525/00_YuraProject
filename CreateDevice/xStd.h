@@ -12,7 +12,7 @@
 //프로젝트 속성에서 추가 종속성에 넣을걸 코드로 넣을수 있다.
 #pragma comment(lib, "winmm.lib")
 #pragma comment(lib, "fmod64_vc.lib")
-
+#pragma comment(lib, "d3d11.lib")
 
 typedef std::basic_string <char>	C_STR;	//multi-byte
 typedef std::basic_string <wchar_t>	W_STR;	//unicode byte

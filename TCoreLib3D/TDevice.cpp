@@ -61,7 +61,7 @@ HRESULT TDevice::CreateDX11GIFactory()
 {
 	HRESULT hr = S_OK;
 
-	//Create SwapChain
+	//Create DXGIFactory
 	if (FAILED(hr = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&m_pDXGIFactory)))
 	{
 		return false;
@@ -137,7 +137,7 @@ HRESULT TDevice::CreateDeviceResources(UINT iWidth, UINT iHeight)
 
 HRESULT TDevice::ResizeDevice(UINT iWidth, UINT iHeight)
 {
-	if (m_pd3dDevice == NULL) return false;
+	if (m_pd3dDevice == NULL) return -1;
 
 	HRESULT hr = S_OK;
 

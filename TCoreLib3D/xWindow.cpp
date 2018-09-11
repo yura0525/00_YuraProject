@@ -78,6 +78,7 @@ LRESULT xWindow::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				m_pSwapChain->ResizeTarget(&desc);
 				m_pSwapChain->SetFullscreenState(TRUE, NULL);
 			}
+			break;
 		}
 		break;
 	case WM_DESTROY:

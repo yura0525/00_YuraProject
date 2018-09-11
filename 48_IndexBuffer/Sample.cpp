@@ -1,5 +1,6 @@
 #include "xCore.h"
 #include "D3Dcompiler.h"		//D3DCOMPILE_DEBUG
+#include <math.h>
 
 #define GPU
 struct P3VERTEX
@@ -28,8 +29,8 @@ public:
 	ID3D11PixelShader*	m_pPS;
 	ID3D11InputLayout*	m_pVertexLayout;
 
-	vector<P3VERTEX>	m_verList;
-	vector<DWORD>		m_indexList;
+	std::vector<P3VERTEX>	m_verList;
+	std::vector<DWORD>		m_indexList;
 
 public:
 	HRESULT CreateVertextBuffer();
@@ -47,7 +48,7 @@ public:
 		m_constantData.g = sinf(g_fGameTimer) * 0.5f + 0.5f;
 		m_constantData.b = 0.5f + cosf(g_fGameTimer) * 0.5f + 0.5f;
 		m_constantData.a = 1;
-		m_constantData.fTime[1] = g_fGameTimer;
+		m_constantData.fTime[0] = g_fGameTimer;
 
 		CreateVertextBuffer();
 		CreateIndexBuffer();
@@ -68,12 +69,18 @@ public:
 	bool Frame()
 	{
 		xCore::Frame();
+		//static float fAngle = 0.0f;
+		//fAngle += g_fSecPerFrame;
 #ifdef GPU
 		//gpu update
 		m_constantData.r = cosf(g_fGameTimer) * 0.5f + 0.5f;
 		m_constantData.g = sinf(g_fGameTimer) * 0.5f + 0.5f;
 		m_constantData.b = 0.5f + cosf(g_fGameTimer) * 0.5f + 0.5f;
 		m_constantData.a = 1;
+		m_constantData.fTime[0] = cosf(g_fGameTimer) * 0.5f + 0.5f;
+		m_constantData.fTime[1] = 0.5f;
+		m_constantData.fTime[2] = 1.0f;
+		//m_constantData.fTime[3] = fAngle;
 		m_pContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &m_constantData, 0,0);
 #elif defined CPU
 		//cpu update
@@ -89,8 +96,10 @@ public:
 			cb->g = sinf(g_fGameTimer) * 0.5f + 0.5f;
 			cb->b = 0.5f + cosf(g_fGameTimer) * 0.5f + 0.5f;
 			cb->a = 1.0f;
-			cb->fTime[1] = cosf(g_fGameTimer) * 0.5f + 0.5f;
-			cb->fTime[2] = 5.0f;
+			cb->fTime[0] = cosf(g_fGameTimer) * 0.5f + 0.5f;
+			cb->fTime[1] = 0.5f;
+			cb->fTime[2] = 1.0f;
+			//cb->fTime[3] = fAngle;
 			m_pContext->Unmap(m_pConstantBuffer, 0);
 		}
 #endif
@@ -209,6 +218,7 @@ HRESULT Sample::CreateIndexBuffer()
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.ByteWidth = m_indexList.size() * sizeof(DWORD);
+
 	bd.Usage = D3D11_USAGE_DEFAULT;				//GPU에 메모리를 할당해라. 기본이 GPU메모리. GPU는 READ/WRITE 가능.CPU는 접근불가능하다.
 												//D3D11_USAGE_STAGING만이 CPU가 접근가능하다. 단점은 느리다.
 	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;		//인덱스버퍼
@@ -236,6 +246,12 @@ HRESULT Sample::CreateConstantBuffer()
 	bd.ByteWidth = sizeof(VS_CB);
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;	//상수버퍼
 												//GPU상에 메모리를 셋팅하고 할당함.
+
+	//Usage
+	//D3D11_USAGE_DEFAULT = 0,						 // gpu w/r가능. CPU 접근 불가능.
+	//D3D11_USAGE_IMMUTABLE = 1,					 // gpu r 가능
+	//D3D11_USAGE_DYNAMIC = 2,						 // 중간에 변경가능. CPUAccessFlags 값을 셋팅해야한다.
+	//D3D11_USAGE_STAGING = 3						 // cpu w/r 가능
 #ifdef CPU
 	bd.Usage = D3D11_USAGE_DYNAMIC;				//D3D11_USAGE_DYNAMIC : GPU는 READ/WRITE 가능. cpu Read X/ Write 0.
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;	//D3D11_USAGE_DYNAMIC이면 CPUAccessFlags 값을 셋팅해야한다.
@@ -305,6 +321,7 @@ HRESULT Sample::CreatePixelShader()
 	//셰이더 컴파일된 결과(오브젝트파일, 목적파일)
 	V_RETURN(m_pd3dDevice->CreatePixelShader(pPSBuf->GetBufferPointer(), pPSBuf->GetBufferSize(), NULL, &m_pPS));
 	pPSBuf->Release();
+	return hr;
 }
 
 GAMERUN("IndexBuffer", 800, 600);

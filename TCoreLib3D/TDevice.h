@@ -17,6 +17,7 @@ public:
 	HRESULT SetRenderTarget();
 	void SetViewPort();
 
+public:
 	virtual void DeleteDeviceResources(UINT iWidth, UINT iHeight);
 	virtual HRESULT CreateDeviceResources(UINT iWidth, UINT iHeight);
 
