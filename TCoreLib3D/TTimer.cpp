@@ -25,6 +25,9 @@ bool TTimer::Frame()
 	m_fSecPerFrame = static_cast<float>(m_CurrentTime.QuadPart - m_BeforeTick.QuadPart) / static_cast<float>(m_Frequency.QuadPart);
 	g_fSecPerFrame = m_fSecPerFrame;
 
+	m_fGameTime += m_fSecPerFrame;
+	g_fGameTimer = m_fGameTime;
+
 	if (((m_CurrentTime.LowPart - m_FPS.LowPart) / m_Frequency.LowPart) >= 1)
 	{
 		m_iFramePerSecond = m_iFrameCount;
@@ -39,9 +42,7 @@ bool TTimer::Frame()
 
 	m_iFrameCount++;
 	m_BeforeTick = m_CurrentTime;
-
-	m_fGameTime = static_cast<float>(m_CurrentTime.QuadPart - m_Start.QuadPart) / static_cast<float>(m_Frequency.QuadPart);
-	g_fGameTimer = m_fGameTime;
+	
 	return true;
 }
 bool TTimer::Render()

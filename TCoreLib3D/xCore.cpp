@@ -8,14 +8,14 @@ bool xCore::Init()
 
 	DeleteDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);
 	CreateDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);
-	return 0;
+	return true;
 }
 bool xCore::Frame()
 {
 	xWindow::Frame();
 	m_Timer.Frame();
 	m_Font.Frame();
-	return 0;
+	return true;
 }
 
 bool xCore::PreRender()
@@ -31,14 +31,14 @@ bool xCore::Render()
 	xWindow::Render();
 	m_Timer.Render();
 	m_Font.Render();
-	return 0;
+	return true;
 }
 bool xCore::Release()
 {
 	xWindow::Release();
 	m_Timer.Release();
 	m_Font.Release();
-	return 0;
+	return true;
 }
 
 bool xCore::GameInit()

@@ -13,7 +13,7 @@ public:
 	LARGE_INTEGER	m_CurrentTime;		// 현재 시간 
 	LARGE_INTEGER	m_FPS;				//(FPS 체크 타이머)
 	LARGE_INTEGER	m_BeforeTick;		// 이전 프레임의 시간 체크 
-	LARGE_INTEGER	m_Start;		// 이벤트 타이머 시작 시간
+	LARGE_INTEGER	m_Start;			// 이벤트 타이머 시작 시간
 
 	int				m_iFramePerSecond;			// 2) 1초의 프레임 카운터
 	int				m_iFrameCount;				// 초당 경과된 프레임 
