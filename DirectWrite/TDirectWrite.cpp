@@ -46,16 +46,20 @@ HRESULT TDirectWrite::DrawText(RECT rt, const TCHAR* pText, D2D1::ColorF color)
 {
 	m_pRT->BeginDraw();
 
-	//D2D1::Matrix3x2F matWorld;
-	//D2D1_POINT_2F center;
-	//center.x = 400;
-	//center.y = 300;
-	float fScale = (cosf(g_fGameTimer) * 0.5f) + 0.5f;
+	//회전하고 스케일링하는 부분.
+	D2D1::Matrix3x2F matWorld;
+	D2D1_POINT_2F center;
+	center.x = 400;
+	center.y = 300;
+
+	
+	D2D1::Matrix3x2F rot = matWorld.Rotation(g_fGameTimer * 50.0f, center);
+	/*float fScale = (cosf(g_fGameTimer)*0.5f + 0.5f) * 10;
+	D2D1::Matrix3x2F scale = matWorld.Scale(fScale, fScale, center);
+	rot = scale * rot;*/
+	m_pRT->SetTransform(rot);
 
 
-	//D2D1::Matrix3x2F rot = matWorld.Rotation(g_fGameTimer, center);
-
-	//m_pRT->SetTransform(matWorld);
 	m_pColorBrush->SetColor(color);
 	D2D1_RECT_F rf = D2D1::RectF(rt.left, rt.top, rt.right, rt.bottom);
 
@@ -118,17 +122,21 @@ bool TDirectWrite::Render()
 {
 	m_pRT->BeginDraw();
 
+	D2D1::Matrix3x2F matWorld;
+	D2D1_POINT_2F center;
+	center.x = 400;
+	center.y = 300;
+
+	D2D1::Matrix3x2F rot = matWorld.Rotation(g_fGameTimer * 50.0f, center);
+	/*float fScale = (cosf(g_fGameTimer)*0.5f + 0.5f) * 10;
+	D2D1::Matrix3x2F scale = matWorld.Scale(fScale, fScale, center);
+	rot = scale * rot;*/
+
 	for (int iText = 0; iText < m_TextList.size(); iText++)
 	{
-	/*	D2D1::Matrix3x2F matWorld;
-		D2D1_POINT_2F center;
-		center.x = 0;
-		center.y = 0;*/
-
-		//D2D1::Matrix3x2F rot = matWorld.Rotation(g_fGameTimer, center);
-
-		//m_pRT->SetTransform(m_TextList[iText].matWorld);
+		m_pRT->SetTransform(rot);
 		m_pColorBrush->SetColor(m_TextList[iText].color);
+
 		D2D1_RECT_F rf = m_TextList[iText].rf;
 
 		rf.top = rf.top + (iText * 30);
@@ -147,6 +155,7 @@ bool TDirectWrite::Release()
 	if ( m_pd2dFactory ) m_pd2dFactory->Release();
 	if (m_pWriteFactory) m_pWriteFactory->Release();
 
+	m_pTextFormat = NULL;
 	m_pd2dFactory = NULL;
 	m_pWriteFactory = NULL;
 	return true;

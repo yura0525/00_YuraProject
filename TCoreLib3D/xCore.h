@@ -2,14 +2,29 @@
 #include "xWindow.h"
 #include "TDirectWrite.h"
 #include "TTimer.h"
+#include "xInput.h"
+
+struct TOutput									//모니터의 정보와 갯수를 알수있다.
+{
+	DXGI_OUTPUT_DESC				desc;
+	std::vector<DXGI_MODE_DESC>		m_pModeList;
+	std::vector<IDXGIOutput*>		m_pOutputList;
+};
+struct TAdapter									//그래픽카드
+{
+	IDXGIAdapter*				m_pAdapter;
+	DXGI_ADAPTER_DESC			desc;
+	std::vector<TOutput>		m_OutputList;
+};
 
 class xCore : public xWindow
 {
 public:
 	TTimer			m_Timer;
 	TDirectWrite	m_Font;
+	xInput			m_Input;
 public:
-	virtual bool GamePreInit() { return false; }
+	bool GamePreInit();
 
 	bool GameInit();
 	bool GameRun();

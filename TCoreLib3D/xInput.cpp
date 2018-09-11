@@ -21,7 +21,10 @@ bool xInput::Init()
 	{
 		return false;
 	}
-	if (FAILED(hr = m_pKey->SetCooperativeLevel(g_hWnd, DISCL_EXCLUSIVE | DISCL_FOREGROUND | DISCL_NOWINKEY)))
+
+	//원래는 DISCL_EXCLUSIVE으로 생성한다.
+	if (FAILED(hr = m_pKey->SetCooperativeLevel(g_hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND | DISCL_NOWINKEY)))
+	//if (FAILED(hr = m_pKey->SetCooperativeLevel(g_hWnd, DISCL_EXCLUSIVE | DISCL_FOREGROUND | DISCL_NOWINKEY)))
 	{
 		return false;
 	}
@@ -36,7 +39,10 @@ bool xInput::Init()
 	{
 		return false;
 	}
-	if (FAILED(hr = m_pMouse->SetCooperativeLevel(g_hWnd, DISCL_EXCLUSIVE | DISCL_FOREGROUND)))
+
+	//원래는 DISCL_EXCLUSIVE으로 생성한다. 창을 닫을수 없어서 DISCL_NONEXCLUSIVE으로 생성하였다.
+	//if (FAILED(hr = m_pMouse->SetCooperativeLevel(g_hWnd, DISCL_EXCLUSIVE | DISCL_FOREGROUND)))
+	if (FAILED(hr = m_pMouse->SetCooperativeLevel(g_hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND)))
 	{
 		return false;
 	}
@@ -47,11 +53,11 @@ bool xInput::Init()
 bool xInput::Frame()
 {
 	HRESULT hr = S_OK;
-	if (FAILED(hr = m_pKey->GetDeviceState(256, &m_KeyState)))
+	if (FAILED(hr = m_pKey->GetDeviceState(KEYSTATECOUNT, &m_KeyState)))
 	{
 		while (m_pKey->Acquire() == DIERR_INPUTLOST);
 	}
-	if (FAILED(hr = m_pMouse->GetDeviceState(sizeof(DIMOUSESTATE), &m_KeyState)))
+	if (FAILED(hr = m_pMouse->GetDeviceState(sizeof(DIMOUSESTATE), &m_MouseState)))
 	{
 		while (m_pMouse->Acquire() == DIERR_INPUTLOST);
 	}

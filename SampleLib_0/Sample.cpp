@@ -1,17 +1,17 @@
 #include "xCore.h"
-
-struct TOutput									//모니터의 정보와 갯수를 알수있다.
-{
-	DXGI_OUTPUT_DESC				desc;
-	std::vector<DXGI_MODE_DESC>		m_pModeList;
-	std::vector<IDXGIOutput*>		m_pOutputList;
-};
-struct TAdapter									//그래픽카드
-{
-	IDXGIAdapter*				m_pAdapter;
-	DXGI_ADAPTER_DESC			desc;
-	std::vector<TOutput>		m_OutputList;
-};
+//
+//struct TOutput									//모니터의 정보와 갯수를 알수있다.
+//{
+//	DXGI_OUTPUT_DESC				desc;
+//	std::vector<DXGI_MODE_DESC>		m_pModeList;
+//	std::vector<IDXGIOutput*>		m_pOutputList;
+//};
+//struct TAdapter									//그래픽카드
+//{
+//	IDXGIAdapter*				m_pAdapter;
+//	DXGI_ADAPTER_DESC			desc;
+//	std::vector<TOutput>		m_OutputList;
+//};
 
 class Sample : public xCore
 {

@@ -22,9 +22,8 @@ using namespace std;
 #pragma comment( lib, "dinput8.lib")
 #pragma comment( lib, "dxguid.lib")
 #pragma comment( lib, "d3dx11.lib")
-#pragma comment( lib, "xCoreLib.lib")
 
-#pragma warning (disable : C4005)
+#pragma warning (disable : 4005)
 
 typedef std::basic_string <char>	C_STR;	//multi-byte
 typedef std::basic_string <wchar_t>	W_STR;	//unicode byte

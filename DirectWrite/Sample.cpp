@@ -9,9 +9,6 @@ public:
 
 		IDXGISurface1*		m_pBackBuffer;
 
-		m_Font.Init();
-		m_Timer.Init();
-
 		HRESULT hr = m_pSwapChain->GetBuffer(0, __uuidof(IDXGISurface), (void**)&m_pBackBuffer);
 		m_Font.Set(m_hWnd, m_sd.BufferDesc.Width, m_sd.BufferDesc.Height, m_pBackBuffer);
 		if (m_pBackBuffer)	m_pBackBuffer->Release();
