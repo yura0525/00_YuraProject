@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{7B3A51C7-F733-4260-937D-67223AE6BEAD}</ProjectGuid>
+    <ProjectGuid>{1C5181BB-123E-49AE-819C-508B328AC9C9}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>My48IndexBuffer</RootNamespace>
+    <RootNamespace>My51Rotation</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -72,8 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>../../output/IndexBuffer/</OutDir>
-    <IntDir>../../output/IndexBuffer/</IntDir>
+    <OutDir>../../output/Rotation/</OutDir>
+    <IntDir>../../output/Rotation/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -148,9 +148,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Sample.cpp" />
+    <ClCompile Include="xObject.cpp" />
+    <ClCompile Include="xPlaneObj.cpp" />
+    <ClCompile Include="xShader.cpp" />
+    <ClCompile Include="xShaderManager.cpp" />
+    <ClCompile Include="xTexManager.cpp" />
+    <ClCompile Include="xTexture.cpp" />
+    <ClCompile Include="xTriangleObj.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="vertexshader.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="xObject.h" />
+    <ClInclude Include="xPlaneObj.h" />
+    <ClInclude Include="xShader.h" />
+    <ClInclude Include="xShaderManager.h" />
+    <ClInclude Include="xTexManager.h" />
+    <ClInclude Include="xTexture.h" />
+    <ClInclude Include="xTriangleObj.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

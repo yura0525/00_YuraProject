@@ -150,7 +150,7 @@
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="vertextshader.txt" />
+    <Text Include="vertexshader.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

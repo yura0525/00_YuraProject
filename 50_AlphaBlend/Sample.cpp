@@ -71,9 +71,9 @@ public:
 			return false;
 		}
 
-		m_constantData.r = cosf(g_fGameTimer) * 0.5f + 0.5f;
-		m_constantData.g = sinf(g_fGameTimer) * 0.5f + 0.5f;
-		m_constantData.b = 0.5f + cosf(g_fGameTimer) * 0.5f + 0.5f;
+		m_constantData.r = (rand() % 255) / 255.0f;
+		m_constantData.g = (rand() % 255) / 255.0f;
+		m_constantData.b = (rand() % 255) / 255.0f;
 		m_constantData.a = 1;
 		m_constantData.fTime[0] = g_fGameTimer;
 
@@ -168,7 +168,7 @@ public:
 		m_pContext->IASetInputLayout(m_pVertexLayout);
 
 		//m_pContext->Draw(6, 0);
-		//pass Rendering
+		//multi pass Rendering
 		//m_pContext->DrawIndexed(m_indexList.size(), 0, 0);
 
 		m_pContext->PSSetShader(m_pPS2, NULL, 0);
@@ -335,7 +335,7 @@ HRESULT Sample::LoadShaderAndInputLayout()
 	ID3DBlob* pErrorMsgs = NULL;
 	//L"vertexshader.txt" => 셰이더파일이름, "VS" => VertexShader함수이름(), "vs_5_0"=> 컴파일러 
 	DWORD dwFlags = D3DCOMPILE_DEBUG;
-	if (FAILED(hr = D3DX11CompileFromFile(L"vertextshader.txt", NULL, NULL,
+	if (FAILED(hr = D3DX11CompileFromFile(L"vertexshader.txt", NULL, NULL,
 		"VS", "vs_5_0", dwFlags, NULL, NULL, &pVSBuf, &pErrorMsgs, NULL)))
 	{
 		OutputDebugStringA((char*)pErrorMsgs->GetBufferPointer());

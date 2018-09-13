@@ -115,13 +115,16 @@ HRESULT Sample::LoadShaderAndInputLayout()
 {
 	HRESULT hr = S_OK;
 	ID3DBlob* pVSBuf = NULL;
-	//VertextShader 함수이름. vs_5_0 컴파일러.
-	V_RETURN(D3DX11CompileFromFile(L"vertextshader.txt", NULL, NULL,
+
+	//L"vertexshader.txt" => 셰이더파일이름, "VS" => VertexShader함수이름(), "vs_5_0"=> 컴파일러 
+	V_RETURN(D3DX11CompileFromFile(L"vertexshader.txt", NULL, NULL,
 		"VS", "vs_5_0", 0, 0, NULL, &pVSBuf, NULL, NULL));
 
 	//셰이더 컴파일된 결과(오브젝트파일, 목적파일)
 	V_RETURN(m_pd3dDevice->CreateVertexShader(pVSBuf->GetBufferPointer(), pVSBuf->GetBufferSize(), NULL, &m_pVS));
 
+	//셰이더 함수의 선언. 전달인자 타입으로 POSITION을 쓰겠다.
+	//float4 VS(in float3 pos : POSITION ) : SV_POSITION
 	D3D11_INPUT_ELEMENT_DESC layout[] = 
 	{
 		{ "POSITION",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -151,5 +154,7 @@ HRESULT Sample::CreatePixelShader()
 	//셰이더 컴파일된 결과(오브젝트파일, 목적파일)
 	V_RETURN(m_pd3dDevice->CreatePixelShader(pPSBuf->GetBufferPointer(), pPSBuf->GetBufferSize(), NULL, &m_pPS));
 	pPSBuf->Release();
+
+	return hr;
 }
 GAMERUN("VertexBuffer", 800, 600);

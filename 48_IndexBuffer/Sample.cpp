@@ -277,7 +277,7 @@ HRESULT Sample::LoadShaderAndInputLayout()
 	ID3DBlob* pErrorMsgs = NULL;
 	//VertextShader 함수이름. vs_5_0 컴파일러.
 	DWORD dwFlags = D3DCOMPILE_DEBUG;
-	if (FAILED(hr = D3DX11CompileFromFile(L"vertextshader.txt", NULL, NULL,
+	if (FAILED(hr = D3DX11CompileFromFile(L"vertexshader.txt", NULL, NULL,
 		"VS", "vs_5_0", dwFlags, NULL, NULL, &pVSBuf, &pErrorMsgs, NULL)))
 	{
 		OutputDebugStringA((char*)pErrorMsgs->GetBufferPointer());
