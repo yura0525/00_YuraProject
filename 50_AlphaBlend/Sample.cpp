@@ -12,7 +12,9 @@ struct P3VERTEX //pnct
 	float u;
 	float v;
 };
-
+//콘스턴트 버퍼, 상수버퍼. 셰이더내에서 글로벌 변수와 비슷하게 쓰인다.
+//float4개 단위로 보내야한다. 안쓰더라도 float 4개단위로 보내야한다.
+//fTime[0]이거 하나만 쓰더라도 float fTime[4];이렇게 선언해야한다.
 struct VS_CB
 {
 	float r, g, b, a;
@@ -331,7 +333,7 @@ HRESULT Sample::LoadShaderAndInputLayout()
 
 	ID3DBlob* pVSBuf = NULL;
 	ID3DBlob* pErrorMsgs = NULL;
-	//VertextShader 함수이름. vs_5_0 컴파일러.
+	//L"vertexshader.txt" => 셰이더파일이름, "VS" => VertexShader함수이름(), "vs_5_0"=> 컴파일러 
 	DWORD dwFlags = D3DCOMPILE_DEBUG;
 	if (FAILED(hr = D3DX11CompileFromFile(L"vertextshader.txt", NULL, NULL,
 		"VS", "vs_5_0", dwFlags, NULL, NULL, &pVSBuf, &pErrorMsgs, NULL)))
@@ -342,13 +344,17 @@ HRESULT Sample::LoadShaderAndInputLayout()
 	//셰이더 컴파일된 결과(오브젝트파일, 목적파일)
 	V_RETURN(m_pd3dDevice->CreateVertexShader(pVSBuf->GetBufferPointer(), pVSBuf->GetBufferSize(), NULL, &m_pVS));
 
+	//InputLayout.
+	//셰이더 함수의 선언. 전달인자 타입으로 POSITION을 쓰겠다.
+	//float4 VS(in float3 pos : POSITION ) : SV_POSITION
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		//5번째 전달인자인 0에서 DXGI_FORMAT_R32G32B32_FLOAT만큼 꺼낸다.
 		{ "POSITION",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	{ "COLOR",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	//5번째 전달인자인 12바이트에서 DXGI_FORMAT_R32G32_FLOAT만큼 꺼낸다.
-	{ "TEXCOORD",  0, DXGI_FORMAT_R32G32_FLOAT, 0, 28,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		//5번째 전달인자인 12바이트에서 DXGI_FORMAT_R32G32_FLOAT만큼 꺼낸다.
+		{ "COLOR",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		//5번째 전달인자인 28바이트에서 DXGI_FORMAT_R32G32_FLOAT만큼 꺼낸다.
+		{ "TEXCOORD",  0, DXGI_FORMAT_R32G32_FLOAT, 0, 28,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	int iNum = sizeof(layout) / sizeof(layout[0]);
 
@@ -368,7 +374,7 @@ HRESULT Sample::CreatePixelShader()
 {
 	HRESULT hr = S_OK;
 
-	//PixelShader 함수이름. ps_5_0 컴파일러.
+	//L"vertexshader.txt" => 셰이더파일이름, "PS" => PixelShader함수이름(), "ps_5_0"=> 컴파일러 
 	ID3DBlob* pPSBuf = NULL;
 	ID3DBlob* pErrorMsgs = NULL;
 	DWORD dwFlags = D3DCOMPILE_DEBUG;

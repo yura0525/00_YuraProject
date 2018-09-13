@@ -77,7 +77,7 @@ public:
 		m_constantData.g = sinf(g_fGameTimer) * 0.5f + 0.5f;
 		m_constantData.b = 0.5f + cosf(g_fGameTimer) * 0.5f + 0.5f;
 		m_constantData.a = 1;
-		m_constantData.fTime[0] = cosf(g_fGameTimer) * 0.5f + 0.5f;
+		m_constantData.fTime[0] = g_fGameTimer;
 		m_constantData.fTime[1] = 0.5f;
 		m_constantData.fTime[2] = 1.0f;
 		//m_constantData.fTime[3] = fAngle;
