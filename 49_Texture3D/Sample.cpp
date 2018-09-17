@@ -337,7 +337,7 @@ HRESULT Sample::CreatePixelShader()
 	ID3DBlob* pPSBuf = NULL;
 	ID3DBlob* pErrorMsgs = NULL;
 	DWORD dwFlags = D3DCOMPILE_DEBUG;
-	if (FAILED(hr = D3DX11CompileFromFile(L"vertextshader.txt", NULL, NULL,
+	if (FAILED(hr = D3DX11CompileFromFile(L"vertexshader.txt", NULL, NULL,
 		"PS", "ps_5_0", dwFlags, NULL, NULL, &pPSBuf, &pErrorMsgs, NULL)))
 	{
 		OutputDebugStringA((char*)pErrorMsgs->GetBufferPointer());
