@@ -37,8 +37,8 @@ float4 GetPos(in float3 pos : POSITION) : SV_POSITION
 	//정규화 w값으로 x와 y와 z값을 나눠서 넘겨준다.w가 1이면 그대로 넘겨준다.
 
 	float3 vPos = pos;
-	//vPos.x = pos.x * cos(g_angle) + pos.y * sin(g_angle);
-	//vPos.y = pos.y * cos(g_angle) - pos.x * sin(g_angle);
+	//vPos.x = pos.x * cos(g_angle) - pos.y * sin(g_angle);
+	//vPos.y = pos.x * sin(g_angle) + pos.y * cos(g_angle);
 	//vPos.z = 1.0f;
 
 	vPos = vPos * (cos(g_fTimeX) * 0.5f + 0.5f);

@@ -69,8 +69,8 @@ public:
 	bool Frame()
 	{
 		xCore::Frame();
-		//static float fAngle = 0.0f;
-		//fAngle += g_fSecPerFrame;
+		static float fAngle = 0.0f;
+		fAngle += g_fSecPerFrame;
 #ifdef GPU
 		//gpu update
 		m_constantData.r = cosf(g_fGameTimer) * 0.5f + 0.5f;
@@ -80,7 +80,7 @@ public:
 		m_constantData.fTime[0] = g_fGameTimer;
 		m_constantData.fTime[1] = 0.5f;
 		m_constantData.fTime[2] = 1.0f;
-		//m_constantData.fTime[3] = fAngle;
+		m_constantData.fTime[3] = fAngle;
 		m_pContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &m_constantData, 0,0);
 #elif defined CPU
 		//cpu update
@@ -96,10 +96,10 @@ public:
 			cb->g = sinf(g_fGameTimer) * 0.5f + 0.5f;
 			cb->b = 0.5f + cosf(g_fGameTimer) * 0.5f + 0.5f;
 			cb->a = 1.0f;
-			cb->fTime[0] = cosf(g_fGameTimer) * 0.5f + 0.5f;
+			cb->fTime[0] = g_fGameTimer;
 			cb->fTime[1] = 0.5f;
 			cb->fTime[2] = 1.0f;
-			//cb->fTime[3] = fAngle;
+			cb->fTime[3] = fAngle;
 			m_pContext->Unmap(m_pConstantBuffer, 0);
 		}
 #endif
