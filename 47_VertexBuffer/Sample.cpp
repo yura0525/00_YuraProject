@@ -16,6 +16,8 @@ public:
 	ID3D11PixelShader*	m_pPS;
 	ID3D11InputLayout*	m_pVertexLayout;
 
+	ID3D11RasterizerState*      m_pRSWireFrame;
+	ID3D11RasterizerState*      m_pRSSolid;
 public:
 	HRESULT CreateVertextBuffer();
 	HRESULT LoadShaderAndInputLayout();
@@ -24,6 +26,8 @@ public:
 	bool Init()
 	{
 		xCore::Init();
+
+		SetRasterizerState();
 
 		CreateVertextBuffer();
 		if (FAILED(LoadShaderAndInputLayout()))
@@ -47,6 +51,16 @@ public:
 	{
 		xCore::Render();
 
+		//W키를 누르면 와이어 프레임이 보이게함.
+		if (g_Input.bFront)
+		{
+			m_pContext->RSSetState(m_pRSWireFrame);
+		}
+		else
+		{
+			m_pContext->RSSetState(m_pRSSolid);
+		}
+
 		UINT offset = 0;
 		UINT stride = sizeof(P3VERTEX);
 		m_pContext->IASetVertexBuffers(0, 1, &m_pVertextBuffer, &stride, &offset);
@@ -65,10 +79,29 @@ public:
 	{
 		xCore::Release();
 
+		if (m_pRSWireFrame != NULL)		m_pRSWireFrame->Release();
+		if (m_pRSSolid != NULL)			m_pRSSolid->Release();
+
 		m_pVS->Release();
 		m_pPS->Release();
 		m_pVertexLayout->Release();
 		return true;
+	}
+
+	HRESULT SetRasterizerState(D3D11_FILL_MODE fill = D3D11_FILL_SOLID)
+	{
+		HRESULT hr = S_OK;
+		D3D11_RASTERIZER_DESC desc;
+		ZeroMemory(&desc, sizeof(D3D11_RASTERIZER_DESC));
+		desc.FillMode = D3D11_FILL_WIREFRAME;
+		desc.CullMode = D3D11_CULL_NONE;
+		desc.DepthClipEnable = TRUE;
+
+		hr = m_pd3dDevice->CreateRasterizerState(&desc, &m_pRSWireFrame);
+
+		desc.FillMode = D3D11_FILL_SOLID;
+		hr = m_pd3dDevice->CreateRasterizerState(&desc, &m_pRSSolid);
+		return hr;
 	}
 public:
 	Sample() {}
@@ -148,7 +181,7 @@ HRESULT Sample::CreatePixelShader()
 	HRESULT hr = S_OK;
 	ID3DBlob* pPSBuf = NULL;
 	//VertextShader 함수이름. vs_5_0 컴파일러.
-	V_RETURN(D3DX11CompileFromFile(L"vertextshader.txt", NULL, NULL,
+	V_RETURN(D3DX11CompileFromFile(L"vertexshader.txt", NULL, NULL,
 		"PS", "ps_5_0", 0, 0, NULL, &pPSBuf, NULL, NULL));
 
 	//셰이더 컴파일된 결과(오브젝트파일, 목적파일)
