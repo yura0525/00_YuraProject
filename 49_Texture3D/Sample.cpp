@@ -309,10 +309,11 @@ HRESULT Sample::LoadShaderAndInputLayout()
 
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
-		//5번째 전달인자인 0에서 DXGI_FORMAT_R32G32B32_FLOAT만큼 꺼낸다.
+		//5번째 전달인자인 0에서부터 DXGI_FORMAT_R32G32B32_FLOAT만큼인 float 3개를 꺼낸다.
 		{ "POSITION",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		//5번째 전달인자인 12바이트에서부터 DXGI_FORMAT_R32G32B32A32_FLOAT float 4개를 꺼낸다.
 		{ "COLOR",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		//5번째 전달인자인 12바이트에서 DXGI_FORMAT_R32G32_FLOAT만큼 꺼낸다.
+		//5번째 전달인자인 28바이트에서 DXGI_FORMAT_R32G32_FLOAT float2개를 꺼낸다.
 		{ "TEXCOORD",  0, DXGI_FORMAT_R32G32_FLOAT, 0, 28,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	
 	};
 	int iNum = sizeof(layout) / sizeof(layout[0]);
