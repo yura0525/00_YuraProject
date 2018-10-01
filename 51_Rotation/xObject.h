@@ -43,7 +43,7 @@ public:
 	UINT						m_iTexIndex;
 	xTexture*					m_pTexture;
 	ID3DBlob*					m_pBlobVS;
-	ID3D11SamplerState*			m_pSamplerState;
+	//ID3D11SamplerState*			m_pSamplerState;
 	ID3D11BlendState*			m_pAlphaBlend;
 public:
 	virtual HRESULT CreateVertextBuffer(ID3D11Device *	pd3dDevice);

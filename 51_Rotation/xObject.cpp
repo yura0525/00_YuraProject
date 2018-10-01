@@ -22,8 +22,8 @@ bool xObject::PreRender(ID3D11DeviceContext* pContext)
 }
 bool xObject::Render(ID3D11DeviceContext*	pContext)
 {
-	//static float fAngle = 0.0f;
-	//fAngle += g_fSecPerFrame;
+	static float fAngle = 0.0f;
+	fAngle += g_fSecPerFrame;
 #ifdef GPU
 	//gpu update
 	m_constantData.r = cosf(g_fGameTimer) * 0.5f + 0.5f;
@@ -33,7 +33,7 @@ bool xObject::Render(ID3D11DeviceContext*	pContext)
 	m_constantData.fTime[0] = cosf(g_fGameTimer) * 0.5f + 0.5f;
 	m_constantData.fTime[1] = 1.0f;
 	m_constantData.fTime[2] = 1.0f;
-	//m_constantData.fTime[3] = fAngle;
+	m_constantData.fTime[3] = fAngle;
 	m_pContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &m_constantData, 0, 0);
 #elif defined CPU
 	//cpu update
@@ -52,7 +52,7 @@ bool xObject::Render(ID3D11DeviceContext*	pContext)
 		cb->fTime[0] = cosf(g_fGameTimer) * 0.5f + 0.5f;
 		cb->fTime[1] = 2.0f;
 		cb->fTime[2] = 2.0f;
-		//cb->fTime[3] = fAngle;
+		cb->fTime[3] = fAngle;
 		pContext->Unmap(m_pConstantBuffer, 0);
 	}
 #endif
@@ -61,7 +61,7 @@ bool xObject::Render(ID3D11DeviceContext*	pContext)
 	pContext->HSSetShader(NULL, NULL, 0);
 	pContext->DSSetShader(NULL, NULL, 0);
 	pContext->GSSetShader(NULL, NULL, 0);
-	pContext->PSSetSamplers(0, 1, &m_pSamplerState);
+	pContext->PSSetSamplers(0, 1, &(m_pTexture->m_pSamplerState));
 
 	pContext->OMSetBlendState(m_pAlphaBlend, 0, -1);
 	pContext->PSSetShaderResources(0, 1, &(m_pTexture->m_pTexSRV));

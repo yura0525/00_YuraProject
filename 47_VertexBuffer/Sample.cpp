@@ -61,6 +61,7 @@ public:
 			m_pContext->RSSetState(m_pRSSolid);
 		}
 
+
 		UINT offset = 0;
 		UINT stride = sizeof(P3VERTEX);
 		m_pContext->IASetVertexBuffers(0, 1, &m_pVertextBuffer, &stride, &offset);

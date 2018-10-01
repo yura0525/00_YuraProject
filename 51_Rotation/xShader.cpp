@@ -50,7 +50,7 @@ bool xShader::Render()			//드로우
 bool xShader::Release()			//소멸, 삭제
 {
 	SAFE_RELEASE(m_pTexSRV);
-	SAFE_RELEASE(m_pSamplerState);
+	//SAFE_RELEASE(m_pSamplerState);
 	SAFE_RELEASE(m_pBlobVS);
 	return true;
 }
