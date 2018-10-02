@@ -36,12 +36,12 @@ int main()
 	}
 
 	char buffer[256] = { 0, };
-	recv(sock, buffer, sizeof(buffer), 0);
-	std::cout << buffer<<std::endl;
+	//recv(sock, buffer, sizeof(buffer), 0);
+	//std::cout << buffer<<std::endl;
 
 	char buffer2[256] = { 0, };
-	//send(sock, buffer2, sizeof(buffer2), 0);
 	int iLen = 0;
+
 	while (1)
 	{
 		ZeroMemory(buffer2, sizeof(char) * 256);
@@ -51,11 +51,11 @@ int main()
 		buffer2[strlen(buffer2)-1] = '\0';
 
 		send(sock, buffer2, strlen(buffer2), 0);
-		printf("[%s] : %d 바이트를 전송하였습니다.\n", buffer2, strlen(buffer2));
+		printf("[%s] : %zd 바이트를 전송하였습니다.\n", buffer2, strlen(buffer2));
 
 		ZeroMemory(buffer2, sizeof(char) * 256);
 		recv(sock, buffer2, sizeof(buffer2), 0);
-		printf("[%s] : %d 바이트를 받았습니다.\n", buffer2, strlen(buffer2));
+		printf("[%s] : %zd 바이트를 받았습니다.\n", buffer2, strlen(buffer2));
 	}
 	
 	closesocket(sock);

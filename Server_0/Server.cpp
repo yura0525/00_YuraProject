@@ -62,8 +62,8 @@ int main()
 		printf("\n %s, %d", inet_ntoa(clientInfo.sin_addr), ntohs(clientInfo.sin_port));
 		g_userList.push_back(clientSock);
 
-		char buffer[] = "안녕!";
-		send(clientSock, buffer, sizeof(buffer), 0);
+		//char buffer[] = "안녕!";
+		//send(clientSock, buffer, sizeof(buffer), 0);
 
 		char buffer2[256] = { 0, };
 		while (1)
@@ -85,11 +85,10 @@ int main()
 			printf("\n[%s] : ip : %s, port : %d 받았습니다.",
 				buffer2,
 				inet_ntoa(clientInfo.sin_addr), ntohs(clientInfo.sin_port));
-			//std::cout << buffer2;
 
 			send(clientSock, buffer2, sizeof(buffer2), 0);
 
-			printf("\n[%s] : %d 바이트를 전송하였습니다.", buffer2, strlen(buffer2));
+			printf("\n[%s] : %zd 바이트를 전송하였습니다.", buffer2, strlen(buffer2));
 			/*for (int iUser = 0; iUser < g_userList.size(); iUser++)
 			{
 				send(g_userList[iUser], buffer2, sizeof(buffer2), 0);
