@@ -123,6 +123,7 @@ int main()
 				//send(pUser->sock, recvMsg, iByte, 0);
 			}
 		}
+		//브로드캐스트
 		for (iter = g_userList.begin(); iter != g_userList.end(); iter++)
 		{
 			TUser* pUser = &(iter->second);
