@@ -50,11 +50,11 @@ HRESULT TDirectWrite::DrawText(RECT rt, const TCHAR* pText, D2D1::ColorF color)
 	D2D1_POINT_2F	center;
 	center.x = 400;
 	center.y = 300;
-	D2D1::Matrix3x2F rot = matWorld.Rotation(g_fGameTimer * 50.0f, center);
+	//D2D1::Matrix3x2F rot = matWorld.Rotation(g_fGameTimer * 50.0f, center);
 	/*float fScale = (cosf(g_fGameTimer)*0.5f + 0.5f) * 10;
 	D2D1::Matrix3x2F scale = matWorld.Scale(fScale, fScale, center);
 	rot = scale * rot;*/
-	m_pRT->SetTransform(rot);
+	//m_pRT->SetTransform(rot);
 
 	m_pColorBrush->SetColor(color);
 	D2D1_RECT_F rf = D2D1::RectF(rt.left, rt.top, rt.right, rt.bottom);
@@ -122,7 +122,7 @@ bool TDirectWrite::Render()
 	D2D1_POINT_2F	center;
 	center.x = 400;
 	center.y = 300;
-	D2D1::Matrix3x2F rot = matWorld.Rotation(g_fGameTimer * 50.0f, center);
+	//D2D1::Matrix3x2F rot = matWorld.Rotation(g_fGameTimer * 50.0f, center);
 	/*float fScale = (cosf(g_fGameTimer)*0.5f + 0.5f) * 10;
 	D2D1::Matrix3x2F scale = matWorld.Scale(fScale, fScale, center);
 	rot = scale * rot;*/
@@ -130,7 +130,7 @@ bool TDirectWrite::Render()
 
 	for (int iText = 0; iText < m_TextList.size(); iText++)
 	{
-		m_pRT->SetTransform(rot);
+		//m_pRT->SetTransform(rot);
 		m_pColorBrush->SetColor(m_TextList[iText].color);
 		D2D1_RECT_F rf = m_TextList[iText].rf;
 

@@ -31,6 +31,10 @@ typedef std::basic_string <char>	C_STR;	//multi-byte
 typedef std::basic_string <wchar_t>	W_STR;	//unicode byte
 typedef std::basic_string <TCHAR>	T_STR;	//프로젝트속성이 멀티바이트이면 멀티바이트, 유니코드이면 유니코드로 바뀜.
 
+typedef std::basic_string <char>::iterator		C_ITOR;
+typedef std::basic_string <wchar_t>::iterator	W_ITOR;
+typedef std::basic_string <TCHAR>::iterator		T_ITOR;
+
 											//string a;		//multi-byte
 											//wstring b;	//unicode byte
 
