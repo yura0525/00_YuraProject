@@ -1,61 +1,10 @@
-#include <winsock2.h>
-#include <iostream>
-#include"TProtocol.h"
+#include "Sample.h"
 
-#pragma comment(lib, "ws2_32.lib")
-
-int SendMsg(SOCKET sock, char* msg, WORD type)
+HANDLE g_hEvent;
+DWORD WINAPI SendThread(LPVOID arg)
 {
-	UPACKET sendmsg;
-	ZeroMemory(&sendmsg, sizeof(sendmsg));
-	sendmsg.ph.len = strlen(msg);
-	sendmsg.ph.type = type;
-	memcpy(sendmsg.msg, msg, strlen(msg));
+	SOCKET sock = (SOCKET)arg;
 
-	int sendbytes = 0;
-	int iTotalsize = strlen(msg) + PACKET_HEADER_SIZE;
-	char* pMsg = (char*)&sendmsg;
-	do {
-		sendbytes += send(sock, (char*)&pMsg[sendbytes], iTotalsize - sendbytes, 0);
-	} while (sendbytes < iTotalsize);
-
-	return iTotalsize;
-}
-
-int SendMsg(SOCKET sock, PACKET_HEADER ph, char* msg)
-{
-	UPACKET sendmsg;
-	ZeroMemory(&sendmsg, sizeof(sendmsg));
-	sendmsg.ph = ph;
-	memcpy(sendmsg.msg, msg, strlen(msg));
-
-	int sendbytes = 0;
-	int iTotalsize = strlen(msg) + PACKET_HEADER_SIZE;
-	char* pMsg = (char*)&sendmsg;
-	do {
-		sendbytes += send(sock, (char*)&pMsg[sendbytes], iTotalsize - sendbytes, 0);
-	} while (sendbytes < iTotalsize);
-
-	return iTotalsize;
-}
-
-int SendMsg(SOCKET sock, UPACKET* uPacket)
-{
-	int sendbytes = 0;
-	int iTotalsize = strlen(uPacket->msg) + PACKET_HEADER_SIZE;
-	char* pMsg = (char*)uPacket->msg;
-	do {
-		sendbytes += send(sock, (char*)&pMsg[sendbytes], iTotalsize - sendbytes, 0);
-	} while (sendbytes < iTotalsize);
-
-	return iTotalsize;
-}
-
-
-//#define _WINSOCK_DEPRECATED_NO_WARNINGS
-DWORD WINAPI SendThread(LPVOID param)
-{
-	SOCKET sock = (SOCKET)param;
 	char buffer[256] = { 0, };
 	while (1)
 	{
@@ -70,9 +19,9 @@ DWORD WINAPI SendThread(LPVOID param)
 
 		int iSendByte = SendMsg(sock, buffer, PACKET_CHAT_MSG);
 		if (iSendByte == SOCKET_ERROR)	break;
-		printf("[%s] : %zd 바이트를 전송하였습니다.\n", buffer, strlen(buffer));
+		printf("\n[%s] : %zd 바이트를 전송하였습니다.\n", buffer, strlen(buffer));
 	}
-
+	shutdown(sock, SD_BOTH);
 	closesocket(sock);
 	return 1;
 }
@@ -80,8 +29,9 @@ DWORD WINAPI SendThread(LPVOID param)
 DWORD WINAPI RecvThread(LPVOID arg)
 {
 	SOCKET sock = (SOCKET)arg;
+
 	char buffer[2048] = { 0, };
-	printf("\n보낼 데이터 입력하시오?");
+	printf("\n보낼 데이터 입력하시오?\n");
 	int iRecvByte = 0;
 	int iStartByte = 0;
 	ZeroMemory(buffer, sizeof(char) * 2048);
@@ -91,26 +41,31 @@ DWORD WINAPI RecvThread(LPVOID arg)
 	while (bConnect)
 	{
 		int iLen = 0;
-		iLen = recv(sock, &buffer[iStartByte], PACKET_HEADER_SIZE - iRecvByte, 0);
+		iLen = recv(sock, &buffer[iStartByte], sizeof(char) * PACKET_HEADER_SIZE - iRecvByte, 0);
 		iRecvByte += iLen;
-
-		if (iLen == 0 || iLen == SOCKET_ERROR)
+		if (iLen == 0)
 		{
-			printf("[연결종료] : %s", "서버 문제로 인하여 종료되었다.");
+			printf("\n---->정상퇴장\n");
 			break;
 		}
+		if (iLen <= SOCKET_ERROR)
+		{
+			printf("\n---->비정상 퇴장\n");
+			break;
+		}
+
 		if (iRecvByte == PACKET_HEADER_SIZE)
 		{
 			UPACKET* pPacket = (UPACKET*)&buffer;
-
-			while (iRecvByte < pPacket->ph.len)
+			while (iRecvByte < pPacket->ph.len);
 			{
-				iLen = recv(sock, &buffer[iRecvByte], pPacket->ph.len - iRecvByte, 0);
+				iRecvByte = recv(sock, (char*)&buffer[iRecvByte],
+					sizeof(char) * pPacket->ph.len - iRecvByte, 0);
 				iRecvByte += iLen;
-
 				if (iLen == 0 || iLen == SOCKET_ERROR)
 				{
-					printf("[연결종료] : %s", "서버 문제로 인하여 종료되었다.");
+					printf("\niLen == 0 || iLen == SOCKET_ERROR [연결종료] : %s", "서버 문제로 인하여 종료되었다.\n");
+					bConnect = false;
 					break;
 				}
 			}
@@ -122,11 +77,14 @@ DWORD WINAPI RecvThread(LPVOID arg)
 				memcpy(&recvmsg, pPacket, pPacket->ph.len);
 				switch (recvmsg.ph.type)
 				{
-				case PACKET_CHAT_MSG:
-				{
-					printf("\n[받은메세지]: %s", recvmsg.msg);
-					printf("\n보낼 데이터 입력하시오?");
-				}break;
+					//case PACKET_JOIN;
+					//case PACKET_DROP;
+					case PACKET_CHAT_MSG:
+					{
+						printf("\n[받은메세지]: %s\n", recvmsg.msg);
+						printf("\n보낼 데이터 입력하시오?\n");
+					}
+					break;
 				}
 				iStartByte = iRecvByte = 0;
 			}
@@ -136,33 +94,20 @@ DWORD WINAPI RecvThread(LPVOID arg)
 			iStartByte += iRecvByte;
 		}
 	}
+	shutdown(sock, SD_BOTH);
 	closesocket(sock);
 	return 1;
 }
-int main()
+
+DWORD WINAPI ConnectThread(LPVOID param)
 {
-	WSADATA wd;
-	//윈속 초기화. 0이면 성공
-	if (WSAStartup(MAKEWORD(2, 2), &wd) != 0)
-	{
-		return 1;
-	}
-
-	//소켓 생성 완료.
-	/*SOCKET sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	SOCKET sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);*/
-	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
-
-	if (sock == INVALID_SOCKET)
-	{
-		return 1;
-	}
+	SOCKET sock = (SOCKET)param;
 
 	SOCKADDR_IN addr;
 	ZeroMemory(&addr, sizeof(addr));
 	addr.sin_family = AF_INET;
-	//addr.sin_addr.s_addr = inet_addr("192.168.0.27");
-	addr.sin_addr.s_addr = inet_addr("192.168.0.101");
+	addr.sin_addr.s_addr = inet_addr("192.168.0.27");
+	//addr.sin_addr.s_addr = inet_addr("192.168.0.101");
 	addr.sin_port = htons(10000);
 
 	int ret = connect(sock, (sockaddr*)&addr, sizeof(addr));
@@ -171,54 +116,60 @@ int main()
 		return 1;
 	}
 
-
-	//recv(sock, buffer, sizeof(buffer), 0);
-	//std::cout << buffer<<std::endl;
-
-	//char buffer2[256] = { 0, };
-	int iLen = 0;
-
-	DWORD id;
-	HANDLE hThread = CreateThread(NULL, 0, SendThread, (LPVOID)sock, 0, &id);
-	int recvByte = 0;
-	char buffer[256] = { 0, };
-	while (1)
+	SetEvent(g_hEvent);		//이벤트 끝나면 해줘야한다.
+	return 1;
+}
+int main()
+{
+	WSADATA wd;
+	//윈속 초기화. 0이면 성공
+	if (BeginWinSock() == false)
 	{
-		recvByte += recv(sock, &buffer[recvByte], sizeof(char) * PACKET_HEADER_SIZE - recvByte, 0);
-		if (recvByte == 0) break;
-
-		if (recvByte == PACKET_HEADER_SIZE)
-		{
-			UPACKET packet;
-			ZeroMemory(&packet, sizeof(UPACKET));
-			memcpy(&packet.ph, buffer, sizeof(char) * PACKET_HEADER_SIZE);
-
-			int rByte = 0;
-			do
-			{
-				rByte += recv(sock, &(packet.msg[rByte]), sizeof(char)*(packet.ph.len - rByte), 0);
-				if (rByte == 0) break;
-			} while (packet.ph.len > rByte);
-
-			rByte = 0;
-
-			switch (packet.ph.type)
-			{
-			case PACKET_CHAT_MSG:
-			{
-				printf("패킷 완성 %s", packet.msg);
-				SendMsg(sock, packet.msg, PACKET_CHAT_MSG);
-				//SendMsg(sock, &packet);
-				//SendMsg(sock, packet.ph, packet.msg);
-			}
-			break;
-			}
-			//printf("패킷 완성 %s", packet.msg);
-		}
+		return 1;
 	}
 
+	// 이벤트는 스레드간 중계, 스레드간 흐름을 제어하려고 사용한다.
+	// 2 : FALSE(자동리셋 이벤트 ), TRUE( 수동리셋 이벤트 )
+	// 3 : 초기값(FALSE: 논시그널, TRUE:시그널)
+	g_hEvent = CreateEvent(NULL, FALSE,
+		FALSE,
+		L"ConnectEvent");
+
+	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
+
+	if (sock == INVALID_SOCKET)
+	{
+		return 1;
+	}
+
+	//소켓 생성 완료.
+	/*SOCKET sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	SOCKET sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);*/
+	DWORD id_0;
+	HANDLE hConnectThread = CreateThread(0, 0, ConnectThread, (LPVOID)sock, 0, &id_0);
+
+	//event
+	// 커넥트가 되야 샌드 리시브 되니까 기다리려고 이벤트를 사용한다
+	WaitForSingleObject(g_hEvent, INFINITE);
+	ResetEvent(g_hEvent);		//자동리셋 이벤트는 사용 안 해도 되고, 수동리셋 이벤트는 필요하다.
+	//WaitForSingleObject(hConnectThread, INFINITE);
+
+	DWORD id_1;
+	HANDLE hSendThread = CreateThread(NULL, 0, SendThread, (LPVOID)sock, 0, &id_1);
+
+	DWORD id_2;
+	HANDLE hRecvThread = CreateThread(NULL, 0, RecvThread, (LPVOID)sock, 0, &id_2);
+
+	WaitForSingleObject(hSendThread, INFINITE);
+	WaitForSingleObject(hRecvThread, INFINITE);
+
 	closesocket(sock);
-	WSACleanup();
-	std::cout << "Client Hello World\n";
+	CloseHandle(hConnectThread);
+	CloseHandle(hSendThread);
+	CloseHandle(hRecvThread);
+
+	EndWinSock();
+
+	std::cout << "\nClient Hello World\n";
 	getchar();
 }
