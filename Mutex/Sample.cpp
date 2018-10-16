@@ -10,12 +10,8 @@ DWORD WINAPI ClientThread(LPVOID arg)
 	int iRet = 0;
 	bool bConnect = true;
 
-	while (1)
+	while (bConnect)
 	{
-		/*UPACKET packet;
-		ZeroMemory(&packet, sizeof(UPACK));
-		recvByte += recv(sock, (char*)packet.ph[recvByte], sizeof(char) * PACKET_HEADER - recvByte, 0);*/
-
 		iRet = recv(*sock, &buffer[recvByte], sizeof(char) * PACKET_HEADER_SIZE - recvByte, 0);
 		if (CheckReturn(iRet) <= 0)
 		{
@@ -109,13 +105,6 @@ int main()
 
 	// listen -> 듣다.
 	listen(listenSock, SOMAXCONN);	//->개통
-
-									//FIONBIO => FInputOutput NonBlocking InputOutput
-									//listenSock이 사용하는 모든 API함수를 다 NonBlocking함수로 바꿔줌.
-									//clientSock이 NonBlocking되는 건 아니다.
-									//예외처리를 해줘야한다. 정상적인 반환인지 그냥 반환인지 구분해야한다.
-									/*u_long on = TRUE;
-									ioctlsocket(listenSock, FIONBIO, &on);*/
 
 	while (1)
 	{
