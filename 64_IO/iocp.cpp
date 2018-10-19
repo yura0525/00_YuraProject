@@ -21,6 +21,8 @@ public:
 
 	HANDLE m_hWorkThread[MAX_WORK_THREAD];
 	char m_szReadBuffer[MAX_READ_SIZE];
+
+	bool m_bEndRead;
 public:
 	void Init();
 	void Frame();
@@ -30,7 +32,10 @@ public:
 	bool DispatchWrite(DWORD dwTransfer);
 
 public:
-	~TIOCP() {}
+	~TIOCP()
+	{
+		m_bEndRead = false;
+	}
 	void Release()
 	{
 		CloseHandle(m_hFileRead);
@@ -75,6 +80,13 @@ bool TIOCP::DispatchWrite(DWORD dwTransfer)
 
 	m_hWriteOV.Offset += data.LowPart;
 	m_hWriteOV.OffsetHigh += data.HighPart;
+
+	if (m_bEndRead && dwTransfer < MAX_READ_SIZE)
+	{
+		::SetEvent(m_hEventKillThread);
+		return true;
+	}
+
 	return true;
 }
 
@@ -103,6 +115,12 @@ DWORD WINAPI TIOCP::WorkerThread(LPVOID param)
 
 		if (bRet == TRUE)
 		{
+			if (bytesTransfer == 0)
+			{
+				::SetEvent(iocp->m_hEventKillThread);
+				return true;
+			}
+
 			if (keyValue == (ULONG_PTR)iocp->m_hFileRead)
 			{
 				iocp->DispatchRead(bytesTransfer);
@@ -114,6 +132,11 @@ DWORD WINAPI TIOCP::WorkerThread(LPVOID param)
 		}
 		else
 		{
+			if (ERROR_HANDLE_EOF == GetLastError())
+			{
+				iocp->m_bEndRead = true;
+				return true;
+			}
 			if (GetLastError() == WAIT_TIMEOUT)
 			{
 				continue;

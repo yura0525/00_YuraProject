@@ -13,3 +13,5 @@
 /alphablend
 /Client_2/x64/Debug
 /packet_0
+/iocpServer/x64/Debug
+/TSvrLib/TSvrLib.lib
