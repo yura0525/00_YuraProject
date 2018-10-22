@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="iocp">
+      <UniqueIdentifier>{463b0b70-658c-438a-b4ca-f670b8c91b19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -36,6 +39,27 @@
     <ClInclude Include="TNetwork.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="XUser.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TServerStd.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TSvrIOCP.h">
+      <Filter>iocp</Filter>
+    </ClInclude>
+    <ClInclude Include="TLogError.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TWorkThread.h">
+      <Filter>iocp</Filter>
+    </ClInclude>
+    <ClInclude Include="TStreamPacket.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TProtocol.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -54,6 +78,21 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="TNetwork.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="XUser.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TSvrIOCP.cpp">
+      <Filter>iocp</Filter>
+    </ClCompile>
+    <ClCompile Include="TLogError.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TWorkThread.cpp">
+      <Filter>iocp</Filter>
+    </ClCompile>
+    <ClCompile Include="TStreamPacket.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

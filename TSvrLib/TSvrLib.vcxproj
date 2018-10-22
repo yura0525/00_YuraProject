@@ -159,10 +159,17 @@ copy "*.lib" "../../lib"</Command>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TAccept.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TLogError.h" />
     <ClInclude Include="TNetwork.h" />
+    <ClInclude Include="TProtocol.h" />
+    <ClInclude Include="TServerStd.h" />
+    <ClInclude Include="TStreamPacket.h" />
+    <ClInclude Include="TSvrIOCP.h" />
     <ClInclude Include="TSvrObject.h" />
     <ClInclude Include="TSynchronize.h" />
     <ClInclude Include="TThread.h" />
+    <ClInclude Include="TWorkThread.h" />
+    <ClInclude Include="XUser.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -172,10 +179,15 @@ copy "*.lib" "../../lib"</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="TAccept.cpp" />
+    <ClCompile Include="TLogError.cpp" />
     <ClCompile Include="TNetwork.cpp" />
+    <ClCompile Include="TStreamPacket.cpp" />
+    <ClCompile Include="TSvrIOCP.cpp" />
     <ClCompile Include="TSvrObject.cpp" />
     <ClCompile Include="TSynchronize.cpp" />
     <ClCompile Include="TThread.cpp" />
+    <ClCompile Include="TWorkThread.cpp" />
+    <ClCompile Include="XUser.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

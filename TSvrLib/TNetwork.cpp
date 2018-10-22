@@ -6,36 +6,37 @@ bool TNetwork::Set(int iPort, const char* address)
 	WSADATA wd;
 	WSAStartup(MAKEWORD(2, 2), &wd);
 
-	m_Sock = socket(AF_INET, SOCK_STREAM, 0);
+	m_ListenSock = socket(AF_INET, SOCK_STREAM, 0);
+	
+	if (m_ListenSock == INVALID_SOCKET)
+	{
+		return false;
+	}
+
+	SOCKADDR_IN addr;
+	ZeroMemory(&addr, sizeof(addr));
+	addr.sin_family = AF_INET;
 	if (address == NULL)
 	{
-		if (m_Sock == INVALID_SOCKET)
-		{
-			return false;
-		}
-
-		SOCKADDR_IN addr;
-		ZeroMemory(&addr, sizeof(addr));
-		addr.sin_family = AF_INET;
 		addr.sin_addr.s_addr = htonl(INADDR_ANY);
-		addr.sin_port = htons(10000);
-
-		//바인딩
-		int ret = bind(m_Sock, (sockaddr*)&addr, sizeof(addr));
-		if (ret == SOCKET_ERROR)
-		{
-			return false;
-		}
-
-		ret = listen(m_Sock, SOMAXCONN);
-		if (ret == SOCKET_ERROR)
-		{
-			return false;
-		}
 	}
 	else
 	{
+		addr.sin_addr.s_addr = inet_addr(address);
+	}
+	addr.sin_port = htons(10000);
 
+	//바인딩
+	int ret = ::bind(m_ListenSock, (sockaddr*)&addr, sizeof(addr));
+	if (ret == SOCKET_ERROR)
+	{
+		return false;
+	}
+
+	ret = listen(m_ListenSock, SOMAXCONN);
+	if (ret == SOCKET_ERROR)
+	{
+		return false;
 	}
 	return true;
 }

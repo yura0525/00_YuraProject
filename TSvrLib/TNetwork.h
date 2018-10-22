@@ -4,7 +4,7 @@
 class TNetwork : public TSvrObject
 {
 public:
-	SOCKET m_Sock;
+	SOCKET m_ListenSock;
 
 public:
 	bool Set(int iPort, const char* address = 0);
