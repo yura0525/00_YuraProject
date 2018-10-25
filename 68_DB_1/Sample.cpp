@@ -15,11 +15,10 @@ void Select();
 bool Add()
 {
 	TCHAR szSQL[256] = { 0, };
-	SQLTCHAR Name[21] = _T("금연");
-	SQLINTEGER Price = 3000;
-	BOOL Korean = FALSE;
+	SQLTCHAR UserID[11] = _T("정소유");
+	SQLTCHAR UserPW[11] = _T("정소유사랑해");
 
-	_stprintf((TCHAR*)szSQL, _T("Insert into tblCigar(name, price, korean) values('%s', %d, %d)"), Name, Price, Korean);
+	_stprintf((TCHAR*)szSQL, _T("Insert into UserList values('%s', '%s')"), UserID, UserPW);
 	if (SQLExecDirect(g_hStmt, (SQLTCHAR*)szSQL, SQL_NTS) == SQL_SUCCESS)
 	{
 		//조회할때 커서의 위치로부터 밑으로 조회한다.
@@ -37,29 +36,23 @@ bool Add()
 
 void Select()
 {
-	SQLTCHAR Name[20] = { 0, };
-	int iPrice, isKorean;
-	SQLLEN lName, lPrice, lKorean;
+	SQLCHAR Name[10] = { 0, };
+	SQLCHAR Pass[10] = { 0, };
+	SQLLEN lName, lPass;
 	//SQL_C_CHAR 짧은 텍스트 SQL_C_ULONG 숫자.
 	//1번 필드 2번 필드.
 	SQLBindCol(g_hStmt, 1, SQL_C_CHAR, Name, sizeof(Name), &lName);
-	SQLBindCol(g_hStmt, 2, SQL_C_ULONG, &iPrice, sizeof(iPrice), &lPrice);
-	SQLBindCol(g_hStmt, 3, SQL_C_ULONG, &isKorean, sizeof(isKorean), &lKorean);
+	SQLBindCol(g_hStmt, 2, SQL_C_CHAR, Pass, sizeof(Pass), &lPass);
 
-	//tblCigar테이블로부터 name(필드명)을 리턴해라.
-	//select...from...where... '문자열' 
-	//if (SQLExecDirect(g_hStmt, (SQLTCHAR*)_T("select name,price,korean from tblCigar where name='This'"), SQL_NTS) != SQL_SUCCESS)
-	//{
-	//   return;
-	//}
-	if (SQLExecDirect(g_hStmt, (SQLTCHAR*)_T("select * from tblCigar"), SQL_NTS) != SQL_SUCCESS)
+	//USERLIST테이블로부터 name(필드명)을 리턴해라.
+	if (SQLExecDirect(g_hStmt, (SQLTCHAR*)_T("select USERID, USERPW from USERLIST"), SQL_NTS) != SQL_SUCCESS)
 	{
 		return;
 	}
 
 	while (SQLFetch(g_hStmt) != SQL_NO_DATA)
 	{
-		printf("\n%s : price[%d][%d]", Name, iPrice, isKorean);
+		printf("\n%s : [%s]", Name, Pass);
 	}
 
 	//조회할때 커서의 위치로부터 밑으로 조회한다.
@@ -69,8 +62,8 @@ void Select()
 
 bool Delete()
 {
-	TCHAR szSQL[256] = _T("Delete from tblCigar where name = '금연'");
-	SQLTCHAR Name[21] = _T("금연");
+	TCHAR szSQL[256] = _T("Delete from USERLIST where USERID = '정소유'");
+	SQLTCHAR Name[11] = _T("정소유");
 
 	//_stprintf((TCHAR*)szSQL, _T("Delete from tblCigar where name = '%s'"), Name);
 	if (SQLExecDirect(g_hStmt, (SQLTCHAR*)szSQL, SQL_NTS) == SQL_SUCCESS)
@@ -87,10 +80,8 @@ bool Delete()
 
 bool Update()
 {
-	TCHAR szSQL[256] = _T("Update tblCigar set name = '금연자' where name = '금연'");
-	SQLTCHAR Name[21] = _T("금연");
-	SQLINTEGER Price = 3000;
-	BOOL Korean = FALSE;
+	TCHAR szSQL[256] = _T("Update USERLIST set USERID = '정소담' where USERID = '정소유'");
+	SQLTCHAR Name[11] = _T("정소유");
 
 	//_stprintf((TCHAR*)szSQL, _T("Update tblCigar where name = '%s'"), Name);
 	if (SQLExecDirect(g_hStmt, (SQLTCHAR*)szSQL, SQL_NTS) == SQL_SUCCESS)
@@ -122,15 +113,13 @@ void main()
 	SQLAllocHandle(SQL_HANDLE_DBC, g_hEnv, &g_hDbc);
 
 	// 주의 --> *.mdb,"한칸뛰어야 한다."*.accdb
-	SQLTCHAR szInCon[256] = { 0, };
-	_stprintf((TCHAR*)szInCon,
-		_T("DRIVER={Microsoft Access Driver (*.mdb)};DBQ=%s\\cigarette.mdb;"), L"..\\..\\data");
+	SQLTCHAR szInCon[256] = _T("DSN=kimyura");
 
 	SQLTCHAR szOutcon[256] = { 0, };
 	SQLSMALLINT cbCon;
-	SQLRETURN ret = SQLDriverConnect(g_hDbc, NULL,
-		szInCon, _countof(szInCon), szOutcon, _countof(szOutcon),
-		&cbCon, SQL_DRIVER_NOPROMPT);
+	SQLRETURN ret = SQLConnect(g_hDbc, (SQLTCHAR*)L"kimyura", SQL_NTS,
+		(SQLTCHAR*)L"sa", SQL_NTS, (SQLTCHAR*)L"kgca!@34", SQL_NTS);
+
 
 	if (ret != SQL_SUCCESS && (ret != SQL_SUCCESS_WITH_INFO))
 		return;
