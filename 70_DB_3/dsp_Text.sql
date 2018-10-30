@@ -1,0 +1,3 @@
+CREATE PROCEDURE [dbo].[usp_Test]
+AS
+	SELECT * FROM dbo.USERLIST;

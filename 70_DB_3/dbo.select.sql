@@ -1,0 +1,9 @@
+CREATE PROCEDURE [dbo].[usp_Select]
+   @UID NCHAR(10)
+AS
+   DECLARE @ret INT;
+BEGIN
+   SELECT * FROM dbo.USERLIST WHERE @UID = USERID;
+   SELECT @ret = 2;
+END
+RETURN @ret

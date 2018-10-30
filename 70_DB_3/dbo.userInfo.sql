@@ -1,0 +1,8 @@
+CREATE PROCEDURE [dbo].[usp_userinfo]
+   @UID NCHAR(10)
+AS
+   DECLARE @ret INT;
+BEGIN
+   SELECT * FROM dbo.TIME WHERE @UID = USERID;
+END
+RETURN 1

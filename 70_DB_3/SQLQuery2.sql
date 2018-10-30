@@ -1,0 +1,4 @@
+UPDATE [KIMGAME][dbo][Table]
+SET USERPS = 'AAA'
+WHERE USERID = 'ȫ�浿'
+END

@@ -70,11 +70,11 @@ void Select()
 	//1, 2 는 ? 마커의 순서대로 넣어야한다.
 	SWORD sReturn = -1;
 	SQLLEN cbRetParam = SQL_NTS;
-	SQLBindParameter(g_hStmt, 1, SQL_PARAM_OUTPUT, SQL_C_SSHORT, SQL_INTEGER, 0, 0, 
+	SQLBindParameter(g_hStmt, 1, SQL_PARAM_OUTPUT, SQL_C_SSHORT, SQL_INTEGER, 0, 0,
 		&sReturn, sizeof(sReturn), &cbRetParam);
 
 	SQLCHAR UserID[10] = "정소담";
-	SQLBindParameter(g_hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_LONGVARCHAR, 10, 0, 
+	SQLBindParameter(g_hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_LONGVARCHAR, 10, 0,
 		UserID, sizeof(UserID), NULL);
 
 	SQLTCHAR sql[] = _T("{?=CALL dbo.usp_pass(?)}");
