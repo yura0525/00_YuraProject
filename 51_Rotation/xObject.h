@@ -56,7 +56,7 @@ public:
 	virtual HRESULT SetBlendState(ID3D11Device * pd3dDevice);
 public:
 	virtual bool Init();
-	virtual bool Frame();
+	virtual bool Frame(ID3D11DeviceContext* pContext);
 	virtual bool PreRender(ID3D11DeviceContext* pContext);
 	virtual bool Render(ID3D11DeviceContext* pContext);
 	virtual bool PostRender(ID3D11DeviceContext* pContext);

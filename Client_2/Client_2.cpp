@@ -8,6 +8,7 @@ DWORD WINAPI SendThread(LPVOID arg)
 	char buffer[256] = { 0, };
 	while (1)
 	{
+		printf("\n보낼 데이터 입력하시오?\n");
 		fgets(buffer, 256, stdin);
 		if (strlen(buffer) <= 1)
 		{
@@ -31,7 +32,7 @@ DWORD WINAPI RecvThread(LPVOID arg)
 	SOCKET sock = (SOCKET)arg;
 
 	char buffer[2048] = { 0, };
-	printf("\n보낼 데이터 입력하시오?\n");
+	
 	int iRecvByte = 0;
 	int iStartByte = 0;
 	ZeroMemory(buffer, sizeof(char) * 2048);
@@ -59,7 +60,7 @@ DWORD WINAPI RecvThread(LPVOID arg)
 			UPACKET* pPacket = (UPACKET*)&buffer;
 			while (iRecvByte < pPacket->ph.len);
 			{
-				iRecvByte = recv(sock, (char*)&buffer[iRecvByte],
+				iLen = recv(sock, (char*)&buffer[iRecvByte],
 					sizeof(char) * pPacket->ph.len - iRecvByte, 0);
 				iRecvByte += iLen;
 				if (iLen == 0 || iLen == SOCKET_ERROR)
@@ -82,7 +83,6 @@ DWORD WINAPI RecvThread(LPVOID arg)
 					case PACKET_CHAT_MSG:
 					{
 						printf("\n[받은메세지]: %s\n", recvmsg.msg);
-						printf("\n보낼 데이터 입력하시오?\n");
 					}
 					break;
 				}

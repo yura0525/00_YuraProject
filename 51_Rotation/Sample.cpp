@@ -15,15 +15,14 @@ public:
 		xCore::Init();
 		
 		m_Object.Init();
-		m_Object.Create(m_pd3dDevice, L"vertexshader.txt", L"../../data/hud.dds");
+		m_Object.Create(m_pd3dDevice, L"vertexshader.txt", L"../../data/Dirt_Diff.dds");
 		
-
 		return true;
 	}
 	bool Frame()
 	{
 		xCore::Frame();
-		m_Object.Frame();
+		m_Object.Frame(m_pContext);
 		return true;
 	}
 	bool Render()

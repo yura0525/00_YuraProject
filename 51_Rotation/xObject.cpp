@@ -12,15 +12,7 @@ bool xObject::Init()
 	return true;
 }
 
-bool xObject::Frame()
-{
-	return true;
-}
-bool xObject::PreRender(ID3D11DeviceContext* pContext)
-{
-	return true;
-}
-bool xObject::Render(ID3D11DeviceContext*	pContext)
+bool xObject::Frame(ID3D11DeviceContext* pContext)
 {
 	static float fAngle = 0.0f;
 	fAngle += g_fSecPerFrame;
@@ -34,7 +26,7 @@ bool xObject::Render(ID3D11DeviceContext*	pContext)
 	m_constantData.fTime[1] = 1.0f;
 	m_constantData.fTime[2] = 1.0f;
 	m_constantData.fTime[3] = fAngle;
-	m_pContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &m_constantData, 0, 0);
+	pContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &m_constantData, 0, 0);
 #elif defined CPU
 	//cpu update
 	//MAP			->자물쇠 열고
@@ -57,6 +49,14 @@ bool xObject::Render(ID3D11DeviceContext*	pContext)
 	}
 #endif
 
+	return true;
+}
+bool xObject::PreRender(ID3D11DeviceContext* pContext)
+{
+	return true;
+}
+bool xObject::Render(ID3D11DeviceContext*	pContext)
+{
 	pContext->VSSetShader(m_pShader->m_pVS, NULL, 0);
 	pContext->HSSetShader(NULL, NULL, 0);
 	pContext->DSSetShader(NULL, NULL, 0);
@@ -124,7 +124,6 @@ bool xObject::Create(ID3D11Device *	pd3dDevice, T_STR szShaderName, T_STR szTexN
 HRESULT xObject::CreateVertextBuffer(ID3D11Device *	pd3dDevice)
 {
 	HRESULT hr;
-	PCT_VERTEX vList[6];
 
 	m_verList.resize(4);
 	//정점의 저장순서 : 시계방향

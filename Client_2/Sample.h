@@ -56,7 +56,7 @@ int SendMsg(SOCKET sock, UPACKET* uPacket)
 {
 	int sendbytes = 0;
 	int iTotalsize = strlen(uPacket->msg) + PACKET_HEADER_SIZE;
-	char* pMsg = (char*)uPacket->msg;
+	char* pMsg = (char*)uPacket;
 	int iSend = 0;
 	do {
 		iSend = send(sock, (char*)&pMsg[sendbytes], iTotalsize - sendbytes, 0);

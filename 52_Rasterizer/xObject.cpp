@@ -124,8 +124,6 @@ bool xObject::Create(ID3D11Device *	pd3dDevice, T_STR szShaderName, T_STR szTexN
 HRESULT xObject::CreateVertextBuffer(ID3D11Device *	pd3dDevice)
 {
 	HRESULT hr;
-	PCT_VERTEX vList[6];
-
 	m_verList.resize(4);
 	//정점의 저장순서 : 시계방향
 	//반시계방향으로 그리면 안나온다.
