@@ -1,0 +1,16 @@
+struct VS_IN
+{
+	float4 p : POSITION;
+	float4 c : COLOR0;
+};
+
+struct VS_OUTPUT
+{
+	float4 p : POSITION;
+	float4 c : COLOR0;
+};
+
+float4 PS(VS_OUTPUT v) : SV_Target
+{
+	return v.c;
+}
