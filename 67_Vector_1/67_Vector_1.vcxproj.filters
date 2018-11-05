@@ -34,7 +34,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="vs.vsh" />
     <FxCompile Include="ps.psh" />
+    <FxCompile Include="vs.vsh" />
   </ItemGroup>
 </Project>

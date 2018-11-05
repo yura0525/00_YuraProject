@@ -18,7 +18,11 @@ bool TObjectPlane::Set(ID3D11Device* pd3dDevice)
 
 	TVector3 v0 = v4 * -1.0f;
 	TVector3 v1 = (v0 + v2).Normalize();
-	TVector3 v3 = (v2 - v0).Normalize();
+	TVector3 v3 = (v2 + v4).Normalize();
+
+	v0.Normal();
+	v1.Normal();
+	v3.Normal();
 
 	m_VertexList[0].p = v;//TVector3(-1.0f, 1.0f, 0.5f);
 	m_VertexList[0].c = TVector4(1.0f, 0.0f, 0.0f, 1.0f);
@@ -36,8 +40,8 @@ bool TObjectPlane::Set(ID3D11Device* pd3dDevice)
 
 	m_IndexList[0] = 0;	m_IndexList[1] = 1;	m_IndexList[2] = 2;
 	m_IndexList[3] = 0;	m_IndexList[4] = 2;	m_IndexList[5] = 3;
-	m_IndexList[6] = 0;	m_IndexList[7] = 3;	m_IndexList[8] = 3;
-	m_IndexList[9] = 0;	m_IndexList[8] = 4;	m_IndexList[9] = 3;
+	m_IndexList[6] = 0;	m_IndexList[7] = 3;	m_IndexList[8] = 4;
+	m_IndexList[9] = 0;	m_IndexList[8] = 4;	m_IndexList[9] = 5;
 
 	m_iNumVertex = 6;
 	m_iNumIndex = 12;
@@ -70,7 +74,7 @@ bool TObjectPlane::Set(ID3D11Device* pd3dDevice)
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,
 		0,0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,
-		0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 	UINT numElements = sizeof(layout) / sizeof(layout[0]);
 

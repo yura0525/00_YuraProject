@@ -6,7 +6,7 @@ struct VS_IN
 
 struct VS_OUTPUT
 {
-	float4 p : POSITION;
+	float4 p : SV_POSITION;
 	float4 c : COLOR0;
 };
 

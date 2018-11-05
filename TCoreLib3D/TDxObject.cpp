@@ -249,6 +249,8 @@ ID3D11InputLayout* CreateInputLayout(ID3D11Device* pd3dDevice,
 		UINT offset = 0;
 		pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 
+		pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 		pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 		pContext->VSSetShader(m_pVertexShader, NULL, 0);
 		pContext->PSSetShader(m_pPixelShader, NULL, 0);
