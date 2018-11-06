@@ -1,6 +1,6 @@
 struct VS_IN
 {
-	float4 p : POSITION;
+	float3 p : POSITION;
 	float4 c : COLOR0;
 };
 
@@ -13,7 +13,7 @@ struct VS_OUTPUT
 VS_OUTPUT VS(VS_IN v)
 {
 	VS_OUTPUT vOut = (VS_OUTPUT)0;
-	vOut.p = v.p;
+	vOut.p = float4(v.p, 1.0f);
 	vOut.c = v.c;
 	return vOut;
 }
