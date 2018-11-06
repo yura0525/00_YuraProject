@@ -18,7 +18,7 @@ public:
 	bool Frame()
 	{
 		xCore::Frame();
-		//m_Obj.Frame();
+		m_Obj.Frame();
 		return true;
 	}
 	bool Render()

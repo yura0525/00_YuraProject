@@ -18,8 +18,8 @@ struct T_CB_DATA
 class TObjectPlane
 {
 public:
-	PC_VERTEX		m_VertexList[6];
-	DWORD			m_IndexList[12];
+	PC_VERTEX		m_VertexList[9];
+	DWORD			m_IndexList[24];
 	DX::TDxObj		m_dxObj;
 	T_CB_DATA		m_cbData;
 

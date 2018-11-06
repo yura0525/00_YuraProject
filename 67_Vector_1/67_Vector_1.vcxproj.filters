@@ -36,5 +36,6 @@
   <ItemGroup>
     <FxCompile Include="ps.psh" />
     <FxCompile Include="vs.vsh" />
+    <FxCompile Include="gs.gsh" />
   </ItemGroup>
 </Project>

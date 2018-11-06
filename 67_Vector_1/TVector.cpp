@@ -56,6 +56,14 @@ TVector3 TVector3::operator ^ (TVector3 const &v0)	//벡터의 외적
 		(z * v0.x - z * v0.x),
 		(x * v0.y - y * v0.x));
 }
+//-TVector3 마이너스 단항 연산자
+TVector3 TVector3::operator - ()
+{
+	TVector3 temp = *this;
+	temp = temp * -1.0f;
+	return temp;
+}
+
 TVector3 TVector3::operator + (TVector3 const &v0)
 {
 	return TVector3(v0.x + x, v0.y + y, v0.z + z);

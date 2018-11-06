@@ -35,6 +35,11 @@ namespace DX
 		ID3DBlob** ppBlobOut = NULL,
 		const char* pFuncionName = "PS");
 
+	ID3D11GeometryShader*	LoadGSShaderFile(ID3D11Device* pd3dDevice,
+		const void* pShaderFile,
+		ID3DBlob** ppBlobOut = NULL,
+		const char* pFuncionName = "GS");
+
 	HRESULT CompileShaderFromFile(const WCHAR* szFileName,
 		LPCSTR szEntryPoint,
 		LPCSTR szShaderModel,
@@ -50,6 +55,7 @@ namespace DX
 
 		ID3D11VertexShader*			m_pVertexShader;
 		ID3D11PixelShader*			m_pPixelShader;
+		ID3D11GeometryShader*		m_pGeometryShader;
 		ID3DBlob*					m_pVSBlob;
 
 	public:

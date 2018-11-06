@@ -242,18 +242,60 @@ ID3D11InputLayout* CreateInputLayout(ID3D11Device* pd3dDevice,
 		return pPixelShader;
 	}
 
+	ID3D11GeometryShader*	LoadGSShaderFile(ID3D11Device* pd3dDevice,
+		const void* pShaderFile,
+		ID3DBlob** ppBlobOut,
+		const char* pFuncionName)
+	{
+		HRESULT hr;
+		ID3DBlob* pBlob;
+		ID3D11GeometryShader*	pGShader;
+
+		if (FAILED(hr = CompileShaderFromFile(
+			(TCHAR*)pShaderFile,
+			pFuncionName,
+			"gs_5_0",
+			&pBlob)))
+		{
+			return NULL;
+		}
+		if (FAILED(hr = pd3dDevice->CreateGeometryShader(pBlob->GetBufferPointer(),
+			pBlob->GetBufferSize(),
+			NULL,
+			&pGShader)))
+		{
+			if (pBlob)
+				pBlob->Release();
+			return NULL;
+		}
+
+		if (ppBlobOut == NULL)
+		{
+			pBlob->Release();
+		}
+		else
+		{
+			*ppBlobOut = pBlob;
+		}
+
+		return pGShader;
+	}
+
 	bool TDxObj::PreRender(ID3D11DeviceContext* pContext, UINT iVertexSize)
 	{
+		pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 		pContext->IASetInputLayout(m_pInputLayout);
+
 		UINT stride = iVertexSize;
 		UINT offset = 0;
 		pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
-
-		pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
 		pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+		pContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
 		pContext->VSSetShader(m_pVertexShader, NULL, 0);
 		pContext->PSSetShader(m_pPixelShader, NULL, 0);
+		pContext->GSSetShader(m_pGeometryShader, NULL, 0);
 		return true;
 	}
 	bool TDxObj::Render(ID3D11DeviceContext* pContext,
@@ -281,6 +323,7 @@ ID3D11InputLayout* CreateInputLayout(ID3D11Device* pd3dDevice,
 		SAFE_RELEASE(m_pInputLayout);
 		SAFE_RELEASE(m_pVertexShader);
 		SAFE_RELEASE(m_pPixelShader);
+		SAFE_RELEASE(m_pGeometryShader);
 
 		return true;
 	}
@@ -292,6 +335,7 @@ ID3D11InputLayout* CreateInputLayout(ID3D11Device* pd3dDevice,
 		SAFE_ZERO(m_pInputLayout);
 		SAFE_ZERO(m_pVertexShader);
 		SAFE_ZERO(m_pPixelShader);
+		SAFE_ZERO(m_pGeometryShader);
 	}
 
 

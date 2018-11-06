@@ -26,11 +26,12 @@ public:
 	float x, y, z;
 public:
 	bool operator == (TVector3 const &v0);
-	float operator | (TVector3 const &v0);	//벡터의 내적
+	float operator | (TVector3 const &v0);		//벡터의 내적
 	TVector3 operator ^ (TVector3 const &v0);	//벡터의 외적
 
+	TVector3 operator - ();
 	TVector3 operator + (TVector3 const &v0);
-	TVector3 operator - (TVector3 const &v0);
+	TVector3 operator - (TVector3 const &v0);	//-TVector3 마이너스 단항 연산자
 	TVector3 operator * (float const& fScala);
 	TVector3 Normalize()
 	{
