@@ -48,15 +48,18 @@ namespace DX
 	class TDxObj
 	{
 	public:
-		ID3D11Buffer *				m_pVertexBuffer;
-		ID3D11Buffer *				m_pIndexBuffer;
-		ID3D11Buffer *				m_pConstantBuffer;
-		ID3D11InputLayout*			m_pInputLayout;
+		
+		//이렇게 해주면 Release안해줘도된다.
+		ComPtr<ID3D11Buffer>				m_pVertexBuffer;
+		ComPtr<ID3D11Buffer>				m_pIndexBuffer;
+		ComPtr<ID3D11Buffer>				m_pConstantBuffer;
 
-		ID3D11VertexShader*			m_pVertexShader;
-		ID3D11PixelShader*			m_pPixelShader;
-		ID3D11GeometryShader*		m_pGeometryShader;
-		ID3DBlob*					m_pVSBlob;
+		ComPtr<ID3D11InputLayout>			m_pInputLayout;
+
+		ComPtr<ID3D11VertexShader>			m_pVertexShader;
+		ComPtr<ID3D11PixelShader>			m_pPixelShader;
+		ComPtr<ID3D11GeometryShader>		m_pGeometryShader;
+		ComPtr<ID3DBlob>					m_pVSBlob;
 
 	public:
 		bool PreRender(ID3D11DeviceContext* pContext, UINT iVertexSize);

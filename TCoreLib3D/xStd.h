@@ -1,4 +1,6 @@
 #pragma once
+#pragma warning (disable : 4005)
+
 #define DIRECTINPUT_VERSION 0x0800
 
 #include <windows.h>
@@ -15,7 +17,11 @@
 #include <dinput.h>
 #include "D3Dcompiler.h"		//D3DCOMPILE_DEBUG
 #include <math.h>
+#include <d3dx10math.h>
+#include <wrl.h> //window runtime library. 자동으로 해제해준다.
+
 using namespace std;
+using namespace Microsoft::WRL;
 
 //프로젝트 속성에서 추가 종속성에 넣을걸 코드로 넣을수 있다.
 #pragma comment(lib, "xCoreLib.lib")
@@ -24,8 +30,8 @@ using namespace std;
 #pragma comment( lib, "dinput8.lib")
 #pragma comment( lib, "dxguid.lib")
 #pragma comment( lib, "d3dx11.lib")
+#pragma comment( lib, "d3dx10d.lib")	//D3DXVECTOR3, D3DXVec3Normalize()
 
-#pragma warning (disable : 4005)
 
 typedef std::basic_string <char>	C_STR;	//multi-byte
 typedef std::basic_string <wchar_t>	W_STR;	//unicode byte

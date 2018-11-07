@@ -285,17 +285,17 @@ ID3D11InputLayout* CreateInputLayout(ID3D11Device* pd3dDevice,
 	{
 		pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-		pContext->IASetInputLayout(m_pInputLayout);
+		pContext->IASetInputLayout(m_pInputLayout.Get());
 
 		UINT stride = iVertexSize;
 		UINT offset = 0;
-		pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
-		pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+		pContext->IASetVertexBuffers(0, 1, m_pVertexBuffer.GetAddressOf(), &stride, &offset);
+		pContext->IASetIndexBuffer(m_pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
-		pContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
-		pContext->VSSetShader(m_pVertexShader, NULL, 0);
-		pContext->PSSetShader(m_pPixelShader, NULL, 0);
-		pContext->GSSetShader(m_pGeometryShader, NULL, 0);
+		pContext->VSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
+		pContext->VSSetShader(m_pVertexShader.Get(), NULL, 0);
+		pContext->PSSetShader(m_pPixelShader.Get(), NULL, 0);
+		pContext->GSSetShader(m_pGeometryShader.Get(), NULL, 0);
 		return true;
 	}
 	bool TDxObj::Render(ID3D11DeviceContext* pContext,
@@ -317,25 +317,10 @@ ID3D11InputLayout* CreateInputLayout(ID3D11Device* pd3dDevice,
 	}
 	bool TDxObj::Release()
 	{
-		SAFE_RELEASE(m_pVertexBuffer);
-		SAFE_RELEASE(m_pIndexBuffer);
-		SAFE_RELEASE(m_pConstantBuffer);
-		SAFE_RELEASE(m_pInputLayout);
-		SAFE_RELEASE(m_pVertexShader);
-		SAFE_RELEASE(m_pPixelShader);
-		SAFE_RELEASE(m_pGeometryShader);
-
 		return true;
 	}
 	TDxObj::TDxObj()
 	{
-		SAFE_ZERO(m_pVertexBuffer);
-		SAFE_ZERO(m_pIndexBuffer);
-		SAFE_ZERO(m_pConstantBuffer);
-		SAFE_ZERO(m_pInputLayout);
-		SAFE_ZERO(m_pVertexShader);
-		SAFE_ZERO(m_pPixelShader);
-		SAFE_ZERO(m_pGeometryShader);
 	}
 
 

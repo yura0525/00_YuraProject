@@ -200,8 +200,9 @@ bool TDevice::Init()
 bool TDevice::PreRender()
 {
 	//RGB 255가 0-1의값으로 컨버팅. RGBA
-	float color[4] = { 0.5f, 1, 1, 1 };
+	float color[4] = { 0.44f, 0.61f, 0.83f, 1 };
 	m_pContext->ClearRenderTargetView(m_pRenderTargetView, color);
+	m_pContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	return true;
 }
 bool TDevice::PostRender()
