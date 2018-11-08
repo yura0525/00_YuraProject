@@ -127,7 +127,7 @@ bool TObjectPlane::Frame()
 
 bool TObjectPlane::Render(ID3D11DeviceContext* pContext)
 {
-	pContext->UpdateSubresource(m_dxObj.m_pConstantBuffer, 0, NULL, &m_cbData, 0, 0);
+	pContext->UpdateSubresource(m_dxObj.m_pConstantBuffer.Get(), 0, NULL, &m_cbData, 0, 0);
 	return m_dxObj.Render(pContext, sizeof(PC_VERTEX), m_iNumIndex);
 }
 bool TObjectPlane::Release()
