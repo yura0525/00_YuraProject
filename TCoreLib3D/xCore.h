@@ -23,6 +23,11 @@ public:
 	TTimer			m_Timer;
 	TDirectWrite	m_Font;
 	xInput			m_Input;
+
+	ID3D11DepthStencilView*		m_pDSV;
+	ID3D11DepthStencilState*	m_pDSVStateEnable;
+	ID3D11DepthStencilState*	m_pDSVStateEnableLess;
+
 public:
 	bool GamePreInit();
 
@@ -36,7 +41,7 @@ public:
 	bool GamePostRender();
 	void DeleteDeviceResources(UINT iWidth, UINT iHeight);
 	HRESULT CreateDeviceResources(UINT iWidth, UINT iHeight);
-
+	HRESULT CreateDSV();
 public:
 	virtual bool Init();
 	virtual bool Frame();

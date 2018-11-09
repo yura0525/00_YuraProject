@@ -1,11 +1,57 @@
 #include "xCore.h"
 
+HRESULT xCore::CreateDSV()
+{
+	HRESULT hr = S_OK;
+
+	ID3D11Texture2D* pTex = NULL;
+	D3D11_TEXTURE2D_DESC td;
+
+	//32비트 짜리 Mip맵이 없는 width, height 크기에 CPU 접근 못하는 Default의 텍스쳐 1장 생성. 
+	td.Width = g_rtClient.right;
+	td.Height = g_rtClient.bottom;
+	td.MipLevels = 1;
+	td.ArraySize = 1;
+	td.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	td.SampleDesc.Count = 1;
+	td.SampleDesc.Quality = 0;
+	td.Usage = D3D11_USAGE_DEFAULT;
+	td.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	td.CPUAccessFlags = 0;
+	td.MiscFlags = 0;
+
+	hr = m_pd3dDevice->CreateTexture2D(&td, NULL, &pTex);
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC dsvd;
+	dsvd.Format = td.Format;
+	dsvd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	dsvd.Flags = 0;
+	dsvd.Texture2D.MipSlice = 0;
+
+	hr = m_pd3dDevice->CreateDepthStencilView((ID3D11Resource*)pTex, &dsvd, &m_pDSV);
+
+	D3D11_DEPTH_STENCIL_DESC dsd;
+	ZeroMemory(&dsd, sizeof(dsd));
+
+	dsd.DepthEnable = TRUE;								//Z버퍼를 활성화 여부.
+	dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;	//출력되면 Z버퍼 기입.
+	dsd.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;		//Z버퍼값이 작거나 같으면 뿌려줘라.
+
+	hr = m_pd3dDevice->CreateDepthStencilState(&dsd, &m_pDSVStateEnableLess);
+
+	dsd.DepthFunc = D3D11_COMPARISON_GREATER;
+	hr = m_pd3dDevice->CreateDepthStencilState(&dsd, &m_pDSVStateEnable);
+	return hr;
+}
+
 bool xCore::Init()
 {
 	xWindow::Init();
 	m_Timer.Init();
 	m_Font.Init();
 	m_Input.Init();
+
+	CreateDSV();
 
 	DeleteDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);
 	CreateDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);
@@ -22,7 +68,8 @@ bool xCore::Frame()
 
 bool xCore::PreRender()
 {
-	return xWindow::PreRender();
+	xWindow::PreRender();
+	return true;
 }
 bool xCore::PostRender()
 {
@@ -42,6 +89,10 @@ bool xCore::Release()
 	m_Timer.Release();
 	m_Font.Release();
 	m_Input.Release();
+
+	SAFE_RELEASE(m_pDSV);
+	SAFE_RELEASE(m_pDSVStateEnable);
+	SAFE_RELEASE(m_pDSVStateEnableLess);
 	return true;
 }
 
