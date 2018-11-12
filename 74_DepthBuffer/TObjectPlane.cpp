@@ -26,7 +26,8 @@ bool TObjectPlane::Set(ID3D11Device* pd3dDevice)
 	D3DXVec3Normalize(&m_VertexList[5].p, &(-vDir0 * 1.0f));
 
 	m_VertexList[5].c = D3DXVECTOR4(0.0f, 1.0f, 1.0f, 1.0f);
-	m_VertexList[6].p = -m_VertexList[2].p;
+	
+	D3DXVec3Normalize(&m_VertexList[6].p, &(m_VertexList[2].p * -1.0f));
 	m_VertexList[6].c = D3DXVECTOR4(1.0f, 0.0f, 1.0f, 1.0f);
 
 	//m_VertexList[7].p = -vDir1.Normal();
@@ -40,16 +41,16 @@ bool TObjectPlane::Set(ID3D11Device* pd3dDevice)
 	D3DXVec3Normalize(&m_VertexList[4].p, &(vDir0 + vDir1));
 
 	m_VertexList[4].c = D3DXVECTOR4(1.0f, 1.0f, 0.0f, 1.0f);
-	m_VertexList[8].p = -m_VertexList[4].p;
+	D3DXVec3Normalize(&m_VertexList[8].p, &(m_VertexList[4].p * -1.0f));
 	m_VertexList[8].c = D3DXVECTOR4(0.0f, 1.0f, 0.0f, 1.0f);
 
 	//내적
 	//직각이므로 0이다.
-	float fDot = D3DXVec3Dot(&m_VertexList[1].p, &m_VertexList[3].p);
+	//float fDot = D3DXVec3Dot(&m_VertexList[1].p, &m_VertexList[3].p);
 
 	//외적
-	D3DXVECTOR3 vRet;
-	D3DXVec3Cross(&vRet, &m_VertexList[1].p, &m_VertexList[3].p);
+	//D3DXVECTOR3 vRet;
+	//D3DXVec3Cross(&vRet, &m_VertexList[1].p, &m_VertexList[3].p);
 
 	//float Radian = DtoR(180.0);
 	//float degree = RtoD(TBASIS_PI);

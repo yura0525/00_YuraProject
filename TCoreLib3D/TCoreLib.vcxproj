@@ -167,6 +167,7 @@ copy "*.lib" "../../lib"</Command>
     <ClCompile Include="TDevice.cpp" />
     <ClCompile Include="TDirectWrite.cpp" />
     <ClCompile Include="TDxObject.cpp" />
+    <ClCompile Include="TDxState.cpp" />
     <ClCompile Include="TTimer.cpp" />
     <ClCompile Include="xCore.cpp" />
     <ClCompile Include="xInput.cpp" />
@@ -176,6 +177,7 @@ copy "*.lib" "../../lib"</Command>
     <ClInclude Include="TDevice.h" />
     <ClInclude Include="TDirectWrite.h" />
     <ClInclude Include="TDxObject.h" />
+    <ClInclude Include="TDxState.h" />
     <ClInclude Include="TTimer.h" />
     <ClInclude Include="xCore.h" />
     <ClInclude Include="xInput.h" />

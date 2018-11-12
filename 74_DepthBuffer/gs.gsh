@@ -8,7 +8,7 @@ struct GS_OUTPUT
 {
 	float4 p : SV_POSITION;
 	float4 c : COLOR0;
-	uint vp : SV_ViewportArrayIndex;
+	//uint vp : SV_ViewportArrayIndex;
 };
 
 //cbuffer cb0
@@ -40,7 +40,7 @@ void GS(triangle VS_OUTPUT input[3],
 	float4 cColor = (input[0].c + input[1].c + input[2].c) / 3.0f;
 
 	GS_OUTPUT newVertex;
-	newVertex.vp = active;
+	//newVertex.vp = active;
 
 	for (int i = 0; i < 3; i++)
 	{
