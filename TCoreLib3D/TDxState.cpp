@@ -8,27 +8,21 @@ namespace DX
 		D3D11_RASTERIZER_DESC rd;
 		ZeroMemory(&rd, sizeof(rd));
 
-		rd.FillMode = D3D11_FILL_WIREFRAME;
+		rd.FillMode = D3D11_FILL_SOLID;
 		rd.CullMode = D3D11_CULL_BACK;
 		rd.DepthClipEnable = TRUE;
-
-		hr = pd3dDevice->CreateRasterizerState(&rd, &m_pRSWireFrame);
-
-		rd.FillMode = D3D11_FILL_SOLID;
+		
 		hr = pd3dDevice->CreateRasterizerState(&rd, &m_pRSSolidState);
 
 		rd.CullMode = D3D11_CULL_FRONT;
 		hr = pd3dDevice->CreateRasterizerState(&rd, &m_pRSFrontCullState);
-
-		rd.CullMode = D3D11_CULL_BACK;
-		hr = pd3dDevice->CreateRasterizerState(&rd, &m_pRSBackCullState);
 
 		rd.CullMode = D3D11_CULL_NONE;
 		hr = pd3dDevice->CreateRasterizerState(&rd, &m_pRSNoneCullState);
 
 		rd.FillMode = D3D11_FILL_WIREFRAME;
 		rd.CullMode = D3D11_CULL_BACK;
-		hr = pd3dDevice->CreateRasterizerState(&rd, &m_pRSBackCullWireFrameState);
+		hr = pd3dDevice->CreateRasterizerState(&rd, &m_pRSWireFrameState);
 
 		rd.FillMode = D3D11_FILL_WIREFRAME;
 		rd.CullMode = D3D11_CULL_FRONT;
@@ -71,12 +65,6 @@ namespace DX
 			g_pDSVStateGreater = NULL;
 		}
 
-		if (m_pRSWireFrame)
-		{
-			m_pRSWireFrame->Release();
-			m_pRSWireFrame = NULL;
-		}
-
 		if (m_pRSSolidState)
 		{
 			m_pRSSolidState->Release();
@@ -89,22 +77,16 @@ namespace DX
 			m_pRSFrontCullState = NULL;
 		}
 
-		if (m_pRSBackCullState)
-		{
-			m_pRSBackCullState->Release();
-			m_pRSBackCullState = NULL;
-		}
-
 		if (m_pRSNoneCullState)
 		{
 			m_pRSNoneCullState->Release();
 			m_pRSNoneCullState = NULL;
 		}
 
-		if (m_pRSBackCullWireFrameState)
+		if (m_pRSWireFrameState)
 		{
-			m_pRSBackCullWireFrameState->Release();
-			m_pRSBackCullWireFrameState = NULL;
+			m_pRSWireFrameState->Release();
+			m_pRSWireFrameState = NULL;
 		}
 
 		if (m_pRSNoneCullWireFrameState)
@@ -119,13 +101,11 @@ namespace DX
 		g_pDSVStateEnableLessEqual = NULL;
 		g_pDSVStateGreater = NULL;
 
-		m_pRSWireFrame = NULL;
 		m_pRSSolidState = NULL;
-		m_pRSBackCullState = NULL;
 		m_pRSFrontCullState = NULL;
 		m_pRSNoneCullState = NULL;
 
-		m_pRSBackCullWireFrameState = NULL;
+		m_pRSWireFrameState = NULL;
 		m_pRSFrontCullWireFrameState = NULL;
 		m_pRSNoneCullWireFrameState = NULL;
 	}

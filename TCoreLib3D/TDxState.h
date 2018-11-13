@@ -5,13 +5,11 @@ namespace DX
 	static ID3D11DepthStencilState *	g_pDSVStateGreater = 0;
 	static ID3D11DepthStencilState*		g_pDSVStateEnableLessEqual = 0;
 
-	static ID3D11RasterizerState *		m_pRSWireFrame = 0;
 	static ID3D11RasterizerState*		m_pRSSolidState = 0;
-	static ID3D11RasterizerState*		m_pRSBackCullState = 0;
 	static ID3D11RasterizerState*		m_pRSFrontCullState = 0;
 	static ID3D11RasterizerState*		m_pRSNoneCullState = 0;
 
-	static ID3D11RasterizerState*		m_pRSBackCullWireFrameState = 0;
+	static ID3D11RasterizerState*		m_pRSWireFrameState = 0;
 	static ID3D11RasterizerState*		m_pRSFrontCullWireFrameState = 0;
 	static ID3D11RasterizerState*		m_pRSNoneCullWireFrameState = 0;
 
