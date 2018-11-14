@@ -109,10 +109,12 @@ void DelUser(TUser* pUser)
 	{
 		if (g_allUser[iUser]->sock == pUser->sock)
 		{
+			//지울때 뒤에서 하나씩 땡겨오고 g_iNumClient을 하나 줄인다.
 			for (int iDel = iUser; iDel < g_iNumClient; iDel++)
 			{
 				g_allUser[iDel] = g_allUser[iDel + 1];
 			}
+			break;
 		}
 	}
 	g_iNumClient--;
@@ -133,13 +135,12 @@ DWORD WINAPI ClientThread(LPVOID arg)
 
 	while (1)
 	{
-
+		ZeroMemory(&buffer, sizeof(char) * 256);
 		iRet = recv(sock, &buffer[recvByte], sizeof(char) * PACKET_HEADER_SIZE - recvByte, 0);
-		if (iRet == 0) break;
-		if (iRet == SOCKET_ERROR)
-		{
+
+		if (iRet == 0|| iRet == SOCKET_ERROR)
 			break;
-		}
+
 		recvByte += iRet;
 
 		if (recvByte == PACKET_HEADER_SIZE)
@@ -158,30 +159,31 @@ DWORD WINAPI ClientThread(LPVOID arg)
 					break;
 				}
 				rByte += iRecvByte;
-			} while (packet.ph.len > rByte);
-
+			} while (rByte < packet.ph.len);
+			
 			recvByte = 0;
+
 			if (bConnect)
 			{
 				switch (packet.ph.type)
 				{
-				case PACKET_CHAT_MSG:
-				{
-					printf("패킷 완성 %s\n", packet.msg);
-					//SendMsg(sock, packet.msg, PACKET_CHAT_MSG);
-					//SendMsg(sock, &packet);
-					//SendMsg(sock, packet.ph, packet.msg);
-					Broadcastting(packet.msg);
+					case PACKET_CHAT_MSG:
+					{
+						printf("패킷 완성 %s\n", packet.msg);
+						//SendMsg(sock, packet.msg, PACKET_CHAT_MSG);
+						//SendMsg(sock, &packet);
+						//SendMsg(sock, packet.ph, packet.msg);
+						Broadcastting(packet.msg);
+					}
+					break;
+					case PACKET_CREATE_CHARACTER:
+					{
+						CHARACTER_INFO cInfo;
+						memcpy(&cInfo, packet.msg, sizeof(CHARACTER_INFO));
+						printf("패킷 완성 %s\n", packet.msg);
+					}
+					break;
 				}
-				break;
-				case PACKET_CREATE_CHARACTER:
-				{
-					CHARACTER_INFO cInfo;
-					memcpy(&cInfo, packet.msg, sizeof(CHARACTER_INFO));
-				}
-				break;
-				}
-				printf("패킷 완성 %s\n", packet.msg);
 			}
 		}
 		Sleep(1);
@@ -235,7 +237,7 @@ int main()
 		AddUser(&user);
 
 		DWORD threadID;
-		HANDLE hThread = CreateThread(0, 0, ClientThread, (LPVOID)&g_allUser[g_iNumClient], 0, &threadID);
+		HANDLE hThread = CreateThread(0, 0, ClientThread, (LPVOID)&g_allUser[g_iNumClient-1], 0, &threadID);
 
 		if( client != SOCKET_ERROR )
 		{

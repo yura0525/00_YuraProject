@@ -55,23 +55,24 @@ public:
 	{
 		xCore::Render();
 
+		//1)
 		m_Obj.m_cbData.fActiveVP = 0;
 		m_pContext->RSSetViewports(1, &m_vp[0]);
 		m_Obj.Render(m_pContext);
 
+		//2)
 		m_Obj.m_cbData.fActiveVP = 0;
 		m_pContext->RSSetViewports(1, &m_vp[1]);
 		m_Obj.Render(m_pContext);
 
+		//3)
 		m_pContext->RSSetViewports(2, &m_vp[2]);
-		//2
 		m_Obj.m_cbData.fActiveVP = 0;
 		m_pContext->GSSetConstantBuffers(0, 1, m_Obj.m_dxObj.m_pConstantBuffer.GetAddressOf());
 		m_Obj.Render(m_pContext);
 		
-		//3
+		//4)
 		m_Obj.m_cbData.fActiveVP = 1;
-		m_pContext->RSSetViewports(2, &m_vp[2]);
 		m_Obj.Render(m_pContext);
 		return true;
 	}

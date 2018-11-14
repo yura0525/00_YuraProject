@@ -147,6 +147,7 @@ int main()
 		}
 	}
 
+	g_userList.clear();
 	closesocket(listenSock);
 	EndWinSock();
 	return 0;
