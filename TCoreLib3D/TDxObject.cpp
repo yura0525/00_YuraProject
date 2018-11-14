@@ -153,6 +153,7 @@ ID3D11InputLayout* CreateInputLayout(ID3D11Device* pd3dDevice,
 			"vs_5_0",
 			&pBlob)))
 		{
+			OutputDebugStringA((char*)pBlob->GetBufferPointer());
 			return NULL;
 		}
 		if (FAILED(hr = pd3dDevice->CreateVertexShader(pBlob->GetBufferPointer(),
@@ -218,6 +219,7 @@ ID3D11InputLayout* CreateInputLayout(ID3D11Device* pd3dDevice,
 			"ps_5_0",
 			&pBlob)))
 		{
+			OutputDebugStringA((char*)pBlob->GetBufferPointer());
 			return NULL;
 		}
 		if (FAILED(hr = pd3dDevice->CreatePixelShader(pBlob->GetBufferPointer(),
@@ -257,6 +259,7 @@ ID3D11InputLayout* CreateInputLayout(ID3D11Device* pd3dDevice,
 			"gs_5_0",
 			&pBlob)))
 		{
+			OutputDebugStringA((char*)pBlob->GetBufferPointer());
 			return NULL;
 		}
 		if (FAILED(hr = pd3dDevice->CreateGeometryShader(pBlob->GetBufferPointer(),
@@ -283,19 +286,21 @@ ID3D11InputLayout* CreateInputLayout(ID3D11Device* pd3dDevice,
 
 	bool TDxObj::PreRender(ID3D11DeviceContext* pContext, UINT iVertexSize)
 	{
-		pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-		pContext->IASetInputLayout(m_pInputLayout.Get());
+		pContext->VSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
+		pContext->VSSetShader(m_pVertexShader.Get(), NULL, 0);
+		pContext->PSSetShader(m_pPixelShader.Get(), NULL, 0);
+		pContext->GSSetShader(m_pGeometryShader.Get(), NULL, 0);
 
 		UINT stride = iVertexSize;
 		UINT offset = 0;
 		pContext->IASetVertexBuffers(0, 1, m_pVertexBuffer.GetAddressOf(), &stride, &offset);
 		pContext->IASetIndexBuffer(m_pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
-		pContext->VSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
-		pContext->VSSetShader(m_pVertexShader.Get(), NULL, 0);
-		pContext->PSSetShader(m_pPixelShader.Get(), NULL, 0);
-		pContext->GSSetShader(m_pGeometryShader.Get(), NULL, 0);
+		pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		pContext->IASetInputLayout(m_pInputLayout.Get());
+
+		pContext->PSSetShaderResources(0, 1, &m_pTextureRV);
+
 		return true;
 	}
 	bool TDxObj::Render(ID3D11DeviceContext* pContext,

@@ -168,6 +168,7 @@ copy "*.lib" "../../lib"</Command>
     <ClCompile Include="TDirectWrite.cpp" />
     <ClCompile Include="TDxObject.cpp" />
     <ClCompile Include="TDxState.cpp" />
+    <ClCompile Include="TShape.cpp" />
     <ClCompile Include="TTimer.cpp" />
     <ClCompile Include="xCore.cpp" />
     <ClCompile Include="xInput.cpp" />
@@ -178,14 +179,13 @@ copy "*.lib" "../../lib"</Command>
     <ClInclude Include="TDirectWrite.h" />
     <ClInclude Include="TDxObject.h" />
     <ClInclude Include="TDxState.h" />
+    <ClInclude Include="TObjectStd.h" />
+    <ClInclude Include="TShape.h" />
     <ClInclude Include="TTimer.h" />
     <ClInclude Include="xCore.h" />
     <ClInclude Include="xInput.h" />
     <ClInclude Include="xStd.h" />
     <ClInclude Include="xWindow.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="fmodL64.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

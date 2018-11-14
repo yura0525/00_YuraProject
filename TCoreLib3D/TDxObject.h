@@ -61,6 +61,8 @@ namespace DX
 		ComPtr<ID3D11GeometryShader>		m_pGeometryShader;
 		ComPtr<ID3DBlob>					m_pVSBlob;
 
+		ComPtr<ID3D11ShaderResourceView>	m_pTextureRV;
+
 	public:
 		bool PreRender(ID3D11DeviceContext* pContext, UINT iVertexSize);
 		bool Render(ID3D11DeviceContext* pContext,
@@ -74,4 +76,4 @@ namespace DX
 	};
 
 }
-
+using namespace DX;

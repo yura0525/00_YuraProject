@@ -19,11 +19,11 @@ bool TObjectPlane::Set(ID3D11Device* pd3dDevice)
 
 	m_VertexList[2].p = (vDir0 + vDir1).Normal();
 	m_VertexList[2].c = TVector4(0.0f, 1.0f, 0.0f, 1.0f);
-	m_VertexList[5].p = (-vDir0).Normal();
+	m_VertexList[5].p = (-vDir0).Normal();			//5는 1의 반대 벡터
 	m_VertexList[5].c = TVector4(0.0f, 1.0f, 1.0f, 1.0f);
 	m_VertexList[6].p = -m_VertexList[2].p;
 	m_VertexList[6].c = TVector4(1.0f, 0.0f, 1.0f, 1.0f);
-	m_VertexList[7].p = -vDir1.Normal();
+	m_VertexList[7].p = -vDir1.Normal();			//7은 3의 반대 벡터
 	m_VertexList[7].c = TVector4(1.0f, 0.0f, 0.0f, 1.0f);
 
 	vDir0 = m_VertexList[3].p - m_VertexList[0].p;
