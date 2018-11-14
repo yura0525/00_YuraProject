@@ -2,20 +2,22 @@
 #include <d3d11_1.h>
 namespace DX
 {
-	static ID3D11DepthStencilState *	g_pDSVStateGreater = 0;
-	static ID3D11DepthStencilState*		g_pDSVStateEnableLessEqual = 0;
-
-	static ID3D11RasterizerState*		m_pRSSolidState = 0;
-	static ID3D11RasterizerState*		m_pRSFrontCullState = 0;
-	static ID3D11RasterizerState*		m_pRSNoneCullState = 0;
-
-	static ID3D11RasterizerState*		m_pRSWireFrameState = 0;
-	static ID3D11RasterizerState*		m_pRSFrontCullWireFrameState = 0;
-	static ID3D11RasterizerState*		m_pRSNoneCullWireFrameState = 0;
-
-
 	class TDxState
 	{
+	public:
+		static ID3D11DepthStencilState*		g_pDSVStateGreater;
+		static ID3D11DepthStencilState*		g_pDSVStateEnableLessEqual;
+
+		static ID3D11RasterizerState*		g_pRSBackSolidState;
+		static ID3D11RasterizerState*		g_pRSFrontCullState;
+		static ID3D11RasterizerState*		g_pRSNoneCullState;
+
+		static ID3D11RasterizerState*		g_pRSBackWireFrameState;
+		static ID3D11RasterizerState*		g_pRSFrontCullWireFrameState;
+		static ID3D11RasterizerState*		g_pRSNoneCullWireFrameState;
+
+		static ID3D11BlendState*			g_pBSNoBlend;
+		static ID3D11BlendState*			g_pBSAlphaBlend;
 	public:
 		static HRESULT CreateRS(ID3D11Device* pd3dDevice);
 		static HRESULT SetState(ID3D11Device* pd3dDevice);
@@ -32,6 +34,13 @@ namespace DX
 	static void ApplyRS(ID3D11DeviceContext* pContext, ID3D11RasterizerState *pState)
 	{
 		pContext->RSSetState(pState);
+	}
+
+	static void ApplyBS(ID3D11DeviceContext* pContext, ID3D11BlendState* pState, 
+						const float fBlendFactor[] = 0,
+						UINT iMask = 0xffffffff)
+	{
+		pContext->OMSetBlendState(pState, fBlendFactor, iMask);
 	}
 }
 

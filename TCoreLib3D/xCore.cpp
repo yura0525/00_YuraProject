@@ -1,3 +1,4 @@
+#include "TDxState.h"
 #include "xCore.h"
 
 HRESULT xCore::CreateDSV()
@@ -52,6 +53,8 @@ bool xCore::Init()
 	m_Input.Init();
 
 	CreateDSV();
+	DX::TDxState::CreateRS(m_pd3dDevice);
+	DX::TDxState::SetState(m_pd3dDevice);
 
 	DeleteDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);
 	CreateDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);
