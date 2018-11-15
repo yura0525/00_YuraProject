@@ -12,11 +12,11 @@ struct TUser
 	SOCKADDR_IN clientAddr;
 	int iIndex;
 };
-TUser*	g_allUser[100];
+TUser	g_allUser[100];
 int		g_iNumClient = 0;
 CRITICAL_SECTION g_Crit;
 
-void AddUser(TUser* user)
+void AddUser(TUser user)
 {
 	EnterCriticalSection(&g_Crit);
 		g_allUser[g_iNumClient] = user;
@@ -89,7 +89,7 @@ int Broadcastting(char* pMsg)
 	EnterCriticalSection(&g_Crit);
 	for (int iUser = 0; iUser < g_iNumClient; iUser++)
 	{
-		if (0 <= SendMsg(g_allUser[iUser]->sock, pMsg, PACKET_CHAT_MSG))
+		if (0 <= SendMsg(g_allUser[iUser].sock, pMsg, PACKET_CHAT_MSG))
 		{
 			continue;
 			//SendMsg(sock, &packet);
@@ -107,7 +107,7 @@ void DelUser(TUser* pUser)
 	EnterCriticalSection(&g_Crit);
 	for (int iUser = 0; iUser < g_iNumClient; iUser++)
 	{
-		if (g_allUser[iUser]->sock == pUser->sock)
+		if (g_allUser[iUser].sock == pUser->sock)
 		{
 			//지울때 뒤에서 하나씩 땡겨오고 g_iNumClient을 하나 줄인다.
 			for (int iDel = iUser; iDel < g_iNumClient; iDel++)
@@ -169,7 +169,7 @@ DWORD WINAPI ClientThread(LPVOID arg)
 				{
 					case PACKET_CHAT_MSG:
 					{
-						printf("패킷 완성 %s\n", packet.msg);
+						printf("\n패킷 완성 %s", packet.msg);
 						//SendMsg(sock, packet.msg, PACKET_CHAT_MSG);
 						//SendMsg(sock, &packet);
 						//SendMsg(sock, packet.ph, packet.msg);
@@ -180,7 +180,7 @@ DWORD WINAPI ClientThread(LPVOID arg)
 					{
 						CHARACTER_INFO cInfo;
 						memcpy(&cInfo, packet.msg, sizeof(CHARACTER_INFO));
-						printf("패킷 완성 %s\n", packet.msg);
+						printf("\n패킷 완성 %s", packet.msg);
 					}
 					break;
 				}
@@ -234,7 +234,7 @@ int main()
 		user.sock = client;
 		user.clientAddr = clientaddr;
 
-		AddUser(&user);
+		AddUser(user);
 
 		DWORD threadID;
 		HANDLE hThread = CreateThread(0, 0, ClientThread, (LPVOID)&g_allUser[g_iNumClient-1], 0, &threadID);

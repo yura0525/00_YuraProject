@@ -8,6 +8,8 @@ DWORD WINAPI SendThread(LPVOID arg)
 	char buffer[256] = { 0, };
 	while (1)
 	{
+		ZeroMemory(buffer, sizeof(char) * 256);
+
 		printf("\n보낼 데이터 입력하시오?\n");
 		fgets(buffer, 256, stdin);
 		if (strlen(buffer) <= 1)
@@ -35,8 +37,6 @@ DWORD WINAPI RecvThread(LPVOID arg)
 	
 	int iRecvByte = 0;
 	int iStartByte = 0;
-	ZeroMemory(buffer, sizeof(char) * 2048);
-
 	bool bConnect = true;
 
 	while (bConnect)
@@ -45,6 +45,7 @@ DWORD WINAPI RecvThread(LPVOID arg)
 		int iLen = 0;
 		iLen = recv(sock, &buffer[iStartByte], sizeof(char) * PACKET_HEADER_SIZE - iRecvByte, 0);
 		iRecvByte += iLen;
+
 		if (iLen == 0)
 		{
 			printf("\n---->정상퇴장\n");
@@ -60,7 +61,8 @@ DWORD WINAPI RecvThread(LPVOID arg)
 		{
 			UPACKET* pPacket = (UPACKET*)&buffer;
 			int iRecvMsg = 0;
-			while (iRecvMsg < pPacket->ph.len);
+
+			while (iRecvMsg < pPacket->ph.len)
 			{
 				iRecvMsg = recv(sock, (char*)&buffer[iRecvByte],
 					sizeof(char) * pPacket->ph.len, 0);
@@ -75,7 +77,8 @@ DWORD WINAPI RecvThread(LPVOID arg)
 
 			UPACKET recvmsg;
 			memset(&recvmsg, 0, sizeof(recvmsg));
-			memcpy(&recvmsg, pPacket, pPacket->ph.len);
+			memcpy(&recvmsg, pPacket, (pPacket->ph.len + PACKET_HEADER_SIZE));
+			//중요!!: UPACKET으로 다시 만들때 pPacket->ph.len에는 메세지 크기만있으므로 패킷헤더를 더해서 복사해야한다.
 			switch (recvmsg.ph.type)
 			{
 				//case PACKET_JOIN;

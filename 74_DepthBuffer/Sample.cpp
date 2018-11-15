@@ -4,7 +4,7 @@
 class Sample : public xCore
 {
 public:
-	TObjectPlane	m_Obj;
+	TObjectPlane	m_ObjBox;
 	D3D11_VIEWPORT	m_vp[4];
 	
 	D3DXMATRIX					m_matWorld;
@@ -69,8 +69,8 @@ public:
 
 		CreateDSV();
 
-		m_Obj.Init();
-		m_Obj.Set(m_pd3dDevice);
+		m_ObjBox.Init();
+		m_ObjBox.Set(m_pd3dDevice);
 
 		m_vp[0].TopLeftX = 0;
 		m_vp[0].TopLeftY = 0;
@@ -106,12 +106,12 @@ public:
 	bool Frame()
 	{
 		xCore::Frame();
-		m_Obj.Frame();
+		m_ObjBox.Frame();
 		return true;
 	}
 	bool Render()
 	{
-		m_Obj.m_cbData.vColor = D3DXVECTOR4(1, 0, 0, 1);
+		m_ObjBox.m_cbData.vColor = D3DXVECTOR4(1, 0, 0, 1);
 		m_matWorld._43 = 1.0f;
 		D3DXMatrixLookAtLH(&m_matView,
 			&D3DXVECTOR3(+0.0f, +0.0f, -80.0f * (cosf(g_fGameTimer) * 0.5f + 0.5f)),
@@ -122,9 +122,9 @@ public:
 		D3DXMatrixRotationZ(&ll, g_fGameTimer);
 		m_matView = ll * m_matView;
 
-		D3DXMatrixTranspose(&m_Obj.m_cbData.matWorld, &m_matWorld);
-		D3DXMatrixTranspose(&m_Obj.m_cbData.matView, &m_matView);
-		D3DXMatrixTranspose(&m_Obj.m_cbData.matProj, &m_matProj);
+		D3DXMatrixTranspose(&m_ObjBox.m_cbData.matWorld, &m_matWorld);
+		D3DXMatrixTranspose(&m_ObjBox.m_cbData.matView, &m_matView);
+		D3DXMatrixTranspose(&m_ObjBox.m_cbData.matProj, &m_matProj);
 
 		m_pContext->ClearDepthStencilView(m_pDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 		m_pContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDSV);
@@ -132,13 +132,13 @@ public:
 
 		//m_Obj.m_cbData.fActiveVP = 0;
 		//m_pContext->RSSetViewports(1, &m_vp[0]);
-		m_Obj.Render(m_pContext);
+		m_ObjBox.Render(m_pContext);
 
 		m_pContext->OMSetDepthStencilState(m_pDSVStateDisable, 0);
 		//m_Obj.m_cbData.fActiveVP = 0;
 		//m_pContext->RSSetViewports(1, &m_vp[1]);m_Obj.m_cbData.vColor = D3DXVECTOR4(0, 0, 1, 1);
 		m_matWorld._43 = 3.0f;
-		m_Obj.m_cbData.vColor = D3DXVECTOR4(0, 0, 1, 1);
+		m_ObjBox.m_cbData.vColor = D3DXVECTOR4(0, 0, 1, 1);
 		//D3DXMatrixRotationX(&m_matWorld, m_Timer.m_fGameTime);
 
 		/*D3DXMATRIX matPos;
@@ -147,8 +147,8 @@ public:
 		m_matWorld = matPos * m_matWorld;*/
 		//m_matWorld._43 = 3.0f;
 		//m_matWorld._41 = 1.0f;
-		D3DXMatrixTranspose(&m_Obj.m_cbData.matWorld, &m_matWorld);
-		m_Obj.Render(m_pContext);
+		D3DXMatrixTranspose(&m_ObjBox.m_cbData.matWorld, &m_matWorld);
+		m_ObjBox.Render(m_pContext);
 
 		//m_pContext->RSSetViewports(2, &m_vp[2]);
 		//2
@@ -165,7 +165,7 @@ public:
 	bool Release()
 	{
 		xCore::Release();
-		m_Obj.Release();
+		m_ObjBox.Release();
 
 		SAFE_RELEASE(m_pDSV);
 		SAFE_RELEASE(m_pDSVStateEnable);

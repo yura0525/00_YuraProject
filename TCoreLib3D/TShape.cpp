@@ -1,5 +1,10 @@
 #include "TShape.h"
 
+void TShape::SetColor(D3DXVECTOR4 vColor)
+{
+	m_cbData.vColor = vColor;
+}
+
 bool TShape::Create(ID3D11Device *pDevice, T_STR szShaderName, T_STR szTextureName)
 {
 	m_pd3dDevice = pDevice;
@@ -127,6 +132,42 @@ bool TShape::PreRender(ID3D11DeviceContext* pContext)
 	m_dxObj.PreRender(pContext, m_iNumVertexSize);
 	return true;
 }
+
+void TShape::SetMatrix(D3DXMATRIX* pWorld, D3DXMATRIX* pView, D3DXMATRIX* pProj)
+{
+	if (pWorld != NULL)
+	{
+		m_matWorld = *pWorld;
+	}
+	if (pView != NULL)
+	{
+		m_matView = *pView;
+	}
+	if (pProj != NULL)
+	{
+		m_matProj = *pProj;
+	}
+
+	m_vPosition.x = m_matWorld._41;
+	m_vPosition.y = m_matWorld._42;
+	m_vPosition.z = m_matWorld._43;
+
+	m_vLook.x = m_matWorld._11;
+	m_vLook.y = m_matWorld._12;
+	m_vLook.z = m_matWorld._13;
+
+	m_vSide.x = m_matWorld._21;
+	m_vSide.y = m_matWorld._22;
+	m_vSide.z = m_matWorld._23;
+
+	m_vUp.x = m_matWorld._31;
+	m_vUp.y = m_matWorld._32;
+	m_vUp.z = m_matWorld._33;
+
+	D3DXMatrixTranspose(&m_cbData.matWorld, &m_matWorld);
+	D3DXMatrixTranspose(&m_cbData.matView, &m_matView);
+	D3DXMatrixTranspose(&m_cbData.matProj, &m_matProj);
+}
 bool TShape::Render(ID3D11DeviceContext* pContext)
 {
 	PreRender(pContext);
@@ -146,6 +187,11 @@ bool TShape::Release()
 
 TShape::TShape()
 {
+	D3DXMatrixIdentity(&m_matWorld);
+	D3DXMatrixIdentity(&m_matView);
+	D3DXMatrixIdentity(&m_matProj);
+
+	m_Primitive = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 }
 
 
@@ -223,6 +269,7 @@ HRESULT TBoxShape::CreateIndexData()
 
 TBoxShape::TBoxShape()
 {
+	m_Primitive = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 }
 
 

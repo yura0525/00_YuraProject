@@ -16,6 +16,9 @@
     <Filter Include="Object">
       <UniqueIdentifier>{a68a3f1f-11ea-42af-9ef5-f15d0a0d89d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{d1bd1dfb-df44-4889-981f-7dc9bd999f7d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xCore.cpp">
@@ -43,6 +46,15 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="TShape.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TCamera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="TPlaneShape.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TLineShape.cpp">
       <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
@@ -79,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="TShape.h">
       <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TCamera.h">
+      <Filter>Camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -4,15 +4,15 @@
 class Sample : public xCore
 {
 public:
-	TObjectPlane	m_Obj;
+	TObjectPlane	m_ObjBox;
 	D3D11_VIEWPORT	m_vp[4];
 
 public:
 	bool Init()
 	{
 		xCore::Init();
-		m_Obj.Init();
-		m_Obj.Set(m_pd3dDevice);
+		m_ObjBox.Init();
+		m_ObjBox.Set(m_pd3dDevice);
 
 		m_vp[0].TopLeftX = 0;
 		m_vp[0].TopLeftY = 0;
@@ -48,7 +48,7 @@ public:
 	bool Frame()
 	{
 		xCore::Frame();
-		m_Obj.Frame();
+		m_ObjBox.Frame();
 		return true;
 	}
 	bool Render()
@@ -56,30 +56,30 @@ public:
 		xCore::Render();
 
 		//1)
-		m_Obj.m_cbData.fActiveVP = 0;
+		m_ObjBox.m_cbData.fActiveVP = 0;
 		m_pContext->RSSetViewports(1, &m_vp[0]);
-		m_Obj.Render(m_pContext);
+		m_ObjBox.Render(m_pContext);
 
 		//2)
-		m_Obj.m_cbData.fActiveVP = 0;
+		m_ObjBox.m_cbData.fActiveVP = 0;
 		m_pContext->RSSetViewports(1, &m_vp[1]);
-		m_Obj.Render(m_pContext);
+		m_ObjBox.Render(m_pContext);
 
 		//3)
 		m_pContext->RSSetViewports(2, &m_vp[2]);
-		m_Obj.m_cbData.fActiveVP = 0;
-		m_pContext->GSSetConstantBuffers(0, 1, m_Obj.m_dxObj.m_pConstantBuffer.GetAddressOf());
-		m_Obj.Render(m_pContext);
+		m_ObjBox.m_cbData.fActiveVP = 0;
+		m_pContext->GSSetConstantBuffers(0, 1, m_ObjBox.m_dxObj.m_pConstantBuffer.GetAddressOf());
+		m_ObjBox.Render(m_pContext);
 		
 		//4)
-		m_Obj.m_cbData.fActiveVP = 1;
-		m_Obj.Render(m_pContext);
+		m_ObjBox.m_cbData.fActiveVP = 1;
+		m_ObjBox.Render(m_pContext);
 		return true;
 	}
 	bool Release()
 	{
 		xCore::Release();
-		m_Obj.Release();
+		m_ObjBox.Release();
 
 		return true;
 	}

@@ -7,7 +7,7 @@ using namespace DX;
 class Sample : public xCore
 {
 public:
-	TObjectPlane	m_Obj;
+	TObjectPlane	m_ObjBox;
 	D3D11_VIEWPORT	m_vp[4];
 	
 	D3DXMATRIX					m_matWorld;
@@ -115,8 +115,8 @@ public:
 		D3DXMatrixLookAtLH(&m_matView, &D3DXVECTOR3(0, 3, -10.0f), &D3DXVECTOR3(0,0,0), &D3DXVECTOR3(0,1,0));
 		D3DXMatrixPerspectiveFovLH(&m_matProj, D3DX_PI * 0.25f, g_rtClient.right / (float)g_rtClient.bottom, 1.0f, 100.0f);
 
-		m_Obj.Init();
-		m_Obj.Set(m_pd3dDevice);
+		m_ObjBox.Init();
+		m_ObjBox.Set(m_pd3dDevice);
 
 		
 		/*m_vp[0].TopLeftX = 0;
@@ -153,7 +153,7 @@ public:
 	bool Frame()
 	{
 		xCore::Frame();
-		return m_Obj.Frame();
+		return m_ObjBox.Frame();
 	}
 	bool Render()
 	{
@@ -168,19 +168,19 @@ public:
 		ApplyRS(m_pContext, m_pRSSolidState);*/
 		ApplyDDS(m_pContext, m_DSS[0]);
 		ApplyBS(m_pContext, TDxState::g_pBSNoBlend);
-		ApplyRS(m_pContext, TDxState::g_pRSBackSolidState);
+		ApplyRS(m_pContext, TDxState::g_pRSBackCullSolidState);
 
 		D3DXMATRIX matTrans, matRotation;
 		D3DXMatrixTranslation(&matTrans, 3.0f, 0.0f, 0.0f);
 		D3DXMatrixRotationY(&matRotation, m_Timer.m_fGameTime);
 		m_matWorld = matTrans * matRotation;
 
-		D3DXMatrixTranspose(&m_Obj.m_cbData.matWorld, &m_matWorld);
+		D3DXMatrixTranspose(&m_ObjBox.m_cbData.matWorld, &m_matWorld);
 		
 		
 		//m_pContext->RSSetState(DX::m_pRSSolidState);
 		//m_pContext->OMSetDepthStencilState(DX::g_pDSVStateEnableLessEqual, 0);
-		m_Obj.Render(m_pContext);
+		m_ObjBox.Render(m_pContext);
 
 
 		//2)
@@ -191,23 +191,23 @@ public:
 		D3DXMatrixTranslation(&m_matWorld, 0, 0, 1.0f);
 		m_matWorld = Scale * m_matWorld;
 
-		D3DXMatrixTranspose(&m_Obj.m_cbData.matWorld, &m_matWorld);
-		D3DXMatrixTranspose(&m_Obj.m_cbData.matView, &m_matView);
-		D3DXMatrixTranspose(&m_Obj.m_cbData.matProj, &m_matProj);
+		D3DXMatrixTranspose(&m_ObjBox.m_cbData.matWorld, &m_matWorld);
+		D3DXMatrixTranspose(&m_ObjBox.m_cbData.matView, &m_matView);
+		D3DXMatrixTranspose(&m_ObjBox.m_cbData.matProj, &m_matProj);
 
-		DX::ApplyRS(m_pContext, TDxState::g_pRSBackSolidState);
+		DX::ApplyRS(m_pContext, TDxState::g_pRSBackCullSolidState);
 		//m_pContext->RSSetState(DX::m_pRSSolidState);
 
 		DX::ApplyDDS(m_pContext, TDxState::g_pDSVStateEnableLessEqual);
 		//m_pContext->OMSetDepthStencilState(DX::g_pDSVStateEnableLessEqual, 0);
 
-		m_Obj.Render(m_pContext);
+		m_ObjBox.Render(m_pContext);
 		return true;
 	}
 	bool Release()
 	{
 		xCore::Release();
-		m_Obj.Release();
+		m_ObjBox.Release();
 		return true;
 	}
 public:

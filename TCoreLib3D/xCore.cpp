@@ -54,10 +54,15 @@ bool xCore::Init()
 
 	CreateDSV();
 	DX::TDxState::CreateRS(m_pd3dDevice);
+	DX::TDxState::CreateSS(m_pd3dDevice);
 	DX::TDxState::SetState(m_pd3dDevice);
 
 	DeleteDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);
 	CreateDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);
+
+	m_DefaultCamera.SetViewMatrix();
+	m_DefaultCamera.SetProjMatrix(D3DX_PI * 0.5f, (float)m_rtClient.right / m_rtClient.bottom);
+	m_pMainCamera = &m_DefaultCamera;
 	return true;
 }
 bool xCore::Frame()
@@ -72,11 +77,25 @@ bool xCore::Frame()
 bool xCore::PreRender()
 {
 	xWindow::PreRender();
+
+	//RGB 255가 0-1의값으로 컨버팅. RGBA
+	float color[4] = { 0.44f, 0.61f, 0.83f, 1 };
+	m_pContext->ClearRenderTargetView(m_pRenderTargetView, color);
+
+	ApplyDDS(m_pContext, TDxState::g_pDSVStateEnableLessEqual);
+	//ApplyBS(m_pContext, TDxState::g_pBSAlphaBlend);
+	ApplyRS(m_pContext, TDxState::g_pRSBackCullSolidState);
+	ApplySS(m_pContext, TDxState::g_pSSWrapLinear);
+
+	m_pContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	return true;
 }
 bool xCore::PostRender()
 {
-	return xWindow::PostRender();
+	xWindow::PostRender();
+	//백버퍼에있는걸 앞버퍼로 바꾼다.
+	m_pSwapChain->Present(0, 0);
+	return true;
 }
 bool xCore::Render()
 {
@@ -196,16 +215,20 @@ bool xCore::GamePostRender()
 void xCore::DeleteDeviceResources(UINT iWidth, UINT iHeight)
 {
 	m_Font.DiscardDeviceResources();
+	DeleteResources(iWidth, iHeight);
 }
+
 HRESULT xCore::CreateDeviceResources(UINT iWidth, UINT iHeight)
 {
-	IDXGISurface1*		pBackBuffer;
+	IDXGISurface1*		pBackBuffer = NULL;
 
 	HRESULT hr = m_pSwapChain->GetBuffer(0, __uuidof(IDXGISurface), (void**)&pBackBuffer);
 	hr = m_Font.CreateDeviceResources(pBackBuffer);
 	
 	if (pBackBuffer)	pBackBuffer->Release();
-	
+
+	//m_pMainCamera->UpdateProjMatrix(iWidth, iHeight);
+	CreateResources(iWidth, iHeight);
 	return hr;
 }
 bool xCore::GameRun()

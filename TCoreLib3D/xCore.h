@@ -3,6 +3,7 @@
 #include "TDirectWrite.h"
 #include "TTimer.h"
 #include "xInput.h"
+#include "TCamera.h"
 
 struct TOutput									//모니터의 정보와 갯수를 알수있다.
 {
@@ -23,6 +24,8 @@ public:
 	TTimer			m_Timer;
 	TDirectWrite	m_Font;
 	xInput			m_Input;
+	TCamera			m_DefaultCamera;
+	TCamera*		m_pMainCamera;
 
 	ID3D11DepthStencilView*		m_pDSV;
 	ID3D11DepthStencilState*	m_pDSVStateEnable;
@@ -41,6 +44,10 @@ public:
 	bool GamePostRender();
 	void DeleteDeviceResources(UINT iWidth, UINT iHeight);
 	HRESULT CreateDeviceResources(UINT iWidth, UINT iHeight);
+
+	virtual void DeleteResources(UINT iWidth, UINT iHeight) {}
+	virtual HRESULT CreateResources(UINT iWidth, UINT iHeight) { return S_OK; }
+
 	HRESULT CreateDSV();
 public:
 	virtual bool Init();
