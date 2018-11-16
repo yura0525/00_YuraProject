@@ -154,7 +154,7 @@ int Broadcastting(char* pMsg)
 		TUser* pUser = (TUser*)&(itor->second);
 		if (pUser != NULL)
 		{
-			if (0 >= SendMsg(pUser->sock, pMsg, PACKET_CHAT_MSG))
+			if (SendMsg(pUser->sock, pMsg, PACKET_CHAT_MSG) <= 0)
 			{
 				closesocket(pUser->sock);
 				g_allUser.erase(itor++);

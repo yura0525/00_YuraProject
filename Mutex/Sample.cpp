@@ -57,10 +57,11 @@ DWORD WINAPI ClientThread(LPVOID arg)
 				{
 					CHARACTER_INFO cInfo;
 					memcpy(&cInfo, packet.msg, sizeof(CHARACTER_INFO));
+					printf("패킷 완성 %s\n", packet.msg);
 				}
 				break;
 				}
-				printf("패킷 완성 %s\n", packet.msg);
+				
 			}
 		}
 		Sleep(1);

@@ -135,7 +135,6 @@ int main()
 		}
 		//Select 함수의 장점:
 		//블록킹 소켓일 경우-> 블록킹 함수 문제 해결.
-		//취소!!!!:넌블록킹소켓일 경우-> WSAEWOULDBLOCK 해결. WSAEWOULDBLOCK 처리를 안해도된다.
 
 		timeval time;
 		time.tv_sec = 1;		//세컨드
