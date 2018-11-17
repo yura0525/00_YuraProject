@@ -53,10 +53,10 @@ int RecvData(TUser* pUser)
 			{
 				CHARACTER_INFO cInfo;
 				memcpy(&cInfo, packet.msg, sizeof(CHARACTER_INFO));
+				printf("\n패킷 완성-> %s\n", packet.msg);
 			}
 			break;
 			}
-			printf("\n패킷 완성-> %s\n", packet.msg);
 		}
 	}
 

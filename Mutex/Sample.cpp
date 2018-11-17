@@ -47,9 +47,6 @@ DWORD WINAPI ClientThread(LPVOID arg)
 				case PACKET_CHAT_MSG:
 				{
 					printf("패킷 완성 %s\n", packet.msg);
-					//SendMsg(sock, packet.msg, PACKET_CHAT_MSG);
-					//SendMsg(sock, &packet);
-					//SendMsg(sock, packet.ph, packet.msg);
 					Broadcastting(packet.msg);
 				}
 				break;

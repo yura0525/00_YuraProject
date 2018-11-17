@@ -92,8 +92,6 @@ int Broadcastting(char* pMsg)
 		if (0 <= SendMsg(g_allUser[iUser].sock, pMsg, PACKET_CHAT_MSG))
 		{
 			continue;
-			//SendMsg(sock, &packet);
-			//SendMsg(sock, packet.ph, packet.msg);
 		}
 	}
 	LeaveCriticalSection(&g_Crit);
@@ -170,9 +168,6 @@ DWORD WINAPI ClientThread(LPVOID arg)
 					case PACKET_CHAT_MSG:
 					{
 						printf("\n패킷 완성 %s", packet.msg);
-						//SendMsg(sock, packet.msg, PACKET_CHAT_MSG);
-						//SendMsg(sock, &packet);
-						//SendMsg(sock, packet.ph, packet.msg);
 						Broadcastting(packet.msg);
 					}
 					break;
