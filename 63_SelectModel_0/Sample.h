@@ -1,17 +1,19 @@
 #include <winsock2.h>
-#include <ws2tcpip.h>	//InetNtop(), inet_ntop();
+#include <ws2tcpip.h>
 #include <iostream>
 #include <list>
 #include <map>
 #include "TProtocol.h"
 
 #pragma comment(lib, "ws2_32")
+
 using namespace std;
+
 struct TUser
 {
 	SOCKET sock;
 	SOCKADDR_IN clientAddr;
-	int			addrlen;
+	int addrlen;
 	static SOCKET g_socket;
 
 	bool operator()(TUser& user)
@@ -27,7 +29,7 @@ struct TUser
 	{
 		sock = client;
 		clientAddr = add;
-		addrlen = sizeof(add);
+		addrlen = sizeof(clientAddr);
 	}
 	TUser(const TUser& user)
 	{
@@ -43,19 +45,18 @@ std::list<TUser> g_allUser;
 typedef std::list<TUser>::iterator ITOR;
 
 CRITICAL_SECTION g_Crit;
-HANDLE			g_hMutex;
+HANDLE g_hMutex;
 
 void T_ERROR()
 {
 	char* pMsg = 0;
-	FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER |
-		FORMAT_MESSAGE_FROM_SYSTEM, NULL,
-		WSAGetLastError(),
-		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (char*)&pMsg, 0, NULL);
+	FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL,
+		WSAGetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (char*)&pMsg, 0, NULL);
 
 	printf("\n%s\n", pMsg);
 	LocalFree(pMsg);
 }
+
 int CheckReturn(int iRet)
 {
 	//정상
@@ -68,14 +69,14 @@ int CheckReturn(int iRet)
 		T_ERROR();
 		return -1;
 	}
-
 	return iRet;
 }
+
 void AddUser(TUser& user)
 {
 	//EnterCriticalSection(&g_Crit);
-	//EnterCriticalSection와 같다. 무한이 기다려준다.
-	//무한대기하면 WAIT_TIMEOUT할필요가 없다. 시간을 주어줄때 WAIT_TIMEOUT을 쓴다.
+	//EnterCriticalSection과 같다. 무한이 기다려준다.
+	//무한대기하면 WAIT_TIMEOUT할 필요가 없다. 시간을 주어줄때 WAIT_TIMEOUT을 쓴다.
 	DWORD dwRet = WaitForSingleObject(g_hMutex, INFINITE);
 	if (dwRet != WAIT_TIMEOUT)
 	{
@@ -84,9 +85,6 @@ void AddUser(TUser& user)
 	//LeaveCriticalSection(&g_Crit);
 	ReleaseMutex(g_hMutex);
 }
-
-bool BeginWinSock();
-bool EndWinSock();
 
 int SendMsg(SOCKET sock, char* msg, WORD type)
 {
@@ -100,16 +98,15 @@ int SendMsg(SOCKET sock, char* msg, WORD type)
 	int iTotalsize = strlen(msg) + PACKET_HEADER_SIZE;
 	char* pMsg = (char*)&sendmsg;
 	int iSend = 0;
-	do
+	while (sendbytes < iTotalsize)
 	{
 		iSend = send(sock, (char*)&pMsg[sendbytes], iTotalsize - sendbytes, 0);
 		if (CheckReturn(iSend) <= 0)
 		{
 			return iSend;
 		}
-
 		sendbytes += iSend;
-	} while (sendbytes < iTotalsize);
+	}
 
 	return iTotalsize;
 }
@@ -125,16 +122,15 @@ int SendMsg(SOCKET sock, PACKET_HEADER ph, char* msg)
 	int iTotalsize = strlen(msg) + PACKET_HEADER_SIZE;
 	char* pMsg = (char*)&sendmsg;
 	int iSend = 0;
-	do
+	while (sendbytes < iTotalsize)
 	{
 		iSend = send(sock, (char*)&pMsg[sendbytes], iTotalsize - sendbytes, 0);
 		if (CheckReturn(iSend) <= 0)
 		{
 			return iSend;
 		}
-
 		sendbytes += iSend;
-	} while (sendbytes < iTotalsize);
+	}
 
 	return iTotalsize;
 }
@@ -145,31 +141,39 @@ int SendMsg(SOCKET sock, UPACKET* uPacket)
 	int iTotalsize = strlen(uPacket->msg) + PACKET_HEADER_SIZE;
 	char* pMsg = (char*)uPacket->msg;
 	int iSend = 0;
-	do
+	while (sendbytes < iTotalsize)
 	{
 		iSend = send(sock, (char*)&pMsg[sendbytes], iTotalsize - sendbytes, 0);
 		if (CheckReturn(iSend) <= 0)
 		{
 			return iSend;
 		}
-
 		sendbytes += iSend;
-	} while (sendbytes < iTotalsize);
+	}
 
 	return iTotalsize;
 }
+
 int Broadcastting(char* pMsg)
 {
 	//EnterCriticalSection(&g_Crit);
 	DWORD dwRet = WaitForSingleObject(g_hMutex, INFINITE);
 
-	//중요!!!:증감연산자가 없다.if문 안에서 증감한다.
+	//중요!!!!증감연산자가 없다. if문 안에서 증감한다.
 	for (ITOR itor = g_allUser.begin(); itor != g_allUser.end();)
 	{
+		//g_allUser 맨 앞에는 리슨소켓이 등록되어있다.
+		//리슨소켓은 브로드캐스트하지 않는다.
+		if (itor == g_allUser.begin())
+		{
+			itor++;
+			continue;
+		}
+
 		TUser* pUser = (TUser*)&(*itor);
 		if (pUser != NULL)
 		{
-			if (0 >= SendMsg(pUser->sock, pMsg, PACKET_CHAT_MSG))
+			if (SendMsg(pUser->sock, pMsg, PACKET_CHAT_MSG) <= 0)
 			{
 				closesocket(pUser->sock);
 				itor = g_allUser.erase(itor);
@@ -181,36 +185,14 @@ int Broadcastting(char* pMsg)
 		}
 	}
 	ReleaseMutex(g_hMutex);
-	//LeaveCriticalSection(&g_Crit);
 	return 1;
 }
-//void DelUser(TUser* pUser)
-//{
-//	printf("\n퇴장!!!!! ip = %s, port = %d\n",
-//		inet_ntoa(pUser->clientAddr.sin_addr), ntohs(pUser->clientAddr.sin_port));
-//
-//	//EnterCriticalSection(&g_Crit);
-//	DWORD dwRet = WaitForSingleObject(g_hMutex, INFINITE);
-//	{
-//		ITOR itor = g_allUser.find(pUser->sock);
-//		if (itor != g_allUser.end())
-//		{
-//			g_allUser.erase(itor);
-//		}
-//		closesocket(pUser->sock);
-//	}
-//	T_ERROR();
-//	ReleaseMutex(g_hMutex);
-//	//LeaveCriticalSection(&g_Crit);
-//	return;
-//}
 
 bool BeginWinSock()
 {
 	WSADATA wsa;
-
 	int iRet = WSAStartup(MAKEWORD(2, 2), &wsa);
-	if (iRet != 0)	return false;
+	if (iRet != 0) return false;
 
 	return true;
 }
@@ -221,3 +203,4 @@ bool EndWinSock()
 
 	return true;
 }
+
