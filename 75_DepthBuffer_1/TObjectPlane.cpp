@@ -57,7 +57,7 @@ bool TObjectPlane::Set(ID3D11Device* pd3dDevice)
 									m_dxObj.m_pVSBlob.GetAddressOf()));
 
 	m_dxObj.m_pPixelShader.Attach(DX::LoadPixelShaderFile(pd3dDevice, L"ps.psh"));
-	//m_dxObj.m_pGeometryShader.Attach(DX::LoadGSShaderFile(pd3dDevice, L"gs.gsh"));
+	m_dxObj.m_pGeometryShader.Attach(DX::LoadGSShaderFile(pd3dDevice, L"gs.gsh"));
 
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{

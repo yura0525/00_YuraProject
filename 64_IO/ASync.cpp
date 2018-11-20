@@ -112,7 +112,7 @@ void main()
 				break;
 			}
 			FileRead(hReadFile, trans);
-			printf("\n%s : %ld", "FinishRead...", g_size.QuadPart);
+			printf("\n%s : %ld", "FinishRead...", g_size.QuadPart );
 		}
 		else
 		{

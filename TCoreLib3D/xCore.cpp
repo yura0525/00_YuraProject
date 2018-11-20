@@ -47,22 +47,7 @@ HRESULT xCore::CreateDSV()
 
 bool xCore::Init()
 {
-	xWindow::Init();
-	m_Timer.Init();
-	m_Font.Init();
-	m_Input.Init();
-
-	CreateDSV();
-	DX::TDxState::CreateRS(m_pd3dDevice);
-	DX::TDxState::CreateSS(m_pd3dDevice);
-	DX::TDxState::SetState(m_pd3dDevice);
-
-	DeleteDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);
-	CreateDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);
-
-	m_DefaultCamera.SetViewMatrix();
-	m_DefaultCamera.SetProjMatrix(D3DX_PI * 0.5f, (float)m_rtClient.right / m_rtClient.bottom);
-	m_pMainCamera = &m_DefaultCamera;
+	
 	return true;
 }
 bool xCore::Frame()
@@ -179,6 +164,53 @@ bool xCore::GamePreInit()
 bool xCore::GameInit()
 {
 	GamePreInit();
+
+	HRESULT hr;
+	if (FAILED(hr = CreateDX11GIFactory()))
+	{
+		return false;
+	}
+	if (FAILED(hr = CreateDevice()))
+	{
+		return false;
+	}
+	if (FAILED(hr = CreateSwapChain()))
+	{
+		return false;
+	}
+	if (FAILED(hr = SetRenderTarget()))
+	{
+		return false;
+	}
+	SetViewPort();
+
+	//Alt + Enter 키를 막는다.
+	if (FAILED(hr = m_pDXGIFactory->MakeWindowAssociation(NULL, DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER)))
+	{
+		return hr;
+	}
+
+	CreateDSV();
+
+	m_Timer.Init();
+	m_Font.Init();
+	m_Input.Init();
+
+	IDXGISurface* pBackBuffer;
+	m_pSwapChain->GetBuffer(0, __uuidof(IDXGISurface), (void**)&pBackBuffer);
+	m_Font.Set(m_hWnd, m_sd.BufferDesc.Width, m_sd.BufferDesc.Height, pBackBuffer);
+	
+	DX::TDxState::CreateRS(m_pd3dDevice);
+	DX::TDxState::CreateSS(m_pd3dDevice);
+	DX::TDxState::SetState(m_pd3dDevice);
+
+	DeleteDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);
+	CreateDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);
+
+	m_DefaultCamera.SetViewMatrix();
+	m_DefaultCamera.SetProjMatrix(D3DX_PI * 0.5f, (float)m_rtClient.right / m_rtClient.bottom);
+	m_pMainCamera = &m_DefaultCamera;
+
 	Init();
 
 	return true;

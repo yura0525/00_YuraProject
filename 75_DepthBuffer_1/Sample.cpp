@@ -8,7 +8,6 @@ class Sample : public xCore
 {
 public:
 	TObjectPlane	m_ObjBox;
-	D3D11_VIEWPORT	m_vp[4];
 	
 	D3DXMATRIX					m_matWorld;
 	D3DXMATRIX					m_matView;
@@ -117,37 +116,6 @@ public:
 
 		m_ObjBox.Init();
 		m_ObjBox.Set(m_pd3dDevice);
-
-		
-		/*m_vp[0].TopLeftX = 0;
-		m_vp[0].TopLeftY = 0;
-		m_vp[0].Width = g_rtClient.right / 2;
-		m_vp[0].Height = g_rtClient.bottom / 2;
-		m_vp[0].MinDepth = 0.0f;
-		m_vp[0].MaxDepth = 1.0f;
-
-		m_vp[1].TopLeftX = g_rtClient.right / 2;
-		m_vp[1].TopLeftY = 0;
-		m_vp[1].Width = g_rtClient.right / 2;
-		m_vp[1].Height = g_rtClient.bottom / 2;
-		m_vp[1].MinDepth = 0.0f;
-		m_vp[1].MaxDepth = 1.0f;
-
-
-		m_vp[2].TopLeftX = 0;
-		m_vp[2].TopLeftY = g_rtClient.bottom / 2;
-		m_vp[2].Width = g_rtClient.right / 2;
-		m_vp[2].Height = g_rtClient.bottom / 2;
-		m_vp[2].MinDepth = 0.0f;
-		m_vp[2].MaxDepth = 1.0f;
-
-
-		m_vp[3].TopLeftX = g_rtClient.right / 2;
-		m_vp[3].TopLeftY = g_rtClient.bottom / 2;
-		m_vp[3].Width = g_rtClient.right / 2;
-		m_vp[3].Height = g_rtClient.bottom / 2;
-		m_vp[3].MinDepth = 0.0f;
-		m_vp[3].MaxDepth = 1.0f;*/
 		return true;
 	}
 	bool Frame()
@@ -157,15 +125,14 @@ public:
 	}
 	bool Render()
 	{
-		m_pContext->ClearDepthStencilView(m_pDepthStencilView[0], D3D11_CLEAR_DEPTH, 1.0, 0);
-		m_pContext->ClearDepthStencilView(m_pDepthStencilView[0], D3D10_CLEAR_STENCIL, 1.0, 0);
-
 		xCore::Render();
 
-		m_pContext->OMSetDepthStencilState(m_DSS[0], 0x00);
+		m_pContext->ClearDepthStencilView(m_pDepthStencilView[0], D3D11_CLEAR_DEPTH, 1.0, 0);
+		m_pContext->ClearDepthStencilView(m_pDepthStencilView[1], D3D10_CLEAR_STENCIL, 1.0, 0);
 
 		/*ApplyDDS(m_pContext, g_pDSVStateEnableLessEqual);
 		ApplyRS(m_pContext, m_pRSSolidState);*/
+		//m_pContext->OMSetDepthStencilState(m_DSS[0], 0x00);
 		ApplyDDS(m_pContext, m_DSS[0]);
 		ApplyBS(m_pContext, TDxState::g_pBSNoBlend);
 		ApplyRS(m_pContext, TDxState::g_pRSBackCullSolidState);
@@ -176,7 +143,8 @@ public:
 		m_matWorld = matTrans * matRotation;
 
 		D3DXMatrixTranspose(&m_ObjBox.m_cbData.matWorld, &m_matWorld);
-		
+		D3DXMatrixTranspose(&m_ObjBox.m_cbData.matView, &m_matView);
+		D3DXMatrixTranspose(&m_ObjBox.m_cbData.matProj, &m_matProj);
 		
 		//m_pContext->RSSetState(DX::m_pRSSolidState);
 		//m_pContext->OMSetDepthStencilState(DX::g_pDSVStateEnableLessEqual, 0);
@@ -184,8 +152,10 @@ public:
 
 
 		//2)
-		ApplyDDS(m_pContext, m_DSS[1]);
+		//m_pContext->OMSetDepthStencilState(m_DSS[1], 0x00);
+		/*ApplyDDS(m_pContext, m_DSS[1]);
 		ApplyBS(m_pContext, TDxState::g_pBSAlphaBlend);
+		ApplyRS(m_pContext, TDxState::g_pRSBackCullSolidState);
 		D3DXMATRIX Scale;
 		D3DXMatrixScaling(&Scale, 2, 2, 2);
 		D3DXMatrixTranslation(&m_matWorld, 0, 0, 1.0f);
@@ -195,13 +165,13 @@ public:
 		D3DXMatrixTranspose(&m_ObjBox.m_cbData.matView, &m_matView);
 		D3DXMatrixTranspose(&m_ObjBox.m_cbData.matProj, &m_matProj);
 
-		DX::ApplyRS(m_pContext, TDxState::g_pRSBackCullSolidState);
+		
 		//m_pContext->RSSetState(DX::m_pRSSolidState);
 
-		DX::ApplyDDS(m_pContext, TDxState::g_pDSVStateEnableLessEqual);
+		//DX::ApplyDDS(m_pContext, TDxState::g_pDSVStateEnableLessEqual);
 		//m_pContext->OMSetDepthStencilState(DX::g_pDSVStateEnableLessEqual, 0);
 
-		m_ObjBox.Render(m_pContext);
+		m_ObjBox.Render(m_pContext);*/
 		return true;
 	}
 	bool Release()

@@ -164,36 +164,6 @@ HRESULT TDevice::ResizeDevice(UINT iWidth, UINT iHeight)
 }
 bool TDevice::Init()
 {
-	HRESULT hr;
-	if (FAILED(hr = CreateDX11GIFactory()))
-	{
-		return false;
-	}
-
-
-	if (FAILED(hr = CreateDevice()))
-	{
-		return false;
-	}
-
-	
-	if (FAILED(hr = CreateSwapChain()))
-	{
-		return false;
-	}
-
-	if (FAILED(hr = SetRenderTarget()))
-	{
-		return false;
-	}
-
-	SetViewPort();
-
-	//Alt + Enter 키를 막는다.
-	if (FAILED(hr = m_pDXGIFactory->MakeWindowAssociation(NULL, DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER)))
-	{
-		return hr;
-	}
 	return true;
 }
 

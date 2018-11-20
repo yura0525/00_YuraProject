@@ -1,12 +1,12 @@
 #include "TDirectWrite.h"
 
-bool TDirectWrite::Set(HWND hWnd, int iWidth, int iHeight, IDXGISurface1*	pSurface)
+bool TDirectWrite::Set(HWND hWnd, int iWidth, int iHeight, IDXGISurface*	pSurface)
 {
-	//CreateDeviceIndependentResources();
+	CreateDeviceIndependentResources();
 	CreateDeviceResources(pSurface);
 	return true;
 }
-HRESULT TDirectWrite::CreateDeviceResources(IDXGISurface1*	pSurface)
+HRESULT TDirectWrite::CreateDeviceResources(IDXGISurface*	pSurface)
 {
 	
 	D2D1_RENDER_TARGET_PROPERTIES rtp;
@@ -64,7 +64,7 @@ HRESULT TDirectWrite::DrawText(RECT rt, const TCHAR* pText, D2D1::ColorF color)
 	m_pRT->EndDraw();
 	return S_OK;
 }
-void TDirectWrite::OnResize(int iWidth, int iHeight, IDXGISurface1*	pSurface)
+void TDirectWrite::OnResize(int iWidth, int iHeight, IDXGISurface*	pSurface)
 {
 	DiscardDeviceResources();
 	CreateDeviceResources(pSurface);

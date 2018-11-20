@@ -12,10 +12,10 @@
 #include <string>
 #include <list>
 #include <vector>
-#include <d3dx11.h>
-#include <dxgi.h>
+#include "d3dx11.h"
+#include "dxgi.h"
 #include <dinput.h>
-#include "D3Dcompiler.h"		//D3DCOMPILE_DEBUG
+#include "d3dcompiler.h"		//D3DCOMPILE_DEBUG
 #include <math.h>
 #include <d3dx10math.h>
 #include <wrl.h> //window runtime library. 자동으로 해제해준다.
@@ -25,11 +25,12 @@ using namespace Microsoft::WRL;
 
 //프로젝트 속성에서 추가 종속성에 넣을걸 코드로 넣을수 있다.
 #pragma comment(lib, "xCoreLib.lib")
+#pragma comment(lib, "winmm.lib")
 #pragma comment(lib, "d3d11.lib")
+#pragma comment( lib, "d3dx11.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment( lib, "dinput8.lib")
 #pragma comment( lib, "dxguid.lib")
-#pragma comment( lib, "d3dx11.lib")
 #pragma comment( lib, "d3dx10d.lib")	//D3DXVECTOR3, D3DXVec3Normalize()
 
 

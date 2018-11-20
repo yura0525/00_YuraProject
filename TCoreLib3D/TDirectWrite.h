@@ -38,13 +38,13 @@ public:
 	float m_fdpiX;
 	float m_fdpiY;
 public:
-	bool Set(HWND hWnd, int iWidth, int iHeight, IDXGISurface1*	pSurface);
+	bool Set(HWND hWnd, int iWidth, int iHeight, IDXGISurface*	pSurface);
 	HRESULT CreateDeviceIndependentResources();
-	HRESULT CreateDeviceResources(IDXGISurface1*	m_pSurface);
+	HRESULT CreateDeviceResources(IDXGISurface*	m_pSurface);
 
 	void DiscardDeviceResources();
 	HRESULT DrawText(RECT rt, const TCHAR* pText, D2D1::ColorF color);
-	void OnResize(int iWidth, int iHeight, IDXGISurface1*	pSurface);
+	void OnResize(int iWidth, int iHeight, IDXGISurface*	pSurface);
 public:
 	bool Init();
 	bool Frame();
