@@ -14,6 +14,15 @@ public:
 	D3DXMATRIX					m_matProj;
 public:
 
+	void DeleteResources(UINT iWidth, UINT iHeight)
+	{
+
+	}
+	HRESULT CreateResources(UINT iWidth, UINT iHeight)
+	{
+		return S_OK;
+	}
+
 	bool Init()
 	{
 		HRESULT hr = S_OK;
@@ -21,7 +30,6 @@ public:
 		D3DXMatrixLookAtLH(&m_matView, &D3DXVECTOR3(0, 3, -10.0f), &D3DXVECTOR3(0,0,0), &D3DXVECTOR3(0,1,0));
 		D3DXMatrixPerspectiveFovLH(&m_matProj, D3DX_PI * 0.25f, g_rtClient.right / (float)g_rtClient.bottom, 1.0f, 100.0f);
 
-		m_Obj.Init();
 		m_Obj.Create(m_pd3dDevice, L"../../data/shader/shape.hlsl", L"../../data/eye.bmp");
 		return true;
 	}

@@ -44,12 +44,12 @@ namespace DX
 		bd.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
 		
 		bd.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-		pd3dDevice->CreateBlendState(&bd, &TDxState::g_pBSAlphaBlend);
+		pd3dDevice->CreateBlendState(&bd, &g_pBSAlphaBlend);
 
 		bd.RenderTarget[0].SrcBlend = D3D11_BLEND_ZERO;
 		bd.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
 		bd.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-		pd3dDevice->CreateBlendState(&bd, &TDxState::g_pBSNoBlend);
+		pd3dDevice->CreateBlendState(&bd, &g_pBSNoBlend);
 		
 		////////////////////////////////////////DEPTH_STENCIL///////////////////////////////////////
 		D3D11_DEPTH_STENCIL_DESC dsd;
@@ -58,11 +58,11 @@ namespace DX
 		dsd.DepthEnable = TRUE;								//Z버퍼를 활성화 여부.
 		dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;	//출력되면 Z버퍼 기입.
 		dsd.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;		//Z버퍼값이 작거나 같으면 뿌려줘라.
-		hr = pd3dDevice->CreateDepthStencilState(&dsd, &TDxState::g_pDSVStateEnableLessEqual);
+		hr = pd3dDevice->CreateDepthStencilState(&dsd, &g_pDSVStateEnableLessEqual);
 
 		dsd.DepthEnable = TRUE;
 		dsd.DepthFunc = D3D11_COMPARISON_GREATER;
-		hr = pd3dDevice->CreateDepthStencilState(&dsd, &TDxState::g_pDSVStateGreater);
+		hr = pd3dDevice->CreateDepthStencilState(&dsd, &g_pDSVStateGreater);
 
 
 		//////////////////////////////////Rasterizer////////////////////////////////////////////////////
@@ -72,34 +72,32 @@ namespace DX
 		rsDesc.FillMode = D3D11_FILL_SOLID;
 		rsDesc.CullMode = D3D11_CULL_BACK;
 
-		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSSolid);
-		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSBackCullSolid);
+		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &g_pRSSolid);
+		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &g_pRSBackCullSolid);
 
 		rsDesc.CullMode = D3D11_CULL_FRONT;
-		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSFrontCullSolid);
+		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &g_pRSFrontCullSolid);
 
 		rsDesc.CullMode = D3D11_CULL_NONE;
-		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSNoneCullSolid);
+		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &g_pRSNoneCullSolid);
 
 		rsDesc.FillMode = D3D11_FILL_WIREFRAME;
 		rsDesc.CullMode = D3D11_CULL_BACK;
-		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSWireFrame);
-		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSBackCullWireFrame);
+		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &g_pRSWireFrame);
+		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &g_pRSBackCullWireFrame);
 
 		rsDesc.CullMode = D3D11_CULL_FRONT;
-		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSFrontCullWireFrame);
+		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &g_pRSFrontCullWireFrame);
 
 		rsDesc.CullMode = D3D11_CULL_NONE;
-		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSNoneCullWireFrame);
+		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &g_pRSNoneCullWireFrame);
 
 		//////////////////////////////////D3D11_SAMPLER_DESC////////////////////////////////////////////////////
 		D3D11_SAMPLER_DESC samplerDesc;
-		ZeroMemory(&samplerDesc, sizeof(samplerDesc));
-
 		//텍스처 주소 지정 방식
 		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 		samplerDesc.MipLODBias = 0;
 		samplerDesc.MaxAnisotropy = 16;
 		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;	//필터링 방식
