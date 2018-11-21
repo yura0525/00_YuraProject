@@ -7,19 +7,10 @@ using namespace DX;
 class Sample : public xCore
 {
 public:
-	TBoxShape			m_ObjBox;
+	TBoxShape		m_ObjBox;
 	TPlaneShape		m_ObjPlane;
 	TLineShape		m_ObjLine;
 public:
-
-	void DeleteResources(UINT iWidth, UINT iHeight)
-	{
-
-	}
-	HRESULT CreateResources(UINT iWidth, UINT iHeight)
-	{
-		return S_OK;
-	}
 
 	bool Init()
 	{
@@ -80,4 +71,4 @@ public:
 };
 
 
-GAMERUN("Camera(x)", 800, 600);
+GAMERUN("Camera", 800, 600);

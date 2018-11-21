@@ -26,10 +26,13 @@ public:
 	bool Init()
 	{
 		HRESULT hr = S_OK;
-		D3DXMatrixIdentity(&m_matWorld);
-		D3DXMatrixLookAtLH(&m_matView, &D3DXVECTOR3(0, 3, -10.0f), &D3DXVECTOR3(0,0,0), &D3DXVECTOR3(0,1,0));
-		D3DXMatrixPerspectiveFovLH(&m_matProj, D3DX_PI * 0.25f, g_rtClient.right / (float)g_rtClient.bottom, 1.0f, 100.0f);
+		
 
+		/*D3DXMatrixIdentity(&m_matWorld);
+		D3DXMatrixLookAtLH(&m_matView, &D3DXVECTOR3(0, 3, -3.0f), &D3DXVECTOR3(0,0,0), &D3DXVECTOR3(0,1,0));
+		D3DXMatrixPerspectiveFovLH(&m_matProj, D3DX_PI * 0.25f, (float)g_rtClient.right / (float)g_rtClient.bottom, 1.0f, 100.0f);*/
+
+		m_pMainCamera->SetViewMatrix(D3DXVECTOR3(3.0f, 3.0f, -5.0f));
 		m_Obj.Create(m_pd3dDevice, L"../../data/shader/shape.hlsl", L"../../data/eye.bmp");
 		return true;
 	}
@@ -40,14 +43,13 @@ public:
 	}
 	bool Render()
 	{
-		D3DXMATRIX matTrans, matRotation;
-		D3DXMatrixTranslation(&matTrans, 3.0f, 0.0f, 0.0f);
-		D3DXMatrixRotationY(&matRotation, m_Timer.m_fGameTime);
-		m_matWorld = matTrans * matRotation;
+		D3DXMATRIX matWorld, matRotation;
+		D3DXMatrixIdentity(&matWorld);
+		D3DXMatrixIdentity(&matRotation);
 
-		D3DXMatrixTranspose(&m_Obj.m_cbData.matWorld, &m_matWorld);
-		D3DXMatrixTranspose(&m_Obj.m_cbData.matView, &m_matView);
-		D3DXMatrixTranspose(&m_Obj.m_cbData.matProj, &m_matProj);
+		D3DXMatrixTranslation(&matWorld, 3.0f, 0.0f, 0.0f);
+		D3DXMatrixRotationY(&matRotation, m_Timer.m_fGameTime);
+		m_matWorld = matWorld * matRotation;
 
 		m_Obj.SetMatrix(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 		m_Obj.Render(m_pContext);
@@ -56,12 +58,8 @@ public:
 		//2)
 		D3DXMATRIX Scale;
 		D3DXMatrixScaling(&Scale, 2, 2, 2);
-		D3DXMatrixTranslation(&m_matWorld, 0, 0, 1.0f);
+		D3DXMatrixTranslation(&m_matWorld, -3.0f, 0, 0.0f);
 		m_matWorld = Scale * m_matWorld;
-
-		D3DXMatrixTranspose(&m_Obj.m_cbData.matWorld, &m_matWorld);
-		D3DXMatrixTranspose(&m_Obj.m_cbData.matView, &m_matView);
-		D3DXMatrixTranspose(&m_Obj.m_cbData.matProj, &m_matProj);
 
 		m_Obj.SetMatrix(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 		m_Obj.Render(m_pContext);
@@ -78,4 +76,4 @@ public:
 };
 
 
-GAMERUN("DrawShape(x)", 800, 600);
+GAMERUN("DrawShape", 800, 600);

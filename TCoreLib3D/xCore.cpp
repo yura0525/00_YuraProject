@@ -135,12 +135,8 @@ bool xCore::GameInit()
 	
 	pBackBuffer->Release();
 
-	/*
-	DeleteDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);
-	CreateDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);*/
-
 	m_DefaultCamera.SetViewMatrix();
-	m_DefaultCamera.SetProjMatrix(D3DX_PI * 0.5f, (float)m_rtClient.right / m_rtClient.bottom);
+	m_DefaultCamera.SetProjMatrix(D3DX_PI * 0.5f, (float)m_rtClient.right / (float)m_rtClient.bottom);
 	m_pMainCamera = &m_DefaultCamera;
 
 	Init();

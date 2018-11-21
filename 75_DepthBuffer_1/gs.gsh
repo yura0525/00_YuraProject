@@ -1,13 +1,13 @@
 struct VS_OUTPUT
 {
 	float4 p : SV_POSITION;
-	float4 c : COLOR0;
+	float4 c : COLOR;
 };
 
 struct GS_OUTPUT
 {
 	float4 p : SV_POSITION;
-	float4 c : COLOR0;
+	float4 c : COLOR;
 	//uint vp : SV_ViewportArrayIndex;
 };
 
@@ -56,6 +56,7 @@ void GS(triangle VS_OUTPUT input[3],
 		newVertex.p = float4(cPos, 1.0f);
 		newVertex.c = float4(0,0,0,1);
 		triStream.Append(newVertex);
+		triStream.RestartStrip();
 	}
 	
 	triStream.RestartStrip();

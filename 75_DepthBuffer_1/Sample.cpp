@@ -19,8 +19,8 @@ public:
 	ID3D11DepthStencilView * CreateDepthStencilView(ID3D11Device* pDevice, DWORD dwWidth, DWORD dwHeight)
 	{
 		HRESULT hr;
-		ID3D11DepthStencilView* pDSV = nullptr;
-		Microsoft::WRL::ComPtr<ID3D11Texture2D> pDSTexture = nullptr;
+		ID3D11DepthStencilView*  pDSV = NULL;
+		ID3D11Texture2D* pDSTexture = NULL;
 		D3D11_TEXTURE2D_DESC DescDepth;
 		DescDepth.Width = dwWidth;
 		DescDepth.Height = dwHeight;
@@ -35,20 +35,18 @@ public:
 		DescDepth.MiscFlags = 0;
 		if (FAILED(hr = pDevice->CreateTexture2D(&DescDepth, NULL, &pDSTexture)))
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		D3D11_DEPTH_STENCIL_VIEW_DESC dsvd;
-		ZeroMemory(&dsvd, sizeof(dsvd));
 		dsvd.Format = DescDepth.Format;
 		dsvd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		dsvd.Flags = 0;
 		dsvd.Texture2D.MipSlice = 0;
 
-		if (FAILED(hr = pDevice->CreateDepthStencilView(
-			pDSTexture.Get(), &dsvd, &pDSV)))
-		{
-			return nullptr;
-		}
+		hr = pDevice->CreateDepthStencilView(pDSTexture, &dsvd, &pDSV);
+		if (pDSTexture) pDSTexture->Release();
+
 		return pDSV;
 	}
 
@@ -109,7 +107,7 @@ public:
 
 		D3DXMatrixIdentity(&m_matWorld);
 		D3DXMatrixLookAtLH(&m_matView, &D3DXVECTOR3(0, 3, -10.0f), &D3DXVECTOR3(0,0,0), &D3DXVECTOR3(0,1,0));
-		D3DXMatrixPerspectiveFovLH(&m_matProj, D3DX_PI * 0.25f, g_rtClient.right / (float)g_rtClient.bottom, 1.0f, 100.0f);
+		D3DXMatrixPerspectiveFovLH(&m_matProj, D3DX_PI * 0.25f, (float)g_rtClient.right / (float)g_rtClient.bottom, 1.0f, 100.0f);
 
 		m_ObjBox.Init();
 		m_ObjBox.Set(m_pd3dDevice);
@@ -122,8 +120,8 @@ public:
 	}
 	bool Render()
 	{
-		m_pContext->ClearDepthStencilView(m_pDepthStencilView[0], D3D11_CLEAR_DEPTH, 1.0, 0);
-		m_pContext->ClearDepthStencilView(m_pDepthStencilView[1], D3D10_CLEAR_STENCIL, 1.0, 0);
+		m_pContext->ClearDepthStencilView(m_pDepthStencilView[0], D3D11_CLEAR_DEPTH, 1.0f, 0);
+		m_pContext->ClearDepthStencilView(m_pDepthStencilView[1], D3D10_CLEAR_STENCIL, 1.0f, 0);
 
 		/*ApplyDDS(m_pContext, g_pDSVStateEnableLessEqual);
 		ApplyRS(m_pContext, m_pRSSolidState);*/

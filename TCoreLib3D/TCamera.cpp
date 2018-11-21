@@ -20,7 +20,7 @@ D3DMATRIX TCamera::SetProjMatrix(float fFov, float fAspect, float fNear, float f
 
 void TCamera::UpdateProjMatrix(UINT width, UINT height)
 {
-	m_fAspect = (float)width / height;
+	m_fAspect = (float)width / (float)height;
 	SetProjMatrix(m_fFov, m_fAspect, m_fNear, m_fFar);
 }
 TCamera::TCamera()

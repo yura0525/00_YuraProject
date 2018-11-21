@@ -1,5 +1,4 @@
-/*
-#include "Sample.h"
+#include "sample.h"
 #include <algorithm>
 
 #define WM_KGCA (WM_USER+0)
@@ -239,4 +238,3 @@ int main()
 	CloseHandle(g_hMutex);
 	return 0;
 }
-*/

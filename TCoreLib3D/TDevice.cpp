@@ -111,7 +111,6 @@ HRESULT TDevice::SetRenderTarget()
 
 	//GetBuffer을 쓰고 원하는 작업을 한뒤에는 무조건 삭제해야한다.Release();
 	pBackBuffer->Release();
-	m_pContext->OMSetRenderTargets(1, &m_pRenderTargetView, NULL);
 
 	return hr;
 }
@@ -123,11 +122,14 @@ void TDevice::SetViewPort()
 	D3D11_VIEWPORT vp;
 	vp.TopLeftX = 0;
 	vp.TopLeftY = 0;
-	vp.Width = g_rtClient.right;
-	vp.Height = g_rtClient.bottom;
+	vp.Width = m_sd.BufferDesc.Width;
+	vp.Height = m_sd.BufferDesc.Height;
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
 	m_pContext->RSSetViewports(1, &vp);			//RasterizerStage에 셋팅.
+
+	g_rtClient.right = m_sd.BufferDesc.Width;
+	g_rtClient.bottom = m_sd.BufferDesc.Height;
 }
 void TDevice::DeleteDeviceResources(UINT iWidth, UINT iHeight)
 {
@@ -150,8 +152,17 @@ HRESULT TDevice::ResizeDevice(UINT iWidth, UINT iHeight)
 	if (m_pRenderTargetView) m_pRenderTargetView->Release();
 
 	//백버퍼의 크기를 조정한다.
-	m_pSwapChain->ResizeBuffers(m_sd.BufferCount, m_sd.BufferDesc.Width, m_sd.BufferDesc.Height,
-		m_sd.BufferDesc.Format, m_sd.Flags);
+	DXGI_SWAP_CHAIN_DESC sd = m_sd;
+	sd.BufferDesc.Height = iHeight;
+	sd.BufferDesc.Width = iWidth;
+	
+	hr = m_pSwapChain->ResizeBuffers(sd.BufferCount, iWidth, iHeight,
+		sd.BufferDesc.Format, sd.Flags);
+
+	if (SUCCEEDED(hr))
+	{
+		m_pSwapChain->GetDesc(&m_sd);
+	}
 
 	//랜더타겟뷰 생성및 적용한다.
 	if (FAILED(hr = SetRenderTarget()))

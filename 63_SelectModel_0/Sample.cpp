@@ -1,3 +1,4 @@
+/*
 #include "Sample.h"
 #define WM_KGCA (WM_USER+0)
 
@@ -200,3 +201,4 @@ int main()
 	EndWinSock();
 	CloseHandle(g_hMutex);
 }
+*/
