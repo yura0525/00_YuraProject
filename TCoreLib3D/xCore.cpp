@@ -95,6 +95,11 @@ bool xCore::GamePreInit()
 
 bool xCore::GameInit()
 {
+	m_YawPitchRoll.x = 0;
+	m_YawPitchRoll.y = 0;
+	m_YawPitchRoll.z = 0;
+	m_YawPitchRoll.w = 0;
+
 	GamePreInit();
 
 	HRESULT hr;
@@ -150,6 +155,38 @@ bool xCore::GameFrame()
 	m_Font.Frame();
 	m_Input.Frame();
 
+	//camera control
+	if (g_Input.bAttack)
+	{
+		m_YawPitchRoll.y += 0.1f * D3DXToRadian(m_Input.m_MouseState.lY);
+		m_YawPitchRoll.x += 0.1f * D3DXToRadian(m_Input.m_MouseState.lX);
+	}
+
+	float fValue = m_Input.m_MouseState.lZ;
+	m_YawPitchRoll.w = fValue * g_fSecPerFrame;
+	if (g_Input.bJump)
+	{
+		m_pMainCamera->SetSpeed(g_fSecPerFrame * 3.0f);
+	}
+	if (g_Input.bFront)
+	{
+		m_pMainCamera->MoveLook(-g_fSecPerFrame * 5.0f);
+	}
+	if (g_Input.bBack)
+	{
+		m_pMainCamera->MoveLook(g_fSecPerFrame * 5.0f);
+	}
+	if (g_Input.bLeft)
+	{
+		m_pMainCamera->MoveSide(-g_fSecPerFrame * 5.0f);
+	}
+	if (g_Input.bRight)
+	{
+		m_pMainCamera->MoveSide(g_fSecPerFrame * 5.0f);
+	}
+	m_pMainCamera->Update(m_YawPitchRoll);
+	m_pMainCamera->Frame();
+
 	Frame();
 	return true;
 }
@@ -177,8 +214,13 @@ bool xCore::GamePreRender()
 
 	ApplyDDS(m_pContext, TDxState::g_pDSVStateEnableLessEqual);
 	ApplyBS(m_pContext, TDxState::g_pBSAlphaBlend);
-	ApplyRS(m_pContext, TDxState::g_pRSBackCullSolid);
 	ApplySS(m_pContext, TDxState::g_pSSWrapLinear);
+	//ApplyRS(m_pContext, TDxState::g_pRSBackCullSolid);
+
+	if (m_Input.m_KeyState[DIK_P])
+		ApplyRS(m_pContext, TDxState::g_pRSWireFrame);
+	else
+		ApplyRS(m_pContext, TDxState::g_pRSNoneCullSolid);
 
 	m_pContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	return true;

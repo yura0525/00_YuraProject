@@ -28,7 +28,7 @@ public:
 	TCamera*		m_pMainCamera;
 
 	ID3D11DepthStencilView*		m_pDSV;
-
+	D3DXVECTOR4					m_YawPitchRoll;
 public:
 	bool GamePreInit();
 
