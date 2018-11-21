@@ -2,21 +2,22 @@
 
 namespace DX
 {
+	ID3D11BlendState*			TDxState::g_pBSNoBlend = 0;
+	ID3D11BlendState*			TDxState::g_pBSAlphaBlend = 0;
+
 	ID3D11DepthStencilState*	TDxState::g_pDSVStateGreater = 0;
 	ID3D11DepthStencilState*	TDxState::g_pDSVStateEnableLessEqual = 0;
 
 
 	ID3D11RasterizerState*		TDxState::g_pRSSolid = 0;
-	ID3D11RasterizerState*		TDxState::g_pRSWireFrameState = 0;
-	ID3D11RasterizerState*		TDxState::g_pRSBackCullSolidState = 0;
-	ID3D11RasterizerState*		TDxState::g_pRSFrontCullSolidState = 0;
-	ID3D11RasterizerState*		TDxState::g_pRSNoneCullSolidState = 0;
-	ID3D11RasterizerState*		TDxState::g_pRSBackWireFrameState = 0;
-	ID3D11RasterizerState*		TDxState::g_pRSFrontCullWireFrameState = 0;
-	ID3D11RasterizerState*		TDxState::g_pRSNoneCullWireFrameState = 0;
+	ID3D11RasterizerState*		TDxState::g_pRSWireFrame = 0;
+	ID3D11RasterizerState*		TDxState::g_pRSBackCullSolid = 0;
+	ID3D11RasterizerState*		TDxState::g_pRSFrontCullSolid = 0;
+	ID3D11RasterizerState*		TDxState::g_pRSNoneCullSolid = 0;
+	ID3D11RasterizerState*		TDxState::g_pRSBackCullWireFrame = 0;
+	ID3D11RasterizerState*		TDxState::g_pRSFrontCullWireFrame = 0;
+	ID3D11RasterizerState*		TDxState::g_pRSNoneCullWireFrame = 0;
 
-	ID3D11BlendState*			TDxState::g_pBSNoBlend = 0;
-	ID3D11BlendState*			TDxState::g_pBSAlphaBlend = 0;
 
 	ID3D11SamplerState*			TDxState::g_pTexSS = 0;
 	ID3D11SamplerState*			TDxState::g_pSSWrapLinear = 0;
@@ -26,9 +27,45 @@ namespace DX
 	ID3D11SamplerState*			TDxState::g_pSSClampLinear = 0;
 	ID3D11SamplerState*			TDxState::g_pSSClampPoint = 0;
 
-	HRESULT TDxState::CreateRS(ID3D11Device* pd3dDevice)
+	HRESULT TDxState::SetState(ID3D11Device* pd3dDevice)
 	{
 		HRESULT hr;
+		////////////////////////////////////////Alpha Blend///////////////////////////////////////
+		D3D11_BLEND_DESC bd;
+		ZeroMemory(&bd, sizeof(bd));
+		bd.AlphaToCoverageEnable = FALSE;
+		bd.RenderTarget[0].BlendEnable = TRUE;
+		bd.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+		bd.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+		bd.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+
+		bd.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		bd.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+		bd.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+		
+		bd.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+		pd3dDevice->CreateBlendState(&bd, &TDxState::g_pBSAlphaBlend);
+
+		bd.RenderTarget[0].SrcBlend = D3D11_BLEND_ZERO;
+		bd.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+		bd.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+		pd3dDevice->CreateBlendState(&bd, &TDxState::g_pBSNoBlend);
+		
+		////////////////////////////////////////DEPTH_STENCIL///////////////////////////////////////
+		D3D11_DEPTH_STENCIL_DESC dsd;
+		ZeroMemory(&dsd, sizeof(dsd));
+
+		dsd.DepthEnable = TRUE;								//Z버퍼를 활성화 여부.
+		dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;	//출력되면 Z버퍼 기입.
+		dsd.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;		//Z버퍼값이 작거나 같으면 뿌려줘라.
+		hr = pd3dDevice->CreateDepthStencilState(&dsd, &TDxState::g_pDSVStateEnableLessEqual);
+
+		dsd.DepthEnable = TRUE;
+		dsd.DepthFunc = D3D11_COMPARISON_GREATER;
+		hr = pd3dDevice->CreateDepthStencilState(&dsd, &TDxState::g_pDSVStateGreater);
+
+
+		//////////////////////////////////Rasterizer////////////////////////////////////////////////////
 		D3D11_RASTERIZER_DESC rsDesc;
 		ZeroMemory(&rsDesc, sizeof(rsDesc));
 		rsDesc.DepthClipEnable = TRUE;
@@ -36,35 +73,26 @@ namespace DX
 		rsDesc.CullMode = D3D11_CULL_BACK;
 
 		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSSolid);
-		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSBackCullSolidState);
+		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSBackCullSolid);
 
-		rsDesc.FillMode = D3D11_FILL_SOLID;
 		rsDesc.CullMode = D3D11_CULL_FRONT;
-		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSFrontCullSolidState);
+		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSFrontCullSolid);
 
-		rsDesc.FillMode = D3D11_FILL_SOLID;
 		rsDesc.CullMode = D3D11_CULL_NONE;
-		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSNoneCullSolidState);
+		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSNoneCullSolid);
 
 		rsDesc.FillMode = D3D11_FILL_WIREFRAME;
 		rsDesc.CullMode = D3D11_CULL_BACK;
-		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSWireFrameState);
-		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSBackWireFrameState);
+		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSWireFrame);
+		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSBackCullWireFrame);
 
-		rsDesc.FillMode = D3D11_FILL_WIREFRAME;
 		rsDesc.CullMode = D3D11_CULL_FRONT;
-		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSFrontCullWireFrameState);
+		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSFrontCullWireFrame);
 
-		rsDesc.FillMode = D3D11_FILL_WIREFRAME;
 		rsDesc.CullMode = D3D11_CULL_NONE;
-		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSNoneCullWireFrameState);
+		hr = pd3dDevice->CreateRasterizerState(&rsDesc, &TDxState::g_pRSNoneCullWireFrame);
 
-		return hr;
-	}
-
-	HRESULT TDxState::CreateSS(ID3D11Device* pd3dDevice)
-	{
-		HRESULT hr;
+		//////////////////////////////////D3D11_SAMPLER_DESC////////////////////////////////////////////////////
 		D3D11_SAMPLER_DESC samplerDesc;
 		ZeroMemory(&samplerDesc, sizeof(samplerDesc));
 
@@ -72,7 +100,17 @@ namespace DX
 		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.MipLODBias = 0;
+		samplerDesc.MaxAnisotropy = 16;
 		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;	//필터링 방식
+		samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+		samplerDesc.BorderColor[0] = 1.0f;
+		samplerDesc.BorderColor[1] = 0.0f;
+		samplerDesc.BorderColor[2] = 0.0f;
+		samplerDesc.BorderColor[3] = 1.0f;
+		samplerDesc.MinLOD = 0;
+		samplerDesc.MaxLOD = D3D10_FLOAT32_MAX;
+
 		hr = pd3dDevice->CreateSamplerState(&samplerDesc, &g_pTexSS);
 		hr = pd3dDevice->CreateSamplerState(&samplerDesc, &g_pSSWrapLinear);
 
@@ -100,55 +138,19 @@ namespace DX
 		hr = pd3dDevice->CreateSamplerState(&samplerDesc, &g_pSSClampPoint);
 		return hr;
 	}
-
-	HRESULT TDxState::SetState(ID3D11Device* pd3dDevice)
-	{
-		HRESULT hr;
-		////////////////////////////////////////Alpha Blend///////////////////////////////////////
-		D3D11_BLEND_DESC bd;
-		ZeroMemory(&bd, sizeof(bd));
-		bd.AlphaToCoverageEnable = FALSE;
-		bd.RenderTarget[0].BlendEnable = TRUE;
-		bd.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-		bd.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-		bd.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-
-		bd.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-		bd.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-		bd.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-		
-		bd.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-		pd3dDevice->CreateBlendState(&bd, &TDxState::g_pBSAlphaBlend);
-
-		bd.RenderTarget[0].BlendEnable = FALSE;
-		pd3dDevice->CreateBlendState(&bd, &TDxState::g_pBSNoBlend);
-		
-		////////////////////////////////////////DEPTH_STENCIL///////////////////////////////////////
-		D3D11_DEPTH_STENCIL_DESC dsd;
-		ZeroMemory(&dsd, sizeof(dsd));
-
-		dsd.DepthEnable = TRUE;								//Z버퍼를 활성화 여부.
-		dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;	//출력되면 Z버퍼 기입.
-		dsd.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;		//Z버퍼값이 작거나 같으면 뿌려줘라.
-		hr = pd3dDevice->CreateDepthStencilState(&dsd, &TDxState::g_pDSVStateEnableLessEqual);
-
-		dsd.DepthFunc = D3D11_COMPARISON_GREATER;
-		hr = pd3dDevice->CreateDepthStencilState(&dsd, &TDxState::g_pDSVStateGreater);
-		return hr;
-	}
 	bool TDxState::Release()
 	{
 		if (g_pDSVStateEnableLessEqual)		g_pDSVStateEnableLessEqual->Release();		g_pDSVStateEnableLessEqual = NULL;
 		if (g_pDSVStateGreater)				g_pDSVStateGreater->Release();				g_pDSVStateGreater = NULL;
 
 		if (g_pRSSolid)						g_pRSSolid->Release();						g_pRSSolid = NULL;
-		if (g_pRSWireFrameState)			g_pRSWireFrameState->Release();				g_pRSWireFrameState = NULL;
-		if (g_pRSBackCullSolidState)		g_pRSBackCullSolidState->Release();			g_pRSBackCullSolidState = NULL;
-		if (g_pRSFrontCullSolidState)		g_pRSFrontCullSolidState->Release();		g_pRSFrontCullSolidState = NULL;
-		if (g_pRSNoneCullSolidState)		g_pRSNoneCullSolidState->Release();			g_pRSNoneCullSolidState = NULL;
-		if (g_pRSBackWireFrameState)		g_pRSBackWireFrameState->Release();			g_pRSBackWireFrameState = NULL;
-		if (g_pRSFrontCullWireFrameState)	g_pRSFrontCullWireFrameState->Release();	g_pRSFrontCullWireFrameState = NULL;
-		if (g_pRSNoneCullWireFrameState)	g_pRSNoneCullWireFrameState->Release();		g_pRSNoneCullWireFrameState = NULL;
+		if (g_pRSWireFrame)					g_pRSWireFrame->Release();					g_pRSWireFrame = NULL;
+		if (g_pRSBackCullSolid)				g_pRSBackCullSolid->Release();				g_pRSBackCullSolid = NULL;
+		if (g_pRSFrontCullSolid)			g_pRSFrontCullSolid->Release();				g_pRSFrontCullSolid = NULL;
+		if (g_pRSNoneCullSolid)				g_pRSNoneCullSolid->Release();				g_pRSNoneCullSolid = NULL;
+		if (g_pRSBackCullWireFrame)			g_pRSBackCullWireFrame->Release();			g_pRSBackCullWireFrame = NULL;
+		if (g_pRSFrontCullWireFrame)		g_pRSFrontCullWireFrame->Release();			g_pRSFrontCullWireFrame = NULL;
+		if (g_pRSNoneCullWireFrame)			g_pRSNoneCullWireFrame->Release();			g_pRSNoneCullWireFrame = NULL;
 
 		if (g_pBSNoBlend)					g_pBSNoBlend->Release();					g_pBSNoBlend = NULL;
 		if (g_pBSAlphaBlend)				g_pBSAlphaBlend->Release();					g_pBSAlphaBlend = NULL;
@@ -164,28 +166,6 @@ namespace DX
 	}
 	TDxState::TDxState()
 	{
-		g_pDSVStateGreater = NULL;
-		g_pDSVStateEnableLessEqual = NULL;
-
-		g_pRSSolid = NULL;
-		g_pRSWireFrameState = NULL;
-		g_pRSBackCullSolidState = NULL;
-		g_pRSFrontCullSolidState = NULL;
-		g_pRSNoneCullSolidState = NULL;
-		g_pRSBackWireFrameState = NULL;
-		g_pRSFrontCullWireFrameState = NULL;
-		g_pRSNoneCullWireFrameState = NULL;
-
-		g_pBSNoBlend = NULL;
-		g_pBSAlphaBlend = NULL;
-
-		g_pTexSS = NULL;
-		g_pSSWrapLinear = NULL;
-		g_pSSWrapPoint = NULL;
-		g_pSSMirrorLinear = NULL;
-		g_pSSMirrorPoint = NULL;
-		g_pSSClampLinear = NULL;
-		g_pSSClampPoint = NULL;
 	}
 
 

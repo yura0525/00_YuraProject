@@ -8,104 +8,30 @@ class Sample : public xCore
 {
 public:
 	TBoxShape		m_Obj;
-	D3D11_VIEWPORT	m_vp[4];
 	
 	D3DXMATRIX					m_matWorld;
 	D3DXMATRIX					m_matView;
 	D3DXMATRIX					m_matProj;
-
-	ID3D11DepthStencilState*	m_DSS[2];
-	ID3D11DepthStencilView*		m_pDepthStencilView[2];
 public:
-
-	ID3D11DepthStencilView * CreateDepthStencilView(ID3D11Device* pDevice, DWORD dwWidth, DWORD dwHeight)
-	{
-		HRESULT hr;
-		ID3D11DepthStencilView* pDSV = nullptr;
-		Microsoft::WRL::ComPtr<ID3D11Texture2D> pDSTexture = nullptr;
-		D3D11_TEXTURE2D_DESC DescDepth;
-		DescDepth.Width = dwWidth;
-		DescDepth.Height = dwHeight;
-		DescDepth.MipLevels = 1;
-		DescDepth.ArraySize = 1;
-		DescDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-		DescDepth.SampleDesc.Count = 1;
-		DescDepth.SampleDesc.Quality = 0;
-		DescDepth.Usage = D3D11_USAGE_DEFAULT;
-		DescDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-		DescDepth.CPUAccessFlags = 0;
-		DescDepth.MiscFlags = 0;
-		if (FAILED(hr = pDevice->CreateTexture2D(&DescDepth, NULL, &pDSTexture)))
-		{
-			return nullptr;
-		}
-
-		D3D11_DEPTH_STENCIL_VIEW_DESC dsvd;
-		ZeroMemory(&dsvd, sizeof(dsvd));
-		dsvd.Format = DescDepth.Format;
-		dsvd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-		dsvd.Texture2D.MipSlice = 0;
-
-		if (FAILED(hr = pDevice->CreateDepthStencilView(
-			pDSTexture.Get(), &dsvd, &pDSV)))
-		{
-			return nullptr;
-		}
-		return pDSV;
-	}
 
 	bool Init()
 	{
-		xCore::Init();
-		
 		HRESULT hr = S_OK;
 		D3DXMatrixIdentity(&m_matWorld);
 		D3DXMatrixLookAtLH(&m_matView, &D3DXVECTOR3(0, 3, -10.0f), &D3DXVECTOR3(0,0,0), &D3DXVECTOR3(0,1,0));
 		D3DXMatrixPerspectiveFovLH(&m_matProj, D3DX_PI * 0.25f, g_rtClient.right / (float)g_rtClient.bottom, 1.0f, 100.0f);
 
 		m_Obj.Init();
-		m_Obj.Create(m_pd3dDevice, L"../../data/shader.hlsl", L"../../data/eye.bmp");
-
-		m_vp[0].TopLeftX = 0;
-		m_vp[0].TopLeftY = 0;
-		m_vp[0].Width = g_rtClient.right / 2;
-		m_vp[0].Height = g_rtClient.bottom / 2;
-		m_vp[0].MinDepth = 0.0f;
-		m_vp[0].MaxDepth = 1.0f;
-
-		m_vp[1].TopLeftX = g_rtClient.right / 2;
-		m_vp[1].TopLeftY = 0;
-		m_vp[1].Width = g_rtClient.right / 2;
-		m_vp[1].Height = g_rtClient.bottom / 2;
-		m_vp[1].MinDepth = 0.0f;
-		m_vp[1].MaxDepth = 1.0f;
-
-
-		m_vp[2].TopLeftX = 0;
-		m_vp[2].TopLeftY = g_rtClient.bottom / 2;
-		m_vp[2].Width = g_rtClient.right / 2;
-		m_vp[2].Height = g_rtClient.bottom / 2;
-		m_vp[2].MinDepth = 0.0f;
-		m_vp[2].MaxDepth = 1.0f;
-
-
-		m_vp[3].TopLeftX = g_rtClient.right / 2;
-		m_vp[3].TopLeftY = g_rtClient.bottom / 2;
-		m_vp[3].Width = g_rtClient.right / 2;
-		m_vp[3].Height = g_rtClient.bottom / 2;
-		m_vp[3].MinDepth = 0.0f;
-		m_vp[3].MaxDepth = 1.0f;
+		m_Obj.Create(m_pd3dDevice, L"../../data/shader/shape.hlsl", L"../../data/eye.bmp");
 		return true;
 	}
 	bool Frame()
 	{
-		xCore::Frame();
-		return m_Obj.Frame();
+		m_Obj.Frame();
+		return true;
 	}
 	bool Render()
 	{
-		xCore::Render();
-
 		D3DXMATRIX matTrans, matRotation;
 		D3DXMatrixTranslation(&matTrans, 3.0f, 0.0f, 0.0f);
 		D3DXMatrixRotationY(&matRotation, m_Timer.m_fGameTime);
@@ -115,6 +41,7 @@ public:
 		D3DXMatrixTranspose(&m_Obj.m_cbData.matView, &m_matView);
 		D3DXMatrixTranspose(&m_Obj.m_cbData.matProj, &m_matProj);
 
+		m_Obj.SetMatrix(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 		m_Obj.Render(m_pContext);
 
 
@@ -128,12 +55,12 @@ public:
 		D3DXMatrixTranspose(&m_Obj.m_cbData.matView, &m_matView);
 		D3DXMatrixTranspose(&m_Obj.m_cbData.matProj, &m_matProj);
 
+		m_Obj.SetMatrix(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 		m_Obj.Render(m_pContext);
 		return true;
 	}
 	bool Release()
 	{
-		xCore::Release();
 		m_Obj.Release();
 		return true;
 	}
@@ -143,4 +70,4 @@ public:
 };
 
 
-GAMERUN("Vector_1", 800, 600);
+GAMERUN("DrawShape(x)", 800, 600);

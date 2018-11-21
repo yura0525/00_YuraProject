@@ -29,78 +29,10 @@ HRESULT xCore::CreateDSV()
 	dsvd.Flags = 0;
 	dsvd.Texture2D.MipSlice = 0;
 
-	hr = m_pd3dDevice->CreateDepthStencilView((ID3D11Resource*)pTex, &dsvd, &m_pDSV);
+	hr = m_pd3dDevice->CreateDepthStencilView(pTex, &dsvd, &m_pDSV);
 
-	D3D11_DEPTH_STENCIL_DESC dsd;
-	ZeroMemory(&dsd, sizeof(dsd));
-
-	dsd.DepthEnable = TRUE;								//Z버퍼를 활성화 여부.
-	dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;	//출력되면 Z버퍼 기입.
-	dsd.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;		//Z버퍼값이 작거나 같으면 뿌려줘라.
-
-	hr = m_pd3dDevice->CreateDepthStencilState(&dsd, &m_pDSVStateEnableLess);
-
-	dsd.DepthFunc = D3D11_COMPARISON_GREATER;
-	hr = m_pd3dDevice->CreateDepthStencilState(&dsd, &m_pDSVStateEnable);
+	if (pTex) pTex->Release();
 	return hr;
-}
-
-bool xCore::Init()
-{
-	
-	return true;
-}
-bool xCore::Frame()
-{
-	xWindow::Frame();
-	m_Timer.Frame();
-	m_Font.Frame();
-	m_Input.Frame();
-	return true;
-}
-
-bool xCore::PreRender()
-{
-	xWindow::PreRender();
-
-	//RGB 255가 0-1의값으로 컨버팅. RGBA
-	float color[4] = { 0.44f, 0.61f, 0.83f, 1 };
-	m_pContext->ClearRenderTargetView(m_pRenderTargetView, color);
-
-	ApplyDDS(m_pContext, TDxState::g_pDSVStateEnableLessEqual);
-	//ApplyBS(m_pContext, TDxState::g_pBSAlphaBlend);
-	ApplyRS(m_pContext, TDxState::g_pRSBackCullSolidState);
-	ApplySS(m_pContext, TDxState::g_pSSWrapLinear);
-
-	m_pContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	return true;
-}
-bool xCore::PostRender()
-{
-	xWindow::PostRender();
-	//백버퍼에있는걸 앞버퍼로 바꾼다.
-	m_pSwapChain->Present(0, 0);
-	return true;
-}
-bool xCore::Render()
-{
-	xWindow::Render();
-	m_Timer.Render();
-	m_Font.Render();
-	m_Input.Render();
-	return true;
-}
-bool xCore::Release()
-{
-	xWindow::Release();
-	m_Timer.Release();
-	m_Font.Release();
-	m_Input.Release();
-
-	SAFE_RELEASE(m_pDSV);
-	SAFE_RELEASE(m_pDSVStateEnable);
-	SAFE_RELEASE(m_pDSVStateEnableLess);
-	return true;
 }
 
 bool xCore::GamePreInit()
@@ -183,14 +115,15 @@ bool xCore::GameInit()
 		return false;
 	}
 	SetViewPort();
+	CreateDSV();
+
+	TDxState::SetState(m_pd3dDevice);
 
 	//Alt + Enter 키를 막는다.
 	if (FAILED(hr = m_pDXGIFactory->MakeWindowAssociation(NULL, DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER)))
 	{
 		return hr;
-	}
-
-	CreateDSV();
+	}	
 
 	m_Timer.Init();
 	m_Font.Init();
@@ -200,12 +133,11 @@ bool xCore::GameInit()
 	m_pSwapChain->GetBuffer(0, __uuidof(IDXGISurface), (void**)&pBackBuffer);
 	m_Font.Set(m_hWnd, m_sd.BufferDesc.Width, m_sd.BufferDesc.Height, pBackBuffer);
 	
-	DX::TDxState::CreateRS(m_pd3dDevice);
-	DX::TDxState::CreateSS(m_pd3dDevice);
-	DX::TDxState::SetState(m_pd3dDevice);
+	pBackBuffer->Release();
 
+	/*
 	DeleteDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);
-	CreateDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);
+	CreateDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);*/
 
 	m_DefaultCamera.SetViewMatrix();
 	m_DefaultCamera.SetProjMatrix(D3DX_PI * 0.5f, (float)m_rtClient.right / m_rtClient.bottom);
@@ -217,9 +149,12 @@ bool xCore::GameInit()
 }
 
 bool xCore::GameFrame()
-{
-	Frame();
+{	
+	m_Timer.Frame();
+	m_Font.Frame();
+	m_Input.Frame();
 
+	Frame();
 	return true;
 }
 
@@ -237,10 +172,29 @@ bool xCore::GameRender()
 
 bool xCore::GamePreRender()
 {
+	//RGB 255가 0-1의값으로 컨버팅. RGBA
+	float color[4] = { 0.44f, 0.61f, 0.83f, 1 };
+	m_pContext->ClearRenderTargetView(m_pRenderTargetView, color);
+	m_pContext->ClearDepthStencilView(m_pDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	m_pContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDSV);
+
+
+	ApplyDDS(m_pContext, TDxState::g_pDSVStateEnableLessEqual);
+	ApplyBS(m_pContext, TDxState::g_pBSAlphaBlend);
+	ApplyRS(m_pContext, TDxState::g_pRSBackCullSolid);
+	ApplySS(m_pContext, TDxState::g_pSSWrapLinear);
+
+	m_pContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	return true;
 }
 bool xCore::GamePostRender()
 {
+	m_Timer.Render();
+	m_Font.Render();
+	m_Input.Render();
+
+	//백버퍼에있는걸 앞버퍼로 바꾼다.
+	m_pSwapChain->Present(0, 0);
 	return true;
 }
 
@@ -259,7 +213,7 @@ HRESULT xCore::CreateDeviceResources(UINT iWidth, UINT iHeight)
 	
 	if (pBackBuffer)	pBackBuffer->Release();
 
-	//m_pMainCamera->UpdateProjMatrix(iWidth, iHeight);
+	m_pMainCamera->UpdateProjMatrix(iWidth, iHeight);
 	CreateResources(iWidth, iHeight);
 	return hr;
 }
@@ -273,10 +227,34 @@ bool xCore::GameRun()
 bool xCore::GameRelease()
 {
 	Release();
+
+	m_Timer.Release();
+	m_Font.Release();
+	m_Input.Release();
+	TDxState::Release();
+
+	m_pSwapChain->SetFullscreenState(false, NULL);
+
+	SAFE_RELEASE(m_pDSV);
+
+	//생성한 역순으로 Release한다.
+	if (m_pRenderTargetView)	m_pRenderTargetView->Release();
+	if (m_pSwapChain)			m_pSwapChain->Release();
+	if (m_pd3dDevice)			m_pd3dDevice->Release();
+	if (m_pContext)				m_pContext->Release();
+	if (m_pDXGIFactory)			m_pDXGIFactory->Release();
+
+	m_pRenderTargetView = NULL;
+	m_pSwapChain = NULL;
+	m_pd3dDevice = NULL;
+	m_pContext = NULL;
+	m_pDXGIFactory = NULL;
+
 	return true;
 }
 xCore::xCore()
 {
+	m_pMainCamera = NULL;
 }
 
 

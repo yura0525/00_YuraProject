@@ -42,8 +42,6 @@ public:
 public:
 	bool Init()
 	{
-		xCore::Init();
-
 		m_constantData.r = cosf(g_fGameTimer) * 0.5f + 0.5f;
 		m_constantData.g = sinf(g_fGameTimer) * 0.5f + 0.5f;
 		m_constantData.b = 0.5f + cosf(g_fGameTimer) * 0.5f + 0.5f;
@@ -68,7 +66,6 @@ public:
 	}
 	bool Frame()
 	{
-		xCore::Frame();
 		static float fAngle = 0.0f;
 		fAngle += g_fSecPerFrame;
 #ifdef GPU
@@ -107,8 +104,6 @@ public:
 	}
 	bool Render()
 	{
-		xCore::Render();
-
 		m_pContext->VSSetShader(m_pVS, NULL, 0);
 		m_pContext->HSSetShader(NULL, NULL, 0);
 		m_pContext->DSSetShader(NULL, NULL, 0);
@@ -138,8 +133,6 @@ public:
 	}
 	bool Release()
 	{
-		xCore::Release();
-
 		if( m_pVertextBuffer != NULL )	m_pVertextBuffer->Release();
 		if (m_pIndexBuffer != NULL)		m_pIndexBuffer->Release();
 		if (m_pConstantBuffer != NULL)	m_pConstantBuffer->Release();

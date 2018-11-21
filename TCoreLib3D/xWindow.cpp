@@ -1,9 +1,9 @@
 #include "xWindow.h"
 
-xWindow * g_pWindow = 0;
-HWND g_hWnd = NULL;
-HINSTANCE g_hInstance = NULL;
-RECT g_rtClient;
+xWindow *	g_pWindow = 0;
+HWND		g_hWnd = NULL;
+HINSTANCE	g_hInstance = NULL;
+RECT		g_rtClient;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -215,7 +215,6 @@ bool xWindow::Run()
 
 bool xWindow::GameInit()
 {
-	TDevice::Init();
 	return true;
 }
 

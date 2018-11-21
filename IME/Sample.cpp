@@ -21,8 +21,6 @@ public:
 
 	bool Init()
 	{
-		xCore::Init();
-
 		m_StringList.clear();
 
 		m_dwConversion = 0;		//영어모드로 초기화
@@ -50,7 +48,6 @@ public:
 	}
 	bool Release()
 	{
-		xCore::Release();
 		ImmReleaseContext(m_hWnd, m_hIMC);
 		return true;
 	}

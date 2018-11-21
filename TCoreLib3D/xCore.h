@@ -28,8 +28,6 @@ public:
 	TCamera*		m_pMainCamera;
 
 	ID3D11DepthStencilView*		m_pDSV;
-	ID3D11DepthStencilState*	m_pDSVStateEnable;
-	ID3D11DepthStencilState*	m_pDSVStateEnableLess;
 
 public:
 	bool GamePreInit();
@@ -50,12 +48,12 @@ public:
 
 	HRESULT CreateDSV();
 public:
-	virtual bool Init();
-	virtual bool Frame();
-	virtual bool PreRender();
-	virtual bool PostRender();
-	virtual bool Render();
-	virtual bool Release();
+	virtual bool Init()			{	return true;	}
+	virtual bool Frame()		{	return true;	}
+	virtual bool PreRender()	{	return true;	}
+	virtual bool PostRender()	{	return true;	}
+	virtual bool Render()		{	return true;	}
+	virtual bool Release()		{	return true;	}
 
 public:
 	xCore();

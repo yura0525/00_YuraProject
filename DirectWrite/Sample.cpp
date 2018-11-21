@@ -5,8 +5,6 @@ class Sample : public xCore
 public:
 	bool Init()
 	{
-		xCore::Init();
-
 		IDXGISurface1*		m_pBackBuffer;
 
 		HRESULT hr = m_pSwapChain->GetBuffer(0, __uuidof(IDXGISurface), (void**)&m_pBackBuffer);
@@ -26,18 +24,10 @@ public:
 	}
 	bool Frame()
 	{
-		xCore::Frame();
-		m_Timer.Frame();
-		m_Font.Frame();
 		return true;
 	}
 	bool Render()
 	{
-		xCore::Render();
-
-		m_Font.Render();
-		m_Timer.Render();
-
 		RECT rt = g_rtClient;
 
 		m_Font.m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
@@ -57,9 +47,6 @@ public:
 	}
 	bool Release()
 	{
-		xCore::Release();
-		m_Font.Release();
-		m_Timer.Release();
 		return true;
 	}
 public:

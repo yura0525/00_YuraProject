@@ -27,12 +27,13 @@ bool TShape::Create(ID3D11Device *pDevice, T_STR szShaderName, T_STR szTextureNa
 HRESULT TShape::CreateVertexBuffer()
 {
 	HRESULT hr = S_OK;
+	m_iNumVertexSize = sizeof(PNCT_VERTEX);
 
 	//버텍스버퍼, 인덱스버퍼. 벡터랑 배열만 가능하다.
 	//시작주소로부터 연속된 메모리여야 한다.
 	DX::CreateVertexBuffer(m_pd3dDevice,
 		m_iNumVertex,
-		m_iNumVertexSize,
+		sizeof(PNCT_VERTEX),
 		&m_VertexList.at(0),
 		m_dxObj.m_pVertexBuffer.GetAddressOf());
 	return hr;
@@ -43,7 +44,7 @@ HRESULT TShape::CreateIndexBuffer()
 
 	DX::CreateIndexBuffer(m_pd3dDevice,
 		m_iNumIndex,
-		m_iNumIndexSize,
+		sizeof(DWORD),
 		&m_IndexList.at(0),
 		m_dxObj.m_pIndexBuffer.GetAddressOf());
 
@@ -111,24 +112,14 @@ HRESULT TShape::LoadTexture(T_STR szTextureName)
 
 	loadinfo.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 	loadinfo.Format = DXGI_FORMAT_FROM_FILE;
-
 	hr = D3DX11CreateShaderResourceViewFromFile(m_pd3dDevice, szTextureName.c_str(), 
 										&loadinfo, NULL, m_dxObj.m_pTextureRV.GetAddressOf(), NULL);
 
 	return hr;
 }
 
-bool TShape::Init()
-{
-	return true;
-}
-bool TShape::Frame()
-{
-	return true;
-}
 bool TShape::PreRender(ID3D11DeviceContext* pContext)
 {
-	pContext->UpdateSubresource(m_dxObj.m_pConstantBuffer.Get(), 0, NULL, &m_cbData, 0, 0);
 	m_dxObj.PreRender(pContext, m_iNumVertexSize);
 	return true;
 }
@@ -170,8 +161,11 @@ void TShape::SetMatrix(D3DXMATRIX* pWorld, D3DXMATRIX* pView, D3DXMATRIX* pProj)
 }
 bool TShape::Render(ID3D11DeviceContext* pContext)
 {
-	PreRender(pContext);
-	PostRender(pContext);
+	pContext->UpdateSubresource(m_dxObj.m_pConstantBuffer.Get(), 0, NULL, &m_cbData, 0, 0);
+	pContext->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)m_Primitive);
+
+	m_dxObj.PreRender(pContext, m_iNumVertexSize);
+	m_dxObj.PostRender(pContext, m_iNumVertexSize, m_iNumIndex);
 	return true;
 }
 bool TShape::PostRender(ID3D11DeviceContext* pContext)
@@ -179,15 +173,25 @@ bool TShape::PostRender(ID3D11DeviceContext* pContext)
 	m_dxObj.PostRender(pContext, m_iNumVertexSize, m_iNumIndex);
 	return true;
 }
-bool TShape::Release()
-{
-	return true;
-}
 
 
 TShape::TShape()
 {
 	D3DXMatrixIdentity(&m_matWorld);
+	
+	m_vPosition.x = m_matWorld._41;
+	m_vPosition.y = m_matWorld._42;
+	m_vPosition.z = m_matWorld._43;
+	m_vLook.x = m_matWorld._11;
+	m_vLook.y = m_matWorld._12;
+	m_vLook.z = m_matWorld._13;
+	m_vSide.x = m_matWorld._21;
+	m_vSide.y = m_matWorld._22;
+	m_vSide.z = m_matWorld._23;
+	m_vUp.x = m_matWorld._31;
+	m_vUp.y = m_matWorld._32;
+	m_vUp.z = m_matWorld._33;
+
 	D3DXMatrixIdentity(&m_matView);
 	D3DXMatrixIdentity(&m_matProj);
 
@@ -245,7 +249,6 @@ HRESULT TBoxShape::CreateVertexData()
 	m_VertexList[22] = PNCT_VERTEX(D3DXVECTOR3(1.0f, -1.0f, 1.0f), D3DXVECTOR3(0.0f, -1.0f, 0.0f), D3DXVECTOR4(0.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f));
 	m_VertexList[23] = PNCT_VERTEX(D3DXVECTOR3(-1.0f, -1.0f, 1.0f), D3DXVECTOR3(0.0f, -1.0f, 0.0f), D3DXVECTOR4(0.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(0.0f, 1.0f));
 
-	m_iNumVertexSize = sizeof(PNCT_VERTEX);
 	m_iNumVertex = m_VertexList.size();
 	
 	return hr;
@@ -263,13 +266,11 @@ HRESULT TBoxShape::CreateIndexData()
 	m_IndexList[iIndex++] = 20; m_IndexList[iIndex++] = 21; m_IndexList[iIndex++] = 22; m_IndexList[iIndex++] = 20;	m_IndexList[iIndex++] = 22; m_IndexList[iIndex++] = 23;
 
 	m_iNumIndex = m_IndexList.size();
-	m_iNumIndexSize = sizeof(DWORD);
 	return hr;
 }
 
 TBoxShape::TBoxShape()
 {
-	m_Primitive = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 }
 
 

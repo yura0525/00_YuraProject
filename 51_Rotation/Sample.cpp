@@ -12,8 +12,6 @@ public:
 public:
 	bool Init()
 	{
-		xCore::Init();
-		
 		m_Object.Init();
 		m_Object.Create(m_pd3dDevice, L"vertexshader.txt", L"../../data/Dirt_Diff.dds");
 		
@@ -21,20 +19,17 @@ public:
 	}
 	bool Frame()
 	{
-		xCore::Frame();
 		m_Object.Frame(m_pContext);
 		return true;
 	}
 	bool Render()
 	{
-		xCore::Render();
 		m_Object.Render(m_pContext);
 		
 		return true;
 	}
 	bool Release()
 	{
-		xCore::Release();
 		m_Object.Release();
 		
 		return true;
@@ -45,4 +40,4 @@ public:
 };
 
 
-GAMERUN("AlphaBlend", 800, 600);
+GAMERUN("Rotation", 800, 600);

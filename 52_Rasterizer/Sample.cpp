@@ -15,8 +15,6 @@ public:
 public:
 	bool Init()
 	{
-		xCore::Init();
-	
 		SetRasterizerState();
 
 		m_Object.Init();
@@ -27,13 +25,11 @@ public:
 	}
 	bool Frame()
 	{
-		xCore::Frame();
 		m_Object.Frame();
 		return true;
 	}
 	bool Render()
 	{
-		xCore::Render();
 		m_Object.Render(m_pContext);
 
 		//W키를 누르면 와이어 프레임이 보이게함.
@@ -49,7 +45,6 @@ public:
 	}
 	bool Release()
 	{
-		xCore::Release();
 		m_Object.Release();
 		if (m_pRSWireFrame != NULL)		m_pRSWireFrame->Release();
 		if (m_pRSSolid != NULL)			m_pRSSolid->Release();
@@ -77,4 +72,4 @@ public:
 };
 
 
-GAMERUN("AlphaBlend", 800, 600);
+GAMERUN("Rasterizer", 800, 600);

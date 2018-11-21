@@ -9,7 +9,6 @@ public:
 public:
 	bool Init()
 	{
-		xCore::Init();
 		m_ObjBox.Init();
 		m_ObjBox.Set(m_pd3dDevice);
 
@@ -17,20 +16,17 @@ public:
 	}
 	bool Frame()
 	{
-		xCore::Frame();
 		m_ObjBox.Frame();
 		return true;
 	}
 	bool Render()
 	{
-		xCore::Render();
 		m_ObjBox.Render(m_pContext);
 
 		return true;
 	}
 	bool Release()
 	{
-		xCore::Release();
 		m_ObjBox.Release();
 
 		return true;

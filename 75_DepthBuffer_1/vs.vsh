@@ -26,11 +26,6 @@ cbuffer cb0
 VS_OUTPUT VS(VS_IN v)
 {
 	VS_OUTPUT vOut = (VS_OUTPUT)0;
-	/*float4 vWorld = mul(v.p, g_matWorld);
-	float4 vView = mul(vWorld, g_matView);
-	float4 vProj = mul(vView, g_matProj);*/
-
-	//vOut.p = float4(v.p, 1.0f)  * g_fTimer;
 	float4 vPos = float4(v.p, 1.0f);
 	float4 vWorld = mul(vPos, g_matWorld);
 	float4 vView = mul(vWorld, g_matView);

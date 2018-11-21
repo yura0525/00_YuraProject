@@ -10,7 +10,6 @@ public:
 public:
 	bool Init()
 	{
-		xCore::Init();
 		m_ObjBox.Init();
 		m_ObjBox.Set(m_pd3dDevice);
 
@@ -47,14 +46,11 @@ public:
 	}
 	bool Frame()
 	{
-		xCore::Frame();
 		m_ObjBox.Frame();
 		return true;
 	}
 	bool Render()
 	{
-		xCore::Render();
-
 		//1)
 		m_ObjBox.m_cbData.fActiveVP = 0;
 		m_pContext->RSSetViewports(1, &m_vp[0]);
@@ -78,7 +74,6 @@ public:
 	}
 	bool Release()
 	{
-		xCore::Release();
 		m_ObjBox.Release();
 
 		return true;
@@ -89,4 +84,4 @@ public:
 };
 
 
-GAMERUN("Vector_1", 800, 600);
+GAMERUN("DXVector", 800, 600);

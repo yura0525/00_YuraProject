@@ -9,13 +9,13 @@ namespace DX
 		static ID3D11DepthStencilState*		g_pDSVStateEnableLessEqual;
 
 		static ID3D11RasterizerState*		g_pRSSolid;
-		static ID3D11RasterizerState*		g_pRSWireFrameState;
-		static ID3D11RasterizerState*		g_pRSBackCullSolidState;
-		static ID3D11RasterizerState*		g_pRSFrontCullSolidState;
-		static ID3D11RasterizerState*		g_pRSNoneCullSolidState;
-		static ID3D11RasterizerState*		g_pRSBackWireFrameState;
-		static ID3D11RasterizerState*		g_pRSFrontCullWireFrameState;
-		static ID3D11RasterizerState*		g_pRSNoneCullWireFrameState;
+		static ID3D11RasterizerState*		g_pRSWireFrame;
+		static ID3D11RasterizerState*		g_pRSBackCullSolid;
+		static ID3D11RasterizerState*		g_pRSFrontCullSolid;
+		static ID3D11RasterizerState*		g_pRSNoneCullSolid;
+		static ID3D11RasterizerState*		g_pRSBackCullWireFrame;
+		static ID3D11RasterizerState*		g_pRSFrontCullWireFrame;
+		static ID3D11RasterizerState*		g_pRSNoneCullWireFrame;
 
 		static ID3D11BlendState*			g_pBSNoBlend;
 		static ID3D11BlendState*			g_pBSAlphaBlend;
@@ -29,8 +29,6 @@ namespace DX
 		static ID3D11SamplerState*			g_pSSClampPoint;
 
 	public:
-		static HRESULT CreateRS(ID3D11Device* pd3dDevice);
-		static HRESULT CreateSS(ID3D11Device* pd3dDevice);
 		static HRESULT SetState(ID3D11Device* pd3dDevice);
 		static bool Release();
 	public:

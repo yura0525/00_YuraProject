@@ -1,6 +1,17 @@
 #include "xCore.h"
 #include "TObjectPlane.h"
 
+// * 깊이버퍼를 사용하기 위한 절차
+// 1, GetDevice()->CreateTexture2D			깊이 버퍼용 텍스처 생성
+// 2, GetDevice()->CreateDepthStencilView	깊이 버퍼 뷰 생성
+// 3, GetDevice()->CreateDepthStencilState  깊이 상태값 세팅
+
+//    프레임 반복
+// 4, GetDevice()->ClearDepthStencilView	깊이 버퍼 초기화	
+// 5, GetDevice()->OMSetRenderTargets		렌더 타켓에 깊이 버퍼 뷰를 적용
+// 6, GetDevice()->OMSetDepthStencilState	깊이 상태값 적용					
+
+
 class Sample : public xCore
 {
 public:
@@ -44,6 +55,8 @@ public:
 
 		hr = m_pd3dDevice->CreateDepthStencilView(pTex, &dsvd, &m_pDSV);
 
+		SAFE_RELEASE(pTex);
+
 		D3D11_DEPTH_STENCIL_DESC dsd;
 		ZeroMemory(&dsd, sizeof(dsd));
 
@@ -60,8 +73,6 @@ public:
 
 	bool Init()
 	{
-		xCore::Init();
-
 		D3DXMatrixIdentity(&m_matWorld);
 		D3DXMatrixLookAtLH(&m_matView, &D3DXVECTOR3(0,0,-5.0f), &D3DXVECTOR3(0,0,0), &D3DXVECTOR3(0,1,0));
 		D3DXMatrixPerspectiveFovLH(&m_matProj, D3DX_PI * 0.25f, g_rtClient.right / (float)g_rtClient.bottom, 1.0f, 100.0f);
@@ -74,7 +85,6 @@ public:
 	}
 	bool Frame()
 	{
-		xCore::Frame();
 		m_ObjBox.Frame();
 		return true;
 	}
@@ -113,12 +123,7 @@ public:
 	}
 	bool Release()
 	{
-		xCore::Release();
 		m_ObjBox.Release();
-
-		SAFE_RELEASE(m_pDSV);
-		SAFE_RELEASE(m_pDSVStateEnable);
-		SAFE_RELEASE(m_pDSVStateDisable);
 		return true;
 	}
 public:
@@ -127,4 +132,4 @@ public:
 };
 
 
-GAMERUN("Vector_1", 800, 600);
+GAMERUN("DepthBuffer", 800, 600);

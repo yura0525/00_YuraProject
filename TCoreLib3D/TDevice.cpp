@@ -48,7 +48,9 @@ HRESULT TDevice::CreateDevice()
 		{
 			if (retFL != D3D_FEATURE_LEVEL_11_0)
 			{
-				Release();
+				if (m_pSwapChain)	m_pSwapChain->Release();
+				if (m_pd3dDevice)	m_pd3dDevice->Release();
+				if (m_pContext)		m_pContext->Release();
 				continue;
 			}
 			break;
@@ -161,40 +163,6 @@ HRESULT TDevice::ResizeDevice(UINT iWidth, UINT iHeight)
 
 	CreateDeviceResources(iWidth, iHeight);
 	return hr;
-}
-bool TDevice::Init()
-{
-	return true;
-}
-
-bool TDevice::PreRender()
-{
-	return true;
-}
-bool TDevice::PostRender()
-{
-	return true;
-}
-bool TDevice::Render()
-{
-	////지형, 캐릭터, 이펙트, UI
-	return true;
-}
-
-bool TDevice::Release()
-{
-	//생성한 역순으로 Release한다.
-	if (m_pRenderTargetView)	m_pRenderTargetView->Release();
-	if (m_pSwapChain)			m_pSwapChain->Release();
-	if (m_pd3dDevice)			m_pd3dDevice->Release();
-	if (m_pContext)				m_pContext->Release();
-
-	m_pRenderTargetView = NULL;
-	m_pSwapChain = NULL;
-	m_pd3dDevice = NULL;
-	m_pContext = NULL;
-
-	return true;
 }
 
 TDevice::TDevice()

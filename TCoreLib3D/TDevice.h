@@ -23,13 +23,6 @@ public:
 
 	HRESULT ResizeDevice(UINT iWidth, UINT iHeight);
 public:
-	virtual bool Init();
-	virtual bool Frame() { return true; }
-	virtual bool PreRender();
-	virtual bool PostRender();
-	virtual bool Render();
-	virtual bool Release();
-public:
 	TDevice();
 	virtual ~TDevice();
 };

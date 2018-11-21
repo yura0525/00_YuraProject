@@ -2,7 +2,7 @@
 #include "D3Dcompiler.h"		//D3DCOMPILE_DEBUG
 #include <math.h>
 
-#define CPU
+#define GPU
 struct P3VERTEX //pnct
 {
 	float x;
@@ -49,8 +49,6 @@ public:
 public:
 	bool Init()
 	{
-		xCore::Init();
-
 		m_constantData.r = cosf(g_fGameTimer) * 0.5f + 0.5f;
 		m_constantData.g = sinf(g_fGameTimer) * 0.5f + 0.5f;
 		m_constantData.b = 0.5f + cosf(g_fGameTimer) * 0.5f + 0.5f;
@@ -76,9 +74,8 @@ public:
 	}
 	bool Frame()
 	{
-		xCore::Frame();
-		//static float fAngle = 0.0f;
-		//fAngle += g_fSecPerFrame;
+		static float fAngle = 0.0f;
+		fAngle += g_fSecPerFrame;
 #ifdef GPU
 		//gpu update
 		m_constantData.r = cosf(g_fGameTimer) * 0.5f + 0.5f;
@@ -88,7 +85,7 @@ public:
 		m_constantData.fTime[0] = cosf(g_fGameTimer) * 0.5f + 0.5f;
 		m_constantData.fTime[1] = 1.0f;
 		m_constantData.fTime[2] = 1.0f;
-		//m_constantData.fTime[3] = fAngle;
+		m_constantData.fTime[3] = fAngle;
 		m_pContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &m_constantData, 0, 0);
 #elif defined CPU
 		//cpu update
@@ -115,8 +112,6 @@ public:
 	}
 	bool Render()
 	{
-		xCore::Render();
-
 		m_pContext->VSSetShader(m_pVS, NULL, 0);
 		m_pContext->HSSetShader(NULL, NULL, 0);
 		m_pContext->DSSetShader(NULL, NULL, 0);
@@ -148,8 +143,6 @@ public:
 	}
 	bool Release()
 	{
-		xCore::Release();
-
 		if (m_pVertextBuffer != NULL)	m_pVertextBuffer->Release();
 		if (m_pIndexBuffer != NULL)		m_pIndexBuffer->Release();
 		if (m_pConstantBuffer != NULL)	m_pConstantBuffer->Release();
@@ -354,16 +347,16 @@ HRESULT Sample::LoadTextureFile(const TCHAR* szFileName)
 {
 	HRESULT hr = S_OK;
 
-	//D3DX11_IMAGE_LOAD_INFO      pLoadInfo;
-	//D3DX11_IMAGE_INFO			pSrcInfo;
+	D3DX11_IMAGE_LOAD_INFO      pLoadInfo;
+	D3DX11_IMAGE_INFO			pSrcInfo;
 
-	//ZeroMemory(&pLoadInfo, sizeof(D3DX11_IMAGE_LOAD_INFO));
-	//pLoadInfo.Format = DXGI_FORMAT_FROM_FILE;
-	//pLoadInfo.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	//pLoadInfo.Width = D3DX11_DEFAULT;
-	//pLoadInfo.Height = D3DX11_DEFAULT;
-	//pLoadInfo.pSrcInfo = &pSrcInfo;
-	//pLoadInfo.MipLevels = 1;
+	ZeroMemory(&pLoadInfo, sizeof(D3DX11_IMAGE_LOAD_INFO));
+	pLoadInfo.Format = DXGI_FORMAT_FROM_FILE;
+	pLoadInfo.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	pLoadInfo.Width = D3DX11_DEFAULT;
+	pLoadInfo.Height = D3DX11_DEFAULT;
+	pLoadInfo.pSrcInfo = &pSrcInfo;
+	pLoadInfo.MipLevels = 1;
 
 	if (FAILED(hr = D3DX11CreateShaderResourceViewFromFile(m_pd3dDevice, szFileName, NULL, NULL, &m_pTexSRV, NULL)))
 	{

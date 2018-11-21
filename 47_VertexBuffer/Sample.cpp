@@ -25,8 +25,6 @@ public:
 public:
 	bool Init()
 	{
-		xCore::Init();
-
 		SetRasterizerState();
 
 		CreateVertextBuffer();
@@ -44,13 +42,10 @@ public:
 	}
 	bool Frame()
 	{
-		xCore::Frame();
 		return true;
 	}
 	bool Render()
 	{
-		xCore::Render();
-
 		//W키를 누르면 와이어 프레임이 보이게함.
 		if (g_Input.bFront)
 		{
@@ -78,8 +73,6 @@ public:
 	}
 	bool Release()
 	{
-		xCore::Release();
-
 		if (m_pRSWireFrame != NULL)		m_pRSWireFrame->Release();
 		if (m_pRSSolid != NULL)			m_pRSSolid->Release();
 

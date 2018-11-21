@@ -1,34 +1,30 @@
 #pragma once
 #include "TObjectStd.h"
-
+#include "TDxState.h"
 
 class TShape
 {
 public:
 	ID3D11Device *				m_pd3dDevice;
-	
-	TDxObj				m_dxObj;
-
-	vector<PNCT_VERTEX> m_VertexList;
-	vector<DWORD>		m_IndexList;
-	UINT				m_iNumVertexSize;
-	T_CB_DATA			m_cbData;
-	
-	D3DXMATRIX			m_matWorld;
-	D3DXMATRIX			m_matView;
-	D3DXMATRIX			m_matProj;
-
-	D3DXVECTOR3			m_vPosition;
-	D3DXVECTOR3			m_vLook;
-	D3DXVECTOR3			m_vSide;
-	D3DXVECTOR3			m_vUp;
-
-	UINT				m_iNumVertex;
-	UINT				m_iNumIndex;
-	
-	UINT				m_iNumIndexSize;
-
 	D3D11_PRIMITIVE_TOPOLOGY	m_Primitive;
+	TDxObj						m_dxObj;
+
+	vector<PNCT_VERTEX>			m_VertexList;
+	vector<DWORD>				m_IndexList;
+	T_CB_DATA					m_cbData;
+	
+	D3DXMATRIX					m_matWorld;
+	D3DXMATRIX					m_matView;
+	D3DXMATRIX					m_matProj;
+
+	D3DXVECTOR3					m_vPosition;
+	D3DXVECTOR3					m_vLook;
+	D3DXVECTOR3					m_vSide;
+	D3DXVECTOR3					m_vUp;
+
+	UINT						m_iNumVertex;
+	UINT						m_iNumIndex;
+	UINT						m_iNumVertexSize;
 public:
 	void SetColor(D3DXVECTOR4 vColor);
 public:
@@ -51,13 +47,13 @@ public:
 	virtual HRESULT LoadGeometryShader(T_STR szShaderName);
 	virtual HRESULT LoadTexture(T_STR szTextureName);
 
-	virtual bool Init();
-	virtual bool Frame();
+	virtual bool Init()		{	return true;	}
+	virtual bool Frame()	{	return true;	}
 	virtual bool PreRender(ID3D11DeviceContext* pContext);
 	virtual void SetMatrix(D3DXMATRIX* pWorld = NULL, D3DXMATRIX* pView = NULL, D3DXMATRIX* pProj = NULL);
 	virtual bool Render(ID3D11DeviceContext* pContext);
 	virtual bool PostRender(ID3D11DeviceContext* pContext);
-	virtual bool Release();
+	virtual bool Release()	{	return true;	}
 	
 public:
 	TShape();

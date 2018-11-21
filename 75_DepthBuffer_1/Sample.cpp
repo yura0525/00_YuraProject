@@ -1,4 +1,3 @@
-
 #include "xCore.h"
 #include "TObjectPlane.h"
 #include "TDxState.h"
@@ -55,8 +54,6 @@ public:
 
 	bool Init()
 	{
-		xCore::Init();
-		
 		HRESULT hr = S_OK;
 
 		D3D11_DEPTH_STENCIL_DESC dsd;
@@ -120,13 +117,11 @@ public:
 	}
 	bool Frame()
 	{
-		xCore::Frame();
-		return m_ObjBox.Frame();
+		m_ObjBox.Frame();
+		return true;
 	}
 	bool Render()
 	{
-		xCore::Render();
-
 		m_pContext->ClearDepthStencilView(m_pDepthStencilView[0], D3D11_CLEAR_DEPTH, 1.0, 0);
 		m_pContext->ClearDepthStencilView(m_pDepthStencilView[1], D3D10_CLEAR_STENCIL, 1.0, 0);
 
@@ -135,7 +130,7 @@ public:
 		//m_pContext->OMSetDepthStencilState(m_DSS[0], 0x00);
 		ApplyDDS(m_pContext, m_DSS[0]);
 		ApplyBS(m_pContext, TDxState::g_pBSNoBlend);
-		ApplyRS(m_pContext, TDxState::g_pRSBackCullSolidState);
+		ApplyRS(m_pContext, TDxState::g_pRSBackCullSolid);
 
 		D3DXMATRIX matTrans, matRotation;
 		D3DXMatrixTranslation(&matTrans, 3.0f, 0.0f, 0.0f);
@@ -176,7 +171,6 @@ public:
 	}
 	bool Release()
 	{
-		xCore::Release();
 		m_ObjBox.Release();
 		return true;
 	}
@@ -186,4 +180,4 @@ public:
 };
 
 
-GAMERUN("Vector_1", 800, 600);
+GAMERUN("DepthBuffer_1(x)", 800, 600);
