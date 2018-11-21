@@ -12,15 +12,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 	LRESULT ret;
 
-	if (ret = g_pWindow->MsgProc(hWnd, msg, wParam, lParam))
+	if (ret = g_pWindow->MainMsgProc(hWnd, msg, wParam, lParam))
 	{
 		return ret;
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-LRESULT xWindow::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT	xWindow::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	return 1;
+}
+
+LRESULT xWindow::MainMsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	MsgProc(hWnd, msg, wParam, lParam);
+
 	switch (msg)
 	{
 	case WM_SIZE:

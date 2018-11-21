@@ -97,6 +97,10 @@ bool TCamera::Update(D3DXVECTOR4 vValue)
 TCamera::TCamera()
 {
 	m_fSpeed = 1.0f;
+
+	D3DXMatrixIdentity(&m_matWorld);
+	D3DXMatrixIdentity(&m_mModelRot);
+	D3DXMatrixIdentity(&m_mModelLastRot);
 }
 
 

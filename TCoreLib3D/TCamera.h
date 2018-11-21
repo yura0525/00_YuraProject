@@ -3,15 +3,19 @@
 class TCamera
 {
 public:
-	D3DXMATRIX m_matView;
-	D3DXMATRIX m_matProj;
-	D3DXVECTOR3 m_vPos;
-	D3DXVECTOR3 m_vTarget;
-	D3DXVECTOR3 m_vDefaultUp;
+	D3DXMATRIX			m_matWorld;
+	D3DXMATRIX			m_matView;
+	D3DXMATRIX			m_matProj;
+	D3DXVECTOR3			m_vPos;
+	D3DXVECTOR3			m_vTarget;
+	D3DXVECTOR3			m_vDefaultUp;
 
 	D3DXVECTOR3			 m_vLook;
 	D3DXVECTOR3			 m_vSide;
 	D3DXVECTOR3			 m_vUp;
+
+	D3DXMATRIX			m_mModelLastRot;
+	D3DXMATRIX			m_mModelRot;
 
 	float m_fFov;
 	float m_fAspect;
@@ -34,7 +38,7 @@ public:
 	void  UpdateProjMatrix(UINT width, UINT height);
 public:
 	bool Frame();
-	bool Update(D3DXVECTOR4 vValue);
+	virtual bool Update(D3DXVECTOR4 vValue);
 public:
 	TCamera();
 	virtual ~TCamera();

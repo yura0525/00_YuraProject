@@ -2,8 +2,6 @@
 #include "xCore.h"
 #include "TShape.h"
 
-using namespace DX;
-
 class Sample : public xCore
 {
 public:

@@ -22,7 +22,8 @@ public:
 	bool Run();
 
 public:
-	virtual LRESULT MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	virtual LRESULT	MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	virtual LRESULT MainMsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	virtual bool GameInit();
 	virtual bool GameRun();
