@@ -102,7 +102,7 @@ int main()
 
 	//listen -> 듣다.
 	listen(listenSock, SOMAXCONN);	//->개통
-
+	g_listenSocket = listenSock;
 									//리슨소켓도 유저에 등록한다.
 
 	TUser listenUser(listenSock, sa);

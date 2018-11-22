@@ -4,7 +4,7 @@
 #include <tchar.h>
 #include <string.h>
 //유니코드에서 멀티바이트로 바꾸는 함수.
-char* GetW2M(WCHAR* data)
+char* GetW2M(const WCHAR* data)
 {
 	char cData[3333] = { 0, };
 
@@ -16,7 +16,7 @@ char* GetW2M(WCHAR* data)
 }
 
 //멀티바이트에서 유니코드로 바꾸는 함수.
-WCHAR* GetM2W(char* data)
+WCHAR* GetM2W(const char* data)
 {
 	WCHAR cData[3333] = { 0, };
 
@@ -52,7 +52,7 @@ void main()
 
 		if (iRet == TRUE)
 		{
-			printf("출력 완료");
+			printf("출력 완료\n");
 		}
 	}
 	CloseHandle(hWriteFile);
@@ -77,9 +77,7 @@ void main()
 			_tcprintf(L"\n%s", m2w(strCData.c_str()).c_str());
 
 			printf("\n%s", GetW2M(buf));
-			char* pData = GetW2M(buf);
-			wprintf(L"\n%s", GetM2W(pData));
-			//_tcprintf(L"\n%s", buf);
+			_tcprintf(L"\n%s", GetM2W(strCData.c_str()));
 		}
 	}
 	CloseHandle(hReadFile);

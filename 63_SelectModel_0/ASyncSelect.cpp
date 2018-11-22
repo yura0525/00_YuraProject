@@ -64,10 +64,10 @@ int RecvData(TUser* pUser)
 			{
 				CHARACTER_INFO cInfo;
 				memcpy(&cInfo, packet.msg, sizeof(CHARACTER_INFO));
+				printf("\n패킷 완성-> %s\n", packet.msg);
 			}
 			break;
 			}
-			printf("\n패킷 완성-> %s\n", packet.msg);
 		}
 	}
 
@@ -91,14 +91,15 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			case FD_ACCEPT:
 			{
 				TUser addUser;
-				addUser.sock = accept(wParam,
-					(SOCKADDR*)&addUser.clientAddr, &addUser.addrlen);
+				addUser.sock = accept(wParam, (SOCKADDR*)&addUser.clientAddr, &addUser.addrlen);
 				if (addUser.sock == INVALID_SOCKET)
 				{
 					break;
 				}
+
 				AddUser(addUser);
-				//WSAAsyncSelect같은 함수를 여러번 호출하면 마지막만 적용된다.
+
+				//WSAASyncSelect같은 함수를 여러번 호출하면 마지막만 적용된다.
 				//WM_DROP만 된다.
 				int iRet = WSAAsyncSelect(addUser.sock, hWnd, WM_RWC, FD_READ | FD_WRITE | FD_CLOSE);
 
@@ -108,38 +109,40 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				}
 			}
 			break;
-			case FD_READ:
-			{
-				TUser::g_socket = wParam;
-
-				ITOR itor = find_if(g_allUser.begin(), g_allUser.end(), TUser());
-				TUser* pUser = (TUser*)&(*itor);
-				//클라이언트 소켓일 경우 recv()
-				if (RecvData((TUser*)&(*itor)) <= 0)
-				{
-					closesocket(pUser->sock);
-					itor = g_allUser.erase(itor);
-				}
-			}
-			break;
-			case FD_WRITE:
-			{
-				//받은 패킷을 넣어두는 장소가 없음.
-				//패킷풀
-			}
-			break;
-			case FD_CLOSE:
-			{
-				//받은데이터가 0일경우에 나가는 처리가 되어있다.
-				PostMessage(hWnd, WM_KGCA, wParam, FD_READ);
-			}
-			break;
 			}
 		}
 	}
 	else if (uMsg == WM_RWC)
 	{
-		int kkk = 0;
+		switch (WSAGETSELECTEVENT(lParam))
+		{
+		case FD_READ:
+		{
+			TUser::g_socket = wParam;
+			ITOR itor = find_if(g_allUser.begin(), g_allUser.end(), TUser());
+			TUser* pUser = (TUser*)&(*itor);
+			//클라이언트 소켓일경우 recv()
+			if (RecvData(pUser) <= 0)
+			{
+				closesocket(pUser->sock);
+				itor = g_allUser.erase(itor);
+			}
+		}
+		break;
+		case FD_WRITE:
+		{
+			//받은 패킷을 넣어두는 장소가 없음.
+			//패킷풀에 있는걸 Send한다.
+		}
+		break;
+		case FD_CLOSE:
+		{
+			//받은 데이터가 0일경우에 나가는 처리를 하였다.
+			PostMessage(hWnd, WM_KGCA, wParam, FD_READ);
+		}
+		break;
+		}
+
 	}
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
@@ -215,6 +218,8 @@ int main()
 
 	// listen -> 듣다.
 	listen(listenSock, SOMAXCONN);	//->개통
+
+	g_listenSocket = listenSock;
 
 	int iRet = WSAAsyncSelect(listenSock, hWnd, WM_KGCA, FD_ACCEPT | FD_CLOSE);
 	if (iRet == SOCKET_ERROR)
