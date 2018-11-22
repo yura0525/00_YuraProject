@@ -169,9 +169,11 @@ copy "*.lib" "../../lib"</Command>
     <ClCompile Include="TDirectWrite.cpp" />
     <ClCompile Include="TDxObject.cpp" />
     <ClCompile Include="TDxState.cpp" />
+    <ClCompile Include="TFrustum.cpp" />
     <ClCompile Include="TLineShape.cpp" />
     <ClCompile Include="TPlaneShape.cpp" />
     <ClCompile Include="TShape.cpp" />
+    <ClCompile Include="TSphereShape.cpp" />
     <ClCompile Include="TTimer.cpp" />
     <ClCompile Include="xCore.cpp" />
     <ClCompile Include="xInput.cpp" />
@@ -183,6 +185,7 @@ copy "*.lib" "../../lib"</Command>
     <ClInclude Include="TDirectWrite.h" />
     <ClInclude Include="TDxObject.h" />
     <ClInclude Include="TDxState.h" />
+    <ClInclude Include="TFrustum.h" />
     <ClInclude Include="TObjectStd.h" />
     <ClInclude Include="TShape.h" />
     <ClInclude Include="TTimer.h" />

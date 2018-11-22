@@ -65,6 +65,9 @@ class TBoxShape : public TShape
 public:
 	HRESULT CreateVertexData();
 	HRESULT CreateIndexData();
+	HRESULT LoadGeometryShader(T_STR  szName) {
+		return S_OK;
+	};
 public:
 	TBoxShape();
 	virtual ~TBoxShape();
@@ -75,6 +78,9 @@ class TPlaneShape : public TShape
 public:
 	HRESULT CreateVertexData();
 	HRESULT CreateIndexData();
+	HRESULT LoadGeometryShader(T_STR  szName) {
+		return S_OK;
+	};
 public:
 	TPlaneShape();
 	virtual ~TPlaneShape();
@@ -86,6 +92,10 @@ class TLineShape : public TShape
 public:
 	HRESULT CreateVertexData();
 	HRESULT CreateIndexData();
+	HRESULT LoadGeometryShader(T_STR  szName) {
+		return S_OK;
+	};
+
 	bool Draw(ID3D11DeviceContext* pContext, D3DXVECTOR3 vStart, D3DXVECTOR3 vEnd, D3DXVECTOR4 vColor = D3DXVECTOR4(1, 0, 0, 0));
 
 	HRESULT LoadPixelShader(T_STR szShaderName);
@@ -99,9 +109,21 @@ class TDirLineShape : public TLineShape
 public:
 	HRESULT CreateVertexData();
 	HRESULT CreateIndexData();
+	HRESULT LoadGeometryShader(T_STR  szName) {
+		return S_OK;
+	};
 	bool Render(ID3D11DeviceContext* pContext);
 public:
 	TDirLineShape();
 	virtual ~TDirLineShape();
 };
 
+class TSphereShape : public TBoxShape
+{
+public:
+	HRESULT LoadVertexShader(T_STR  szName);
+	HRESULT LoadGeometryShader(T_STR  szName);
+public:
+	TSphereShape();
+	virtual ~TSphereShape();
+};

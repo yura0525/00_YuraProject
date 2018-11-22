@@ -33,4 +33,7 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\data\Shader\shape.hlsl" />
+  </ItemGroup>
 </Project>

@@ -77,6 +77,9 @@ bool TCamera::UpdateVector()
 	D3DXVec3Normalize(&m_vLook, &m_vLook);
 	D3DXVec3Normalize(&m_vUp, &m_vUp);
 	D3DXVec3Normalize(&m_vSide, &m_vSide);
+
+	TFrustum::SetMatrix(NULL, &m_matView, &m_matProj);
+	TFrustum::CreateFrustum();
 	return true;
 }
 

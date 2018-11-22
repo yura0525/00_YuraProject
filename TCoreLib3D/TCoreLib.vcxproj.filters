@@ -57,6 +57,12 @@
     <ClCompile Include="TLineShape.cpp">
       <Filter>Object</Filter>
     </ClCompile>
+    <ClCompile Include="TSphereShape.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TFrustum.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TDevice.h">
@@ -93,6 +99,9 @@
       <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="TCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="TFrustum.h">
       <Filter>Camera</Filter>
     </ClInclude>
   </ItemGroup>

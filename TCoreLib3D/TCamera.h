@@ -1,6 +1,6 @@
 #pragma once
-#include "xStd.h"
-class TCamera
+#include "TFrustum.h"
+class TCamera : public TFrustum
 {
 public:
 	D3DXMATRIX			m_matWorld;

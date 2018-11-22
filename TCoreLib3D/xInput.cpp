@@ -62,12 +62,15 @@ bool xInput::Frame()
 		while (m_pMouse->Acquire() == DIERR_INPUTLOST);
 	}
 
-	g_Input.bFront = m_KeyState[DIK_W];
-	g_Input.bBack = m_KeyState[DIK_S];
-	g_Input.bLeft = m_KeyState[DIK_A];
-	g_Input.bRight = m_KeyState[DIK_D];
-	g_Input.bAttack = m_KeyState[DIK_RETURN] | m_MouseState.rgbButtons[0];
-	g_Input.bJump = m_KeyState[DIK_SPACE] | m_MouseState.rgbButtons[1];
+	g_Input.bFront		= m_KeyState[DIK_W];
+	g_Input.bBack		= m_KeyState[DIK_S];
+	g_Input.bLeft		= m_KeyState[DIK_A];
+	g_Input.bRight		= m_KeyState[DIK_D];
+	g_Input.bAttack		= m_KeyState[DIK_RETURN];
+	g_Input.bJump		= m_KeyState[DIK_SPACE];
+	g_Input.bButton0	= m_MouseState.rgbButtons[0];
+	g_Input.bButton1	= m_MouseState.rgbButtons[1];
+	g_Input.bButton2	= m_MouseState.rgbButtons[2];
 
 	return true;
 }

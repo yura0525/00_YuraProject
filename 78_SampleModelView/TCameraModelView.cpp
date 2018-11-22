@@ -4,6 +4,7 @@ LRESULT	TCameraModelView::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPa
 {
 	//WM_LBUTTONDOWN은 오브젝트 회전
 	if (msg == WM_LBUTTONDOWN)
+	//if (msg == g_Input.bButton0)
 	{
 		short iMouseX = LOWORD(lParam);
 		short iMouseY = HIWORD(lParam);
@@ -11,6 +12,7 @@ LRESULT	TCameraModelView::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPa
 		m_WorldArcBall.OnBegin(iMouseX, iMouseY);
 	}
 	if (msg == WM_RBUTTONDOWN)
+	//if (msg == g_Input.bButton1)
 	{
 
 	}
@@ -29,7 +31,6 @@ LRESULT	TCameraModelView::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPa
 	{
 
 	}
-	
 	
 	return 1;
 }
