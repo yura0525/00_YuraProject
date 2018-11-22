@@ -35,7 +35,7 @@ public:
 		m_pModelCamera->m_matProj = m_pMainCamera->m_matProj;
 
 		m_pMainCamera = m_pModelCamera;
-		m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 30.0f, -10.0f));
+		m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 5.0f, -10.0f));
 
 		m_ObjLine.Create(m_pd3dDevice, L"../../data/shader/shape.hlsl", L"../../data/eye.bmp");
 
@@ -82,6 +82,12 @@ public:
 			vPos.x = m_World[iObj]._41;
 			vPos.y = m_World[iObj]._42;
 			vPos.z = m_World[iObj]._43;
+
+			m_World[iObj] = m_pMainCamera->m_matWorld;
+			m_World[iObj]._41 = vPos.x;
+			m_World[iObj]._42 = vPos.y;
+			m_World[iObj]._43 = vPos.z;
+
 			if( m_pMainCamera->ClassifySphere(vPos, 1.44f) )
 			{
 				m_ObjBox.SetMatrix(&m_World[iObj], &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);

@@ -165,6 +165,7 @@ copy "*.lib" "../../lib"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="TCamera.cpp" />
+    <ClCompile Include="TCameraModelView.cpp" />
     <ClCompile Include="TDevice.cpp" />
     <ClCompile Include="TDirectWrite.cpp" />
     <ClCompile Include="TDxObject.cpp" />
@@ -175,12 +176,14 @@ copy "*.lib" "../../lib"</Command>
     <ClCompile Include="TShape.cpp" />
     <ClCompile Include="TSphereShape.cpp" />
     <ClCompile Include="TTimer.cpp" />
+    <ClCompile Include="xArcBall.cpp" />
     <ClCompile Include="xCore.cpp" />
     <ClCompile Include="xInput.cpp" />
     <ClCompile Include="xWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TCamera.h" />
+    <ClInclude Include="TCameraModelView.h" />
     <ClInclude Include="TDevice.h" />
     <ClInclude Include="TDirectWrite.h" />
     <ClInclude Include="TDxObject.h" />
@@ -189,6 +192,7 @@ copy "*.lib" "../../lib"</Command>
     <ClInclude Include="TObjectStd.h" />
     <ClInclude Include="TShape.h" />
     <ClInclude Include="TTimer.h" />
+    <ClInclude Include="xArcBall.h" />
     <ClInclude Include="xCore.h" />
     <ClInclude Include="xInput.h" />
     <ClInclude Include="xStd.h" />

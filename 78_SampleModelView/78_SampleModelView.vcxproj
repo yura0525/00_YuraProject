@@ -148,12 +148,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Sample.cpp" />
-    <ClCompile Include="TCameraModelView.cpp" />
-    <ClCompile Include="xArcBall.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="TCameraModelView.h" />
-    <ClInclude Include="xArcBall.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\data\Shader\shape.hlsl">

@@ -63,6 +63,12 @@
     <ClCompile Include="TFrustum.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
+    <ClCompile Include="TCameraModelView.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="xArcBall.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TDevice.h">
@@ -102,6 +108,12 @@
       <Filter>Camera</Filter>
     </ClInclude>
     <ClInclude Include="TFrustum.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="TCameraModelView.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="xArcBall.h">
       <Filter>Camera</Filter>
     </ClInclude>
   </ItemGroup>
