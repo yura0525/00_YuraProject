@@ -1,11 +1,11 @@
-
+/*
 #include <windows.h>
 #include <iostream>
 #include <tchar.h>
 #include <string.h>
 #include <conio.h>
 
-#define MAX_READ_SIZE 4096
+#define MAX_READ_SIZE 4096 * 100
 #define MAX_WORK_THREAD 4
 
 class TIOCP
@@ -32,7 +32,7 @@ public:
 	bool DispatchWrite(DWORD dwTransfer);
 
 public:
-	~TIOCP()
+	TIOCP()
 	{
 		m_bEndRead = false;
 	}
@@ -40,55 +40,13 @@ public:
 	{
 		CloseHandle(m_hFileRead);
 		CloseHandle(m_hFileWrite);
-		CloseHandle(m_hWorkThread[0]);
-		CloseHandle(m_hWorkThread[1]);
-		CloseHandle(m_hWorkThread[2]);
-		CloseHandle(m_hWorkThread[3]);
+		for (int i = 0; i < MAX_WORK_THREAD; i++)
+		{
+			CloseHandle(m_hWorkThread[i]);
+		}
 		CloseHandle(m_hIOCP);
 	}
 };
-
-bool TIOCP::DispatchRead(DWORD dwTransfer)
-{
-	DWORD dwWrite;
-	if (::WriteFile(m_hFileWrite, 
-		m_szReadBuffer, dwTransfer, &dwWrite, 
-		(LPOVERLAPPED)&m_hWriteOV) == FALSE)
-	{
-		//중요!!!:정상적인 경우. 비동기 입출력이 진행되고있음.
-		if (GetLastError() != ERROR_IO_PENDING)
-		{
-			return false;
-		}
-	}
-
-	//블럭단위로 읽어서 그 다음 블럭부터 읽으라고 알려주는 부분.(m_hReadOV.Offset을 사용)
-	LARGE_INTEGER data;
-	data.QuadPart = dwTransfer;
-
-	m_hReadOV.Offset += data.LowPart;
-	m_hReadOV.OffsetHigh += data.HighPart;
-
-	WaitForRead();
-	return true;
-}
-bool TIOCP::DispatchWrite(DWORD dwTransfer)
-{
-	//블럭단위로 써서 그 다음부터 쓰라는 부분.
-	LARGE_INTEGER data;
-	data.QuadPart = dwTransfer;
-
-	m_hWriteOV.Offset += data.LowPart;
-	m_hWriteOV.OffsetHigh += data.HighPart;
-
-	if (m_bEndRead && dwTransfer < MAX_READ_SIZE)
-	{
-		::SetEvent(m_hEventKillThread);
-		return true;
-	}
-
-	return true;
-}
 
 DWORD WINAPI TIOCP::WorkerThread(LPVOID param)
 {
@@ -135,6 +93,7 @@ DWORD WINAPI TIOCP::WorkerThread(LPVOID param)
 			if (ERROR_HANDLE_EOF == GetLastError())
 			{
 				iocp->m_bEndRead = true;
+				::SetEvent(iocp->m_hEventKillThread);
 				return true;
 			}
 			if (GetLastError() == WAIT_TIMEOUT)
@@ -146,33 +105,47 @@ DWORD WINAPI TIOCP::WorkerThread(LPVOID param)
 	}
 	return 0;
 }
-void TIOCP::Init()
-{
-	m_hFileRead = CreateFile(L"../../data/data_1.zip",
-		GENERIC_READ, 0, 0, OPEN_EXISTING,
-		FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, 0);
-	m_hFileWrite = CreateFile(L"copy.zip",
-		GENERIC_WRITE, 0, 0, CREATE_ALWAYS,
-		FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, 0);
 
-	//스레드4개를 고용.
-	DWORD id;
-	for (int i = 0; i < MAX_WORK_THREAD; i++)
+bool TIOCP::DispatchRead(DWORD dwTransfer)
+{
+	DWORD dwWrite;
+	if (::WriteFile(m_hFileWrite,
+		m_szReadBuffer, dwTransfer, &dwWrite,
+		(LPOVERLAPPED)&m_hWriteOV) == FALSE)
 	{
-		m_hWorkThread[i] = ::CreateThread(0, 0, WorkerThread, this, 0, &id);
+		//중요!!!:정상적인 경우. 비동기 입출력이 진행되고있음.
+		if (GetLastError() != ERROR_IO_PENDING)
+		{
+			return false;
+		}
 	}
 
-	m_hEventKillThread = ::CreateEvent(0, TRUE, FALSE, NULL);
-	::ResetEvent(m_hEventKillThread);
+	//블럭단위로 읽어서 그 다음 블럭부터 읽으라고 알려주는 부분.(m_hReadOV.Offset을 사용)
+	LARGE_INTEGER data;
+	data.QuadPart = dwTransfer;
 
-	//기술자를 고용.
-	m_hIOCP = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, 0);
+	m_hReadOV.Offset += data.LowPart;
+	m_hReadOV.OffsetHigh += data.HighPart;
 
-	//기술자에게 Read파일에대한 읽는 결과가 완료되면, 그 결과를 완료키key( ex)1111 )의 내용으로 알려줘라.
-	::CreateIoCompletionPort(m_hFileRead, m_hIOCP, (ULONG_PTR)m_hFileRead, 0);
-	//기술자에게 Write파일에대한 쓰는 결과가 완료되면, 그 결과를 완료키key( ex)2222 )의 내용으로 알려줘라.
-	//완료키는 유일해야한다. 유일해야하므로 핸들을 넣는다.
-	::CreateIoCompletionPort(m_hFileWrite, m_hIOCP, (ULONG_PTR)m_hFileWrite, 0);
+	WaitForRead();
+	return true;
+}
+bool TIOCP::DispatchWrite(DWORD dwTransfer)
+{
+	//블럭단위로 써서 그 다음부터 쓰라는 부분.
+	LARGE_INTEGER data;
+	data.QuadPart = dwTransfer;
+
+	m_hWriteOV.Offset += data.LowPart;
+	m_hWriteOV.OffsetHigh += data.HighPart;
+
+	if (m_bEndRead && dwTransfer < MAX_READ_SIZE)
+	{
+		::SetEvent(m_hEventKillThread);
+		return true;
+	}
+
+	return true;
 }
 
 bool TIOCP::WaitForRead()
@@ -198,6 +171,40 @@ bool TIOCP::WaitForRead()
 	//}
 	return true;
 }
+
+void TIOCP::Init()
+{
+	m_bEndRead = false;
+
+	m_hEventKillThread = ::CreateEvent(0, TRUE, FALSE, NULL);
+	::ResetEvent(m_hEventKillThread);
+
+
+	m_hFileRead = CreateFile(L"../../C++.zip",
+		GENERIC_READ, 0, 0, OPEN_EXISTING,
+		FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, 0);
+	m_hFileWrite = CreateFile(L"copy.zip",
+		GENERIC_WRITE, 0, 0, CREATE_ALWAYS,
+		FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, 0);
+
+	//스레드(작업자)를 고용.
+	m_hIOCP = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, 0);
+
+
+	//스레드4개를 고용.
+	DWORD id;
+	for (int i = 0; i < MAX_WORK_THREAD; i++)
+	{
+		m_hWorkThread[i] = ::CreateThread(0, 0, WorkerThread, this, 0, &id);
+	}
+
+	//스레드(작업자)에게 Read파일에대한 읽는 결과가 완료되면, 그 결과를 완료키key( ex)1111 )의 내용으로 알려줘라.
+	//완료키는 유일해야한다. 유일해야하므로 핸들을 넣는다.
+	::CreateIoCompletionPort(m_hFileRead, m_hIOCP, (ULONG_PTR)m_hFileRead, 0);
+	//스레드(작업자)에게 Write파일에대한 쓰는 결과가 완료되면, 그 결과를 완료키key( ex)2222 )의 내용으로 알려줘라.
+	::CreateIoCompletionPort(m_hFileWrite, m_hIOCP, (ULONG_PTR)m_hFileWrite, 0);
+}
+
 void TIOCP::Frame()
 {
 	WaitForRead();
@@ -218,3 +225,5 @@ void main()
 	iocp.Frame();
 	_getch();
 }
+*/
+
