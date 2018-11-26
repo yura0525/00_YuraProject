@@ -1,4 +1,5 @@
-/*#include <windows.h>
+/*
+#include <windows.h>
 #include <iostream>
 #include <tchar.h>
 #include <string.h>
@@ -43,11 +44,11 @@ std::wstring m2w(std::string data)
 	return ret;
 }
 
-//4096 * 1024만큼 쪼개서 읽는다.
+//4096만큼 쪼개서 읽는다.
 //파일을 한번에 읽으면 부담스럽기 때문에 쪼개서 읽는다.
 void FileRead(HANDLE hReadFile, DWORD offset)
 {
-	DWORD dwLength = 4096 * 1024;			//dwLength = filesize.QuadPart;
+	DWORD dwLength = 4096;			//dwLength = filesize.QuadPart;
 	g_size.QuadPart += offset;
 
 	ov.Offset = g_size.LowPart;
@@ -55,11 +56,7 @@ void FileRead(HANDLE hReadFile, DWORD offset)
 	char* pTemp = &g_buf[g_size.QuadPart];
 
 	DWORD dwRead;
-	bool iRet = ReadFile(hReadFile, 
-						pTemp,
-						dwLength,
-						&dwRead, 
-						&ov);
+	bool iRet = ReadFile(hReadFile, pTemp, dwLength, &dwRead, &ov);
 
 	//비동기입출력함수. OVERLAPPED을 사용했다.
 	//그래서 읽기가 끝나기 전에 리턴되어서 iRet == FALSE이므로
@@ -81,7 +78,7 @@ void main()
 	//wov.hEvent = CreateEvent();
 
 	HANDLE hReadFile = CreateFileA(
-									"../../data/data_1.zip", 
+									"../../data.zip", 
 									GENERIC_READ, 
 									0, 
 									NULL,
@@ -147,30 +144,29 @@ void main()
 
 			if (dwRet == WAIT_OBJECT_0)
 			{
-				printf("\n%s : %ld", "FinishWrite...", ov.InternalHigh);
+				printf("\n%s : %ld", "FinishWrite...", wov.InternalHigh);
 				break;
 			}
 			else if (dwRet == WAIT_TIMEOUT)
 			{
-				DWORD trans;
-				bool ret = GetOverlappedResult(hWriteFile, &ov, &trans, FALSE);
+				DWORD trans = 0;
+				bool ret = GetOverlappedResult(hWriteFile, &wov, &trans, FALSE);
 				if (ret == TRUE)
 				{
-					printf("\n%s : %ld", "FinishWrite...", ov.InternalHigh);
+					printf("\n%s : %ld", "FinishWrite...", wov.InternalHigh);
 					break;
 				}
 				else
 				{
 					static DWORD dwSum = 0;
-					dwSum += ov.InternalHigh;
-					printf("\n%s : %ld: %ld", "Write...", ov.InternalHigh, dwSum);
+					dwSum += wov.InternalHigh;
+					printf("\n%s : %ld: %ld", "Write...", wov.InternalHigh, dwSum);
 				}
 			}
 		}
 	}
-
+	CloseHandle(hWriteFile);
 	printf("파일 복사 완료");
 	delete[] g_buf;
-	CloseHandle(hWriteFile);
 }
 */
