@@ -2,6 +2,9 @@
 #include "xStd.h"
 namespace DX
 {
+	ID3D11ShaderResourceView* CreateShaderResourceView(ID3D11Device* pd3dDevice,
+		const TCHAR* szFileName);
+
 	ID3D11Buffer * CreateVertexBuffer(ID3D11Device* pd3dDevice, 
 		UINT iNumVertex,
 		UINT iVertexSize,
@@ -45,6 +48,7 @@ namespace DX
 		LPCSTR szShaderModel,
 		ID3DBlob** ppBlobOut);
 
+	
 	class TDxObj
 	{
 	public:

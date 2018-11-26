@@ -107,6 +107,8 @@ HRESULT TShape::LoadGeometryShader(T_STR szShaderName)
 HRESULT TShape::LoadTexture(T_STR szTextureName)
 {
 	HRESULT hr = S_OK;
+	if (szTextureName.empty()) return E_FAIL;
+
 	D3DX11_IMAGE_LOAD_INFO loadinfo;
 	ZeroMemory(&loadinfo, sizeof(loadinfo));
 

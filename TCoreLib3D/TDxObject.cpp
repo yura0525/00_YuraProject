@@ -1,6 +1,26 @@
 #include "TDxObject.h"
 namespace DX
 {
+	ID3D11ShaderResourceView* CreateShaderResourceView(ID3D11Device* pd3dDevice,
+		const TCHAR* szFileName)
+	{
+		HRESULT hr = S_OK;
+		ID3D11ShaderResourceView* pSRV = NULL;
+		D3DX11_IMAGE_LOAD_INFO loadinfo;
+		ZeroMemory(&loadinfo, sizeof(loadinfo));
+
+		loadinfo.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+		loadinfo.Format = DXGI_FORMAT_FROM_FILE;
+		hr = D3DX11CreateShaderResourceViewFromFile(pd3dDevice, szFileName,
+			&loadinfo, NULL, &pSRV, NULL);
+
+		if (FAILED(hr))
+		{
+			return NULL;
+		}
+		return pSRV;
+	}
+
 	ID3D11Buffer * CreateVertexBuffer(ID3D11Device* pd3dDevice, UINT iNumVertex, UINT iVertexSize, void* pData, ID3D11Buffer** ppBuffer)
 	{
 		HRESULT hr;

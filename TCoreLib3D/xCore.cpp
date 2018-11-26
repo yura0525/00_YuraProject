@@ -1,5 +1,9 @@
 #include "TDxState.h"
 #include "xCore.h"
+LRESULT	xCore::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	return m_ModelCamera.MsgProc(hWnd, msg, wParam, lParam);
+}
 
 HRESULT xCore::CreateDSV()
 {
@@ -143,6 +147,9 @@ bool xCore::GameInit()
 	m_Font.Init();
 	m_Input.Init();
 
+	m_ObjSkyBox.Create(m_pd3dDevice, L"../../data/shader/sky.hlsl", L"../../data/grassenvmap1024.dds");
+	m_dirAxis.Create(m_pd3dDevice, L"../../data/shader/shape.hlsl", L"../../data/eye.bmp");
+
 	IDXGISurface* pBackBuffer;
 	m_pSwapChain->GetBuffer(0, __uuidof(IDXGISurface), (void**)&pBackBuffer);
 	m_Font.Set(m_hWnd, m_sd.BufferDesc.Width, m_sd.BufferDesc.Height, pBackBuffer);
@@ -168,8 +175,11 @@ bool xCore::GameFrame()
 	m_Font.Frame();
 	m_Input.Frame();
 
+	m_ObjSkyBox.Frame();
+	m_dirAxis.Frame();
+
 	//camera control
-	if (g_Input.bAttack)
+	if (g_Input.bButton1)
 	{
 		m_YawPitchRoll.y += 0.1f * D3DXToRadian(m_Input.m_MouseState.lY);
 		m_YawPitchRoll.x += 0.1f * D3DXToRadian(m_Input.m_MouseState.lX);
@@ -225,7 +235,7 @@ bool xCore::GamePreRender()
 	m_pContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDSV);
 
 
-	ApplyDDS(m_pContext, TDxState::g_pDSVStateEnableLessEqual);
+	ApplyDSS(m_pContext, TDxState::g_pDSVStateEnableLessEqual);
 	ApplyBS(m_pContext, TDxState::g_pBSAlphaBlend);
 	ApplySS(m_pContext, TDxState::g_pSSWrapLinear);
 	//ApplyRS(m_pContext, TDxState::g_pRSBackCullSolid);
@@ -243,6 +253,13 @@ bool xCore::GamePostRender()
 	m_Timer.Render();
 	m_Font.Render();
 	m_Input.Render();
+
+	m_ObjSkyBox.SetMatrix(NULL, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+	m_ObjSkyBox.Render(m_pContext);
+
+	// 면 방향벡터 출력
+	m_dirAxis.SetMatrix(NULL, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+	m_dirAxis.Render(m_pContext);
 
 	//백버퍼에있는걸 앞버퍼로 바꾼다.
 	m_pSwapChain->Present(0, 0);
@@ -283,6 +300,8 @@ bool xCore::GameRelease()
 	m_Font.Release();
 	m_Input.Release();
 	TDxState::Release();
+	m_ObjSkyBox.Release();
+	m_dirAxis.Release();
 
 	m_pSwapChain->SetFullscreenState(false, NULL);
 

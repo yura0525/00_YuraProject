@@ -123,10 +123,10 @@ public:
 		m_pContext->ClearDepthStencilView(m_pDepthStencilView[0], D3D11_CLEAR_DEPTH, 1.0f, 0);
 		m_pContext->ClearDepthStencilView(m_pDepthStencilView[1], D3D10_CLEAR_STENCIL, 1.0f, 0);
 
-		/*ApplyDDS(m_pContext, g_pDSVStateEnableLessEqual);
+		/*ApplyDSS(m_pContext, g_pDSVStateEnableLessEqual);
 		ApplyRS(m_pContext, m_pRSSolidState);*/
 		//m_pContext->OMSetDepthStencilState(m_DSS[0], 0x00);
-		ApplyDDS(m_pContext, m_DSS[0]);
+		ApplyDSS(m_pContext, m_DSS[0]);
 		ApplyBS(m_pContext, TDxState::g_pBSNoBlend);
 		ApplyRS(m_pContext, TDxState::g_pRSBackCullSolid);
 
@@ -146,7 +146,7 @@ public:
 
 		//2)
 		//m_pContext->OMSetDepthStencilState(m_DSS[1], 0x00);
-		/*ApplyDDS(m_pContext, m_DSS[1]);
+		/*ApplyDSS(m_pContext, m_DSS[1]);
 		ApplyBS(m_pContext, TDxState::g_pBSAlphaBlend);
 		ApplyRS(m_pContext, TDxState::g_pRSBackCullSolidState);
 		D3DXMATRIX Scale;
@@ -161,7 +161,7 @@ public:
 		
 		//m_pContext->RSSetState(DX::m_pRSSolidState);
 
-		//DX::ApplyDDS(m_pContext, TDxState::g_pDSVStateEnableLessEqual);
+		//DX::ApplyDSS(m_pContext, TDxState::g_pDSVStateEnableLessEqual);
 		//m_pContext->OMSetDepthStencilState(DX::g_pDSVStateEnableLessEqual, 0);
 
 		m_ObjBox.Render(m_pContext);*/

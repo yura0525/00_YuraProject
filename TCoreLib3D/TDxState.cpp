@@ -7,7 +7,7 @@ namespace DX
 
 	ID3D11DepthStencilState*	TDxState::g_pDSVStateGreater = 0;
 	ID3D11DepthStencilState*	TDxState::g_pDSVStateEnableLessEqual = 0;
-
+	ID3D11DepthStencilState*	TDxState::g_pDSVStateDepthWriteDisable = 0;
 
 	ID3D11RasterizerState*		TDxState::g_pRSSolid = 0;
 	ID3D11RasterizerState*		TDxState::g_pRSWireFrame = 0;
@@ -64,7 +64,11 @@ namespace DX
 		dsd.DepthFunc = D3D11_COMPARISON_GREATER;
 		hr = pd3dDevice->CreateDepthStencilState(&dsd, &g_pDSVStateGreater);
 
-
+		dsd.DepthEnable = FALSE;							//Z버퍼를 활성화 여부.
+		dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;	//Z버퍼랑 비교도안하고 Z버퍼에 기입도 하지 않는다.
+		dsd.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;		//Z버퍼값이 작거나 같으면 뿌려줘라.
+		hr = pd3dDevice->CreateDepthStencilState(&dsd, &g_pDSVStateDepthWriteDisable);
+		
 		//////////////////////////////////Rasterizer////////////////////////////////////////////////////
 		D3D11_RASTERIZER_DESC rsDesc;
 		ZeroMemory(&rsDesc, sizeof(rsDesc));
@@ -140,6 +144,8 @@ namespace DX
 	{
 		if (g_pDSVStateEnableLessEqual)		g_pDSVStateEnableLessEqual->Release();		g_pDSVStateEnableLessEqual = NULL;
 		if (g_pDSVStateGreater)				g_pDSVStateGreater->Release();				g_pDSVStateGreater = NULL;
+		if (g_pDSVStateDepthWriteDisable)	g_pDSVStateDepthWriteDisable->Release();	g_pDSVStateDepthWriteDisable = NULL;
+
 
 		if (g_pRSSolid)						g_pRSSolid->Release();						g_pRSSolid = NULL;
 		if (g_pRSWireFrame)					g_pRSWireFrame->Release();					g_pRSWireFrame = NULL;

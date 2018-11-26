@@ -1,4 +1,4 @@
-#include <windows.h>
+/*#include <windows.h>
 #include <iostream>
 #include <tchar.h>
 #include <string.h>
@@ -173,3 +173,4 @@ void main()
 	delete[] g_buf;
 	CloseHandle(hWriteFile);
 }
+*/

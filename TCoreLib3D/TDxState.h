@@ -7,7 +7,7 @@ namespace DX
 	public:
 		static ID3D11DepthStencilState*		g_pDSVStateGreater;
 		static ID3D11DepthStencilState*		g_pDSVStateEnableLessEqual;
-
+		static ID3D11DepthStencilState*		g_pDSVStateDepthWriteDisable;
 		static ID3D11RasterizerState*		g_pRSSolid;
 		static ID3D11RasterizerState*		g_pRSWireFrame;
 		static ID3D11RasterizerState*		g_pRSBackCullSolid;
@@ -35,7 +35,7 @@ namespace DX
 		TDxState();
 		virtual ~TDxState();
 	};
-	static void ApplyDDS(ID3D11DeviceContext* pContext, ID3D11DepthStencilState *pState, UINT iRef = 0x01)
+	static void ApplyDSS(ID3D11DeviceContext* pContext, ID3D11DepthStencilState *pState, UINT iRef = 0x01)
 	{
 		pContext->OMSetDepthStencilState(pState, iRef);
 	}

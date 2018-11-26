@@ -69,6 +69,9 @@
     <ClCompile Include="xArcBall.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
+    <ClCompile Include="TSkyBox.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TDevice.h">
@@ -115,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="xArcBall.h">
       <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="TSkyBox.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

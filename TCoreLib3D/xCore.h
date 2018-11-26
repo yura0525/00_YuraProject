@@ -4,6 +4,7 @@
 #include "TTimer.h"
 #include "xInput.h"
 #include "TCameraModelView.h"
+#include "TSkyBox.h"
 
 struct TOutput									//모니터의 정보와 갯수를 알수있다.
 {
@@ -30,6 +31,9 @@ public:
 
 	ID3D11DepthStencilView*		m_pDSV;
 	D3DXVECTOR4					m_YawPitchRoll;
+
+	TSkyBox						m_ObjSkyBox;
+	TDirLineShape				m_dirAxis;
 public:
 	bool GamePreInit();
 
@@ -49,10 +53,8 @@ public:
 
 	HRESULT CreateDSV();
 
-	LRESULT	MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-	{
-		return m_ModelCamera.MsgProc(hWnd, msg, wParam, lParam);
-	}
+	LRESULT	MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	
 	void SwapModelView();
 	void SwapDefaultView();
 

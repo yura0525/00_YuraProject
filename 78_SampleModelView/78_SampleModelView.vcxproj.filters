@@ -21,5 +21,6 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\data\Shader\shape.hlsl" />
+    <FxCompile Include="..\..\data\Shader\sky.hlsl" />
   </ItemGroup>
 </Project>
