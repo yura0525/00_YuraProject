@@ -143,7 +143,7 @@ void main()
 
 		while (1)
 		{
-			DWORD dwRet = WaitForSingleObject(hReadFile, 0);
+			DWORD dwRet = WaitForSingleObject(hWriteFile, 0);
 
 			if (dwRet == WAIT_OBJECT_0)
 			{
@@ -153,7 +153,7 @@ void main()
 			else if (dwRet == WAIT_TIMEOUT)
 			{
 				DWORD trans;
-				bool ret = GetOverlappedResult(hReadFile, &ov, &trans, FALSE);
+				bool ret = GetOverlappedResult(hWriteFile, &ov, &trans, FALSE);
 				if (ret == TRUE)
 				{
 					printf("\n%s : %ld", "FinishWrite...", ov.InternalHigh);

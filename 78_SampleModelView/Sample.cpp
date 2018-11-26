@@ -8,13 +8,9 @@ class Sample : public xCore
 	TPlaneShape			m_ObjPlane;
 	TLineShape			m_ObjLine;
 	TSphereShape		m_ObjSphere;
-	TCameraModelView*	m_pModelCamera;
 	D3DXMATRIX			m_World[100];
 public:
-	LRESULT	MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-	{
-		return m_pModelCamera->MsgProc(hWnd, msg, wParam, lParam);
-	}
+	
 	void    DeleteResources()
 	{
 	}
@@ -31,10 +27,8 @@ public:
 			m_World[iObj]._43 = iObj * 10;
 		}
 
-		m_pModelCamera = new TCameraModelView();
-		m_pModelCamera->m_matProj = m_pMainCamera->m_matProj;
-
-		m_pMainCamera = m_pModelCamera;
+		// ¸ðµ¨ºä Ä«¸Þ¶ó ÀüÈ¯
+		SwapModelView();
 		m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 5.0f, -10.0f));
 
 		m_ObjLine.Create(m_pd3dDevice, L"../../data/shader/shape.hlsl", L"../../data/eye.bmp");

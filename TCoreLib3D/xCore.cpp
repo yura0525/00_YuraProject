@@ -35,6 +35,15 @@ HRESULT xCore::CreateDSV()
 	return hr;
 }
 
+void    xCore::SwapModelView()
+{
+	m_pMainCamera = &m_ModelCamera;
+}
+void    xCore::SwapDefaultView()
+{
+	m_pMainCamera = &m_DefaultCamera;
+}
+
 bool xCore::GamePreInit()
 {
 	HRESULT hr;
@@ -142,6 +151,10 @@ bool xCore::GameInit()
 
 	m_DefaultCamera.SetViewMatrix();
 	m_DefaultCamera.SetProjMatrix(D3DX_PI * 0.5f, (float)m_rtClient.right / (float)m_rtClient.bottom);
+
+	m_ModelCamera.SetViewMatrix();
+	m_ModelCamera.SetProjMatrix(D3DX_PI * 0.5f, (float)m_rtClient.right / (float)m_rtClient.bottom);
+
 	m_pMainCamera = &m_DefaultCamera;
 
 	Init();

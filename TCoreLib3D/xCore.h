@@ -3,7 +3,7 @@
 #include "TDirectWrite.h"
 #include "TTimer.h"
 #include "xInput.h"
-#include "TCamera.h"
+#include "TCameraModelView.h"
 
 struct TOutput									//모니터의 정보와 갯수를 알수있다.
 {
@@ -21,11 +21,12 @@ struct TAdapter									//그래픽카드
 class xCore : public xWindow
 {
 public:
-	TTimer			m_Timer;
-	TDirectWrite	m_Font;
-	xInput			m_Input;
-	TCamera			m_DefaultCamera;
-	TCamera*		m_pMainCamera;
+	TTimer				m_Timer;
+	TDirectWrite		m_Font;
+	xInput				m_Input;
+	TCamera				m_DefaultCamera;
+	TCameraModelView	m_ModelCamera;
+	TCamera*			m_pMainCamera;
 
 	ID3D11DepthStencilView*		m_pDSV;
 	D3DXVECTOR4					m_YawPitchRoll;
@@ -47,6 +48,14 @@ public:
 	virtual HRESULT CreateResources(UINT iWidth, UINT iHeight) { return S_OK; }
 
 	HRESULT CreateDSV();
+
+	LRESULT	MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+	{
+		return m_ModelCamera.MsgProc(hWnd, msg, wParam, lParam);
+	}
+	void SwapModelView();
+	void SwapDefaultView();
+
 public:
 	virtual bool Init()			{	return true;	}
 	virtual bool Frame()		{	return true;	}
