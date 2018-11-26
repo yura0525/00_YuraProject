@@ -91,8 +91,8 @@ public:
 		}
 
 		// 박스 출력
-		/*m_ObjBox.SetMatrix(&m_pMainCamera->m_mModelRot, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-		m_ObjBox.Render(m_pContext);*/
+		m_ObjBox.SetMatrix(&m_pMainCamera->m_mModelRot, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+		m_ObjBox.Render(m_pContext);
 
 		
 		// 박스와 면의 연결선 출력

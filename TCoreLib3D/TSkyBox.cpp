@@ -54,7 +54,8 @@ bool TSkyBox::Render(ID3D11DeviceContext* pContext)
 	{
 		for (int iTex = 0; iTex < MAX_SKYBOX_TEXTURE; iTex++)
 		{
-			//0번레지스터에 텍스처를 한장 한장씩 넘긴다.
+			//0번 레지스터에 텍스처를 한장 한장씩 넘긴다.
+			//g_txDiffuse
 			pContext->PSSetShaderResources(0, 1, m_pTexSRV[iTex].GetAddressOf());
 			pContext->DrawIndexed(6, 6 * iTex, 0);
 		}
@@ -62,13 +63,15 @@ bool TSkyBox::Render(ID3D11DeviceContext* pContext)
 	else if(m_bRenerType == 1)
 	{
 		//1번 레지스터에 텍스처 배열을 넘긴다.
+		//g_txDiffuseArray[6]
 		pContext->PSSetShaderResources(1, MAX_SKYBOX_TEXTURE, m_pTexSRV[0].GetAddressOf());
 		pContext->PSSetShader(m_dxObj.m_pPixelShader.Get(), NULL, 0);
 		pContext->DrawIndexed(m_iNumIndex, 0, 0);
 	}
 	else
 	{
-		//1번 레지스터에 텍스처 배열을 넘긴다.
+		//2번 레지스터에 큐브맵텍스처를 넘긴다.
+		//g_txCubeDiffuse
 		pContext->PSSetShaderResources(2, 1, m_dxObj.m_pTextureRV.GetAddressOf());
 		pContext->PSSetShader(m_dxObj.m_pPixelShader.Get(), NULL, 0);
 		pContext->DrawIndexed(m_iNumIndex, 0, 0);

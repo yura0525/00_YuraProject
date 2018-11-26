@@ -64,7 +64,7 @@ namespace DX
 		dsd.DepthFunc = D3D11_COMPARISON_GREATER;
 		hr = pd3dDevice->CreateDepthStencilState(&dsd, &g_pDSVStateGreater);
 
-		dsd.DepthEnable = FALSE;							//Z버퍼를 활성화 여부.
+		dsd.DepthEnable = TRUE;								//Z버퍼를 활성화 여부.
 		dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;	//Z버퍼랑 비교도안하고 Z버퍼에 기입도 하지 않는다.
 		dsd.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;		//Z버퍼값이 작거나 같으면 뿌려줘라.
 		hr = pd3dDevice->CreateDepthStencilState(&dsd, &g_pDSVStateDepthWriteDisable);
