@@ -63,9 +63,10 @@ DWORD WINAPI TIOCP::WorkerThread(LPVOID param)
 			break;
 		}
 
-		//비동기 입출력의 작업결과를 확인하는 함수.
-		//::범위 지정함수. 
-		//::사용자 정의 함수와 헷갈리지 말라고 이함수는 여기 클래스가 아니라 상위에 있다고 알려주는 함수.
+		//비동기 입출력의 작업 결과를 확인하는 함수.
+		//::범위 지정 연산자.
+		//사용자 정의 함수와 전역 함수가 이름이 같은 경우. 
+		//이 함수는 여기 클래스내의 함수가 아니라 상위(전역)에 있다고 알려주는 연산자.
 		//IOCP QUEUE
 		bool bRet = ::GetQueuedCompletionStatus(iocp->m_hIOCP, 
 												&bytesTransfer, &keyValue, 
