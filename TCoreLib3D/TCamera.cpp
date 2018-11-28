@@ -13,6 +13,13 @@ void TCamera::MoveSide(float fValue)
 {
 	m_vPos += m_vSide * fValue * m_fSpeed;
 }
+bool TCamera::Frame()
+{
+	m_fSpeed -= g_fSecPerFrame;
+	if (m_fSpeed < 0.5f)
+		m_fSpeed = 0.5f;
+	return true;
+}
 D3DXMATRIX TCamera::SetViewMatrix(
 	D3DXVECTOR3 vPos,
 	D3DXVECTOR3 vTarget,
@@ -26,6 +33,16 @@ D3DXMATRIX TCamera::SetViewMatrix(
 		&vTarget,
 		&vUp);
 	UpdateVector();
+
+	// 뷰 행렬 생성 할 때 1번만 호출되도록 한다. 
+	// 이유는 카메라가 뒤집어 질 경우에는 문제가 생긴다.
+	D3DXMATRIX mInvView;
+	D3DXMatrixInverse(&mInvView, NULL, &m_matView);
+	D3DXVECTOR3* pZBasis = (D3DXVECTOR3*)&mInvView._31;
+
+	m_fCameraYawAngle = atan2f(pZBasis->x, pZBasis->z);
+	float fLen = sqrtf(pZBasis->z * pZBasis->z + pZBasis->x * pZBasis->x);
+	m_fCameraPitchAngle = -atan2f(pZBasis->y, fLen);
 	return m_matView;
 }
 
@@ -52,13 +69,7 @@ void  TCamera::UpdateProjMatrix(UINT width, UINT height)
 		m_fAspect,
 		m_fNear, m_fFar);
 }
-bool TCamera::Frame()
-{
-	m_fSpeed -= g_fSecPerFrame;
-	if (m_fSpeed < 0.5f)
-		m_fSpeed = 0.5f;
-	return true;
-}
+
 
 bool TCamera::UpdateVector()
 {
@@ -88,7 +99,7 @@ bool TCamera::Update(D3DXVECTOR4 vValue)
 	//yaw, pitch, roll, radius
 	D3DXMATRIX matRotation;
 	D3DXQUATERNION qRotation;
-	D3DXQuaternionRotationYawPitchRoll(&qRotation, vValue.y, vValue.x, vValue.z);
+	D3DXQuaternionRotationYawPitchRoll(&qRotation, m_fCameraYawAngle += vValue.y, m_fCameraPitchAngle += vValue.x, vValue.z);
 
 	m_vPos += m_vLook * vValue.w * m_fSpeed;
 
@@ -100,6 +111,8 @@ bool TCamera::Update(D3DXVECTOR4 vValue)
 TCamera::TCamera()
 {
 	m_fSpeed = 1.0f;
+	m_fCameraYawAngle = 0.0f;
+	m_fCameraPitchAngle = 0.0f;
 
 	D3DXMatrixIdentity(&m_matWorld);
 	D3DXMatrixIdentity(&m_mModelRot);

@@ -108,11 +108,6 @@ bool xCore::GamePreInit()
 
 bool xCore::GameInit()
 {
-	m_YawPitchRoll.x = 0;
-	m_YawPitchRoll.y = 0;
-	m_YawPitchRoll.z = 0;
-	m_YawPitchRoll.w = 0;
-
 	GamePreInit();
 
 	HRESULT hr;
@@ -178,26 +173,28 @@ bool xCore::GameFrame()
 	m_ObjSkyBox.Frame();
 	m_dirAxis.Frame();
 
+	D3DXVECTOR4   vYawPitchRoll(0, 0, 0, 0);
+
 	//camera control
 	if (g_Input.bButton1)
 	{
-		m_YawPitchRoll.y += 0.1f * D3DXToRadian(m_Input.m_MouseState.lY);
-		m_YawPitchRoll.x += 0.1f * D3DXToRadian(m_Input.m_MouseState.lX);
+		vYawPitchRoll.y = 0.1f * D3DXToRadian(m_Input.m_MouseState.lX);
+		vYawPitchRoll.x = 0.1f * D3DXToRadian(m_Input.m_MouseState.lY);
 	}
 
 	float fValue = m_Input.m_MouseState.lZ;
-	m_YawPitchRoll.w = fValue * g_fSecPerFrame;
+	vYawPitchRoll.w = fValue * g_fSecPerFrame;
 	if (g_Input.bJump)
 	{
 		m_pMainCamera->SetSpeed(g_fSecPerFrame * 3.0f);
 	}
 	if (g_Input.bFront)
 	{
-		m_pMainCamera->MoveLook(-g_fSecPerFrame * 5.0f);
+		m_pMainCamera->MoveLook(g_fSecPerFrame * 5.0f);
 	}
 	if (g_Input.bBack)
 	{
-		m_pMainCamera->MoveLook(g_fSecPerFrame * 5.0f);
+		m_pMainCamera->MoveLook(-g_fSecPerFrame * 5.0f);
 	}
 	if (g_Input.bLeft)
 	{
@@ -207,7 +204,7 @@ bool xCore::GameFrame()
 	{
 		m_pMainCamera->MoveSide(g_fSecPerFrame * 5.0f);
 	}
-	m_pMainCamera->Update(m_YawPitchRoll);
+	m_pMainCamera->Update(vYawPitchRoll);
 	m_pMainCamera->Frame();
 
 	Frame();

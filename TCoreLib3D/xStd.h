@@ -91,6 +91,11 @@ public:
 		return theSingleInstance;
 	}
 };
+/////////////////////////////////////////////¸ÅÅ©·Î//////////////////////////////////////////////
+#define randf(x)				(x * rand() / (float)RAND_MAX)
+#define randf2(x, off)			(off + (x * rand() /(float)RAND_MAX))
+#define randstep(fMin, fMax)	(fMin + ((float)fMax - (float)fMin) * rand()/(float)RAND_MAX)
+#define clamp(x, minX, maxX)	if(x > maxX) x = maxX;else if(x < minX) x = minX;
 
 #ifndef V_RETURN
 #define V_RETURN(x) { hr = (x); if( FAILED(hr) ) {return hr;} }

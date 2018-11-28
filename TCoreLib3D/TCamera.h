@@ -17,6 +17,9 @@ public:
 	D3DXMATRIX			m_mModelLastRot;
 	D3DXMATRIX			m_mModelRot;
 
+	float m_fCameraYawAngle;
+	float m_fCameraPitchAngle;
+
 	float m_fFov;
 	float m_fAspect;
 	float m_fNear;

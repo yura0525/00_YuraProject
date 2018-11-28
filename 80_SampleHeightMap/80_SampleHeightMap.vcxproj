@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{4B48F1AA-806E-4D00-B00D-E9B75E6062E7}</ProjectGuid>
+    <ProjectGuid>{2A82CAD0-057C-46DD-B3DB-8CE2DB0891A9}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>My79SampleMap</RootNamespace>
+    <RootNamespace>My80SampleHeightMap</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -72,8 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>../../output/SampleMap/</OutDir>
-    <IntDir>../../output/SampleMap/</IntDir>
+    <OutDir>../../output/SampleHeightMap/</OutDir>
+    <IntDir>../../output/SampleHeightMap/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -152,6 +152,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xMap.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\data\Shader\map.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\data\Shader\shape.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\data\Shader\sky.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

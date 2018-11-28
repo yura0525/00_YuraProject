@@ -30,7 +30,6 @@ public:
 	TCamera*			m_pMainCamera;
 
 	ID3D11DepthStencilView*		m_pDSV;
-	D3DXVECTOR4					m_YawPitchRoll;
 
 	TSkyBox						m_ObjSkyBox;
 	TDirLineShape				m_dirAxis;
