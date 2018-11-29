@@ -51,13 +51,17 @@ HRESULT xMap::CreateIndexData()
 		}
 	}
 
+	GenVertexNormal();
 	return S_OK;
 }
 
-
 float xMap::GetHeightOfVertex(int iIndex)
 {
-	return m_fHeightList[iIndex] * m_fScaleHeight;
+	if (m_fHeightList.size() > 0)
+	{
+		return m_fHeightList[iIndex] * m_fScaleHeight;
+	}
+	return 0.0f;
 }
 
 D3DXVECTOR2 xMap::GetTextureOfVertex(float fU, float fV)
@@ -89,7 +93,8 @@ bool xMap::CreateHeightMap(ID3D11Device* pDevice, ID3D11DeviceContext* pContext,
 	//CPU가 읽고 쓸수 있게 하려고.DYNAMIC은 읽기는 안되고 쓰기만 됨.
 	info.Usage = D3D11_USAGE_STAGING;									
 	info.CpuAccessFlags = D3D11_CPU_ACCESS_WRITE | D3D11_CPU_ACCESS_READ;
-	info.Format = DXGI_FORMAT_FROM_FILE;
+	//info.Format = DXGI_FORMAT_FROM_FILE;
+	info.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	info.MipLevels = 1;
 	info.pSrcInfo = &ImageInfo;		//ImageInfo원본에 대한 정보, info이렇게 컨버팅해달라는 정보.
 
@@ -191,6 +196,93 @@ bool xMap::Release()
 	return true;
 }
 
+void xMap::GenVertexNormal()
+{
+	InitFaceNormals();
+	GenNormalLookupTable();				//LookupTable => 결과를 리스트로 들고있다.
+	CalcPerVertexFormalsFastLookup();
+}
+
+void xMap::InitFaceNormals()
+{
+	m_FaceNormalList.resize(m_iNumFace);
+}
+void xMap::CalcFaceNormals()
+{
+	int iFaceIndex = 0;
+	for (int iIndex = 0; iIndex < m_iNumIndex; iIndex += 3)
+	{
+		DWORD i0 = m_IndexList[iIndex];
+		DWORD i1 = m_IndexList[iIndex+1];
+		DWORD i2 = m_IndexList[iIndex+2];
+		m_FaceNormalList[iFaceIndex++] = ComputeFaceNormal(i0, i1, i2);
+	}
+}
+
+D3DXVECTOR3 xMap::ComputeFaceNormal(DWORD i0, DWORD i1, DWORD i2)
+{
+	D3DXVECTOR3 vNormal;
+	D3DXVECTOR3 v0 = m_VertexList[i1].p - m_VertexList[i0].p;
+	D3DXVECTOR3 v1 = m_VertexList[i2].p - m_VertexList[i0].p;
+	D3DXVec3Cross(&vNormal, &v0, &v1);
+	D3DXVec3Normalize(&vNormal, &vNormal);
+	return vNormal;
+}
+void xMap::GenNormalLookupTable()
+{
+	m_NormalLookupTable.resize(m_iNumVertex);
+
+	for (int iFace = 0; iFace < m_iNumFace; iFace++)
+	{
+		for (int iVertex = 0; iVertex < 3; iVertex++)
+		{
+			for (int iTable = 0; iTable < 6; iTable++)
+			{
+				int iIndex = m_IndexList[iFace * 3 + iVertex];
+				if (m_NormalLookupTable[iIndex].faceIndex[iTable] == -1)
+				{
+					m_NormalLookupTable[iIndex].faceIndex[iTable] = iFace;
+					break;
+				}
+			}
+		}
+	}
+}
+void xMap::CalcPerVertexFormalsFastLookup()
+{
+	CalcFaceNormals();
+	for (int iVertex = 0; iVertex < m_NormalLookupTable.size(); iVertex++)
+	{
+		D3DXVECTOR3 avrNormal(0, 0, 0);
+		int iFace = 0;
+		for (iFace = 0; iFace < 6; iFace++)
+		{
+			if (m_NormalLookupTable[iVertex].faceIndex[iFace] != -1)
+			{
+				int iFaceIndex = m_NormalLookupTable[iVertex].faceIndex[iFace];
+				avrNormal += m_FaceNormalList[iFaceIndex];
+			}
+			else
+				break;
+		}
+		/*if (0 < iFace)
+		{
+			avrNormal.x = avrNormal.x / (float)iFace;
+			avrNormal.y = avrNormal.y / (float)iFace;
+			avrNormal.z = avrNormal.z / (float)iFace;
+		}*/
+		
+		D3DXVec3Normalize(&m_VertexList[iVertex].n, &avrNormal);
+
+		//조명 적용.
+		D3DXVECTOR3 vLight(100, 100, 100);
+		D3DXVec3Normalize(&vLight, &vLight);
+		float fDot = D3DXVec3Dot(&m_VertexList[iVertex].n, &vLight);
+		m_VertexList[iVertex].c.x = fDot;
+		m_VertexList[iVertex].c.y = fDot;
+		m_VertexList[iVertex].c.z = fDot;
+	}
+}
 xMap::xMap()
 {
 	m_fScaleHeight = 1.0f;
