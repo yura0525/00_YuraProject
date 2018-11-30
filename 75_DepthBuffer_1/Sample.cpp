@@ -41,12 +41,14 @@ public:
 		D3D11_DEPTH_STENCIL_VIEW_DESC dsvd;
 		dsvd.Format = DescDepth.Format;
 		dsvd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-		dsvd.Flags = 0;
+		//dsvd.Flags = 0;
 		dsvd.Texture2D.MipSlice = 0;
 
 		hr = pDevice->CreateDepthStencilView(pDSTexture, &dsvd, &pDSV);
 		if (pDSTexture) pDSTexture->Release();
 
+		//±íÀÌ ¹× ½ºÅÙ½Çºä ¸®¼Ò½º ·£´õÅ¸°Ù ºä¿¡ ¹ÙÀÎµù
+		m_pContext->OMSetRenderTargets(1, &m_pRenderTargetView, pDSV);
 		return pDSV;
 	}
 
@@ -125,7 +127,7 @@ public:
 
 		/*ApplyDSS(m_pContext, g_pDSVStateEnableLessEqual);
 		ApplyRS(m_pContext, m_pRSSolidState);*/
-		//m_pContext->OMSetDepthStencilState(m_DSS[0], 0x00);
+		m_pContext->OMSetDepthStencilState(m_DSS[0], 0x00);
 		ApplyDSS(m_pContext, m_DSS[0]);
 		ApplyBS(m_pContext, TDxState::g_pBSNoBlend);
 		ApplyRS(m_pContext, TDxState::g_pRSBackCullSolid);
@@ -140,7 +142,7 @@ public:
 		D3DXMatrixTranspose(&m_ObjBox.m_cbData.matProj, &m_matProj);
 		
 		//m_pContext->RSSetState(DX::m_pRSSolidState);
-		//m_pContext->OMSetDepthStencilState(DX::g_pDSVStateEnableLessEqual, 0);
+		m_pContext->OMSetDepthStencilState(TDxState::g_pDSVStateEnableLessEqual, 0);
 		m_ObjBox.Render(m_pContext);
 
 

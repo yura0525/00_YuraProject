@@ -62,12 +62,15 @@ DWORD WINAPI WorkerThread(LPVOID param)
 
 		TUser* pUser = (TUser*)keyValue;
 		OVERLAPPED_EX* ovex = (OVERLAPPED_EX*)&ov;
-
+		DWORD trans = 0;
 		if (bRet == TRUE)
 		{
+			pUser->buffer.buf = pUser->buf;
+			pUser->buffer.len = 2048;
+			trans = bytesTransfer;
+
 			if (ovex->flag == RECV)
 			{
-				DWORD trans = bytesTransfer;
 				ovex->flag = SEND;
 
 				int iRet = WSASend(pUser->sock, &(pUser->buffer), 1, &trans, 0,
@@ -75,13 +78,9 @@ DWORD WINAPI WorkerThread(LPVOID param)
 			}
 			else
 			{
-				pUser->buffer.buf = pUser->buf;
-				pUser->buffer.len = 2048;
+				ovex->flag = RECV;
 
-				DWORD trans = bytesTransfer;
-				ovex->flag = SEND;
-
-				int iRet = WSASend(pUser->sock, &(pUser->buffer), 1, &trans, 0,
+				int iRet = WSARecv(pUser->sock, &(pUser->buffer), 1, &trans, 0,
 					(LPOVERLAPPED)&(pUser->ov), NULL);
 				/*if (iRet == SOCKET_ERROR)
 				{
@@ -121,16 +120,16 @@ int main()
 	// listen -> 듣다.
 	listen(listenSock, SOMAXCONN);	//->개통
 
+	//기술자를 고용.
+	m_hIOCP = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, 0);
+
 	//스레드4개를 고용.
 	DWORD id;
 	for (int i = 0; i < MAX_WORK_THREAD; i++)
 	{
 		m_hWorkThread[i] = ::CreateThread(0, 0, WorkerThread, 0, 0, &id);
 	}
-
-	//기술자를 고용.
-	m_hIOCP = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, 0);
-
+	
 	SOCKADDR_IN addr;
 	int addrlen = sizeof(addr);
 
@@ -152,7 +151,7 @@ int main()
 		{
 			if (WSAGetLastError() != WSA_IO_PENDING)
 			{
-				return false;
+				return -1;
 			}
 		}
 	}
