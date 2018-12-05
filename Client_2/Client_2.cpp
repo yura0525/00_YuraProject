@@ -162,7 +162,7 @@ int main()
 	HANDLE hConnectThread = CreateThread(0, 0, ConnectThread, (LPVOID)sock, 0, &id_0);
 
 	//event
-	// 커넥트가 되야 샌드 리시브 되니까 커넥트가 될때까지 대기하려고 이벤트를 사용한다
+	//커넥트가 되야 샌드 리시브 되니까 커넥트가 될때까지 대기하려고 이벤트를 사용한다
 	//커넥트가 되면 이벤트가 시그널 상태가 된다.
 	WaitForSingleObject(g_hEvent, INFINITE);
 

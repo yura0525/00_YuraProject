@@ -31,6 +31,7 @@ public:
 
 		ID3D11Texture2D* pTex = NULL;
 		D3D11_TEXTURE2D_DESC td;
+		ZeroMemory(&td, sizeof(td));
 
 		//32비트 짜리 Mip맵이 없는 width, height 크기에 CPU 접근 못하는 Default의 텍스쳐 1장 생성. 
 		td.Width = g_rtClient.right;
@@ -48,6 +49,7 @@ public:
 		hr = m_pd3dDevice->CreateTexture2D(&td, NULL, &pTex);
 
 		D3D11_DEPTH_STENCIL_VIEW_DESC dsvd;
+		ZeroMemory(&dsvd, sizeof(dsvd));
 		dsvd.Format = td.Format;
 		dsvd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 		dsvd.Flags = 0;
