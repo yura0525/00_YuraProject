@@ -33,7 +33,7 @@ public:
 		DescDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 		DescDepth.CPUAccessFlags = 0;
 		DescDepth.MiscFlags = 0;
-		if (FAILED(hr = pDevice->CreateTexture2D(&DescDepth, NULL, &pDSTexture)))
+		if (FAILED(hr = m_pd3dDevice->CreateTexture2D(&DescDepth, NULL, &pDSTexture)))
 		{
 			return NULL;
 		}
@@ -41,10 +41,10 @@ public:
 		D3D11_DEPTH_STENCIL_VIEW_DESC dsvd;
 		dsvd.Format = DescDepth.Format;
 		dsvd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-		//dsvd.Flags = 0;
+		dsvd.Flags = 0;
 		dsvd.Texture2D.MipSlice = 0;
 
-		hr = pDevice->CreateDepthStencilView(pDSTexture, &dsvd, &pDSV);
+		hr = m_pd3dDevice->CreateDepthStencilView(pDSTexture, &dsvd, &pDSV);
 		if (pDSTexture) pDSTexture->Release();
 
 		//±íÀÌ ¹× ½ºÅÙ½Çºä ¸®¼Ò½º ·£´õÅ¸°Ù ºä¿¡ ¹ÙÀÎµù
@@ -65,7 +65,7 @@ public:
 		dsd.StencilReadMask = 0xff;
 		dsd.StencilWriteMask = 0xff;
 
-		dsd.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+		dsd.FrontFace.StencilFunc = D3D11_COMPARISON_GREATER;
 		dsd.FrontFace.StencilPassOp = D3D11_STENCIL_OP_INCR;
 		dsd.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
 		dsd.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
@@ -88,7 +88,7 @@ public:
 		dsd.StencilReadMask = 0xff;
 		dsd.StencilWriteMask = 0xff;
 
-		dsd.FrontFace.StencilFunc = D3D11_COMPARISON_EQUAL;
+		dsd.FrontFace.StencilFunc = D3D11_COMPARISON_LESS_EQUAL;
 		dsd.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 		dsd.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
 		dsd.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
@@ -102,6 +102,8 @@ public:
 		{
 			return false;
 		}
+
+		
 
 		m_pDepthStencilView[0] = CreateDepthStencilView(m_pd3dDevice, g_rtClient.right, g_rtClient.bottom);
 		m_pDepthStencilView[1] = CreateDepthStencilView(m_pd3dDevice, g_rtClient.right, g_rtClient.bottom);
@@ -125,11 +127,9 @@ public:
 		m_pContext->ClearDepthStencilView(m_pDepthStencilView[0], D3D11_CLEAR_DEPTH, 1.0f, 0);
 		m_pContext->ClearDepthStencilView(m_pDepthStencilView[1], D3D10_CLEAR_STENCIL, 1.0f, 0);
 
-		/*ApplyDSS(m_pContext, g_pDSVStateEnableLessEqual);
-		ApplyRS(m_pContext, m_pRSSolidState);*/
 		m_pContext->OMSetDepthStencilState(m_DSS[0], 0x00);
 		ApplyDSS(m_pContext, m_DSS[0]);
-		ApplyBS(m_pContext, TDxState::g_pBSNoBlend);
+		ApplyBS(m_pContext, TDxState::g_pBSAlphaBlend);
 		ApplyRS(m_pContext, TDxState::g_pRSBackCullSolid);
 
 		D3DXMATRIX matTrans, matRotation;
@@ -141,16 +141,15 @@ public:
 		D3DXMatrixTranspose(&m_ObjBox.m_cbData.matView, &m_matView);
 		D3DXMatrixTranspose(&m_ObjBox.m_cbData.matProj, &m_matProj);
 		
-		//m_pContext->RSSetState(DX::m_pRSSolidState);
-		m_pContext->OMSetDepthStencilState(TDxState::g_pDSVStateEnableLessEqual, 0);
 		m_ObjBox.Render(m_pContext);
 
 
 		//2)
-		//m_pContext->OMSetDepthStencilState(m_DSS[1], 0x00);
-		/*ApplyDSS(m_pContext, m_DSS[1]);
+		m_pContext->OMSetDepthStencilState(m_DSS[1], 0x00);
+		ApplyDSS(m_pContext, m_DSS[1]);
 		ApplyBS(m_pContext, TDxState::g_pBSAlphaBlend);
-		ApplyRS(m_pContext, TDxState::g_pRSBackCullSolidState);
+		ApplyRS(m_pContext, TDxState::g_pRSBackCullSolid);
+
 		D3DXMATRIX Scale;
 		D3DXMatrixScaling(&Scale, 2, 2, 2);
 		D3DXMatrixTranslation(&m_matWorld, 0, 0, 1.0f);
@@ -160,13 +159,9 @@ public:
 		D3DXMatrixTranspose(&m_ObjBox.m_cbData.matView, &m_matView);
 		D3DXMatrixTranspose(&m_ObjBox.m_cbData.matProj, &m_matProj);
 
-		
-		//m_pContext->RSSetState(DX::m_pRSSolidState);
-
-		//DX::ApplyDSS(m_pContext, TDxState::g_pDSVStateEnableLessEqual);
 		//m_pContext->OMSetDepthStencilState(DX::g_pDSVStateEnableLessEqual, 0);
 
-		m_ObjBox.Render(m_pContext);*/
+		m_ObjBox.Render(m_pContext);
 		return true;
 	}
 	bool Release()

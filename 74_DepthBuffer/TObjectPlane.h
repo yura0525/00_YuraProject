@@ -1,6 +1,7 @@
 #pragma once
 #include "TVector.h"
 #include "TDxObject.h"
+#include "TObjectStd.h"
 
 struct PC_VERTEX
 {
@@ -8,17 +9,17 @@ struct PC_VERTEX
 	D3DXVECTOR4 c;
 };
 
-struct T_CB_DATA
-{
-	D3DXMATRIX matWorld;
-	D3DXMATRIX matView;
-	D3DXMATRIX matProj;
-
-	float fTime;
-	float fActiveVP;
-	float z, w;
-	D3DXVECTOR4 vColor;
-};
+//struct T_CB_DATA
+//{
+//	D3DXMATRIX matWorld;
+//	D3DXMATRIX matView;
+//	D3DXMATRIX matProj;
+//
+//	float fTime;
+//	float fActiveVP;
+//	float z, w;
+//	D3DXVECTOR4 vColor;
+//};
 
 class TObjectPlane
 {
